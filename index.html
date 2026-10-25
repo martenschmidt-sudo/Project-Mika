@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lichtung</title>
+<meta name="description" content="A diary that supports you day to day with bulimia.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lichtung">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#EDF2F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111816" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="manifest" href="manifest.json">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.4 -apple-system,system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one calm phone column, sticky date header, bottom tab bar, full-screen sheets for entries */
+:root{
+  --bg:#EDF2F0; --surface:#FFFFFF; --surface-2:#E2EAE7; --line:#CFDAD6;
+  --ink:#1D2B29; --muted:#5A6B67;
+  --accent:#2F7568; --accent-soft:#D4E8E3; --on-accent:#FFFFFF;
+  --urge:#6E5FA8; --urge-soft:#E6E1F5;
+  --mood:#A0731F; --mood-soft:#F4E9D2;
+  --sos:#B4475C; --sos-soft:#F6DEE3;
+  --display:"Young Serif", Georgia, "Times New Roman", serif;
+  --body:"Figtree", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111816; --surface:#1A2321; --surface-2:#22302D; --line:#2E3D3A;
+  --ink:#E3ECE9; --muted:#97A9A4;
+  --accent:#78C2B3; --accent-soft:#1F3833; --on-accent:#0E1E1A;
+  --urge:#AFA3E6; --urge-soft:#2A2640;
+  --mood:#E0B566; --mood-soft:#352B18;
+  --sos:#EE8A9C; --sos-soft:#3D2027; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#1A2321; --surface-2:#22302D; --line:#2E3D3A;
+  --ink:#E3ECE9; --muted:#97A9A4;
+  --accent:#78C2B3; --accent-soft:#1F3833; --on-accent:#0E1E1A;
+  --urge:#AFA3E6; --urge-soft:#2A2640;
+  --mood:#E0B566; --mood-soft:#352B18;
+  --sos:#EE8A9C; --sos-soft:#3D2027; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 calc(96px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+h1{font-size:1.9rem;line-height:1.15}
+h2{font-size:1.35rem;line-height:1.2}
+h3{font-size:1.05rem}
+.label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;display:flex;align-items:center;gap:8px}
+header.top .title{flex:1;min-width:0}
+.iconbtn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;flex:none}
+.iconbtn svg{width:18px;height:18px}
+.view{display:flex;flex-direction:column;gap:20px;padding-top:6px}
+
+.banner{background:var(--surface-2);border-radius:12px;padding:10px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:.875rem}
+.linkbtn{background:none;border:0;color:var(--accent);font-weight:600;padding:4px 0}
+
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qbtn{border:0;border-radius:var(--r);padding:14px 10px 12px;text-align:left;display:flex;flex-direction:column;gap:22px;min-height:104px}
+.qbtn b{font-weight:600;font-size:.98rem;line-height:1.2}
+.qbtn span{font-size:.75rem;opacity:.8}
+.qbtn svg{width:22px;height:22px}
+.q-meal{background:var(--accent-soft);color:var(--accent)}
+.q-urge{background:var(--urge-soft);color:var(--urge)}
+.q-mood{background:var(--mood-soft);color:var(--mood)}
+.qbtn b,.qbtn span{color:var(--ink)}
+
+.sosbar{display:flex;align-items:center;gap:12px;background:var(--sos-soft);border-radius:var(--r);padding:12px 14px;border:0;width:100%;text-align:left}
+.sosbar .dot{width:36px;height:36px;border-radius:50%;background:var(--sos);color:var(--surface);display:grid;place-items:center;flex:none;font-weight:700}
+.sosbar div{flex:1;min-width:0}
+
+.rhythm{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.slot{font-size:.72rem;padding:4px 8px;border-radius:99px;border:1px dashed var(--line);color:var(--muted)}
+.slot.on{border:1px solid transparent;background:var(--accent-soft);color:var(--accent);font-weight:600}
+
+.timeline{display:flex;flex-direction:column}
+.entry{display:grid;grid-template-columns:52px 14px 1fr;gap:0 10px;border:0;background:none;text-align:left;padding:0;width:100%}
+.entry .time{font-variant-numeric:tabular-nums;font-size:.85rem;color:var(--muted);padding-top:14px;text-align:right}
+.entry .rail{position:relative;display:flex;justify-content:center}
+.entry .rail::before{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--line)}
+.entry:first-child .rail::before{top:18px}
+.entry:last-child .rail::before{bottom:calc(100% - 18px)}
+.entry .pip{position:relative;margin-top:14px;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg)}
+.entry .card{background:var(--surface);border-radius:14px;padding:12px 14px;margin-block:4px;min-width:0;border:1px solid var(--line)}
+.entry .card .k{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.entry .card p{margin:2px 0 0;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:.72rem;padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+.ex{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);margin-left:6px;vertical-align:2px}
+.t-meal .pip{background:var(--accent)} .t-meal .k{color:var(--accent)}
+.t-urge .pip{background:var(--urge)} .t-urge .k{color:var(--urge)}
+.t-mood .pip{background:var(--mood)} .t-mood .k{color:var(--mood)}
+.t-log .pip{background:var(--ink)} .t-log .k{color:var(--ink)}
+.logbtn{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:var(--r);padding:16px;background:var(--ink);color:var(--bg);text-align:left}
+.logbtn .ring{width:44px;height:44px;border-radius:50%;background:var(--bg);color:var(--ink);display:grid;place-items:center;flex:none}
+.logbtn .ring svg{width:24px;height:24px}
+.logbtn .txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.logbtn b{font-size:1.1rem}
+.logbtn .txt span{font-size:.8rem;opacity:.75}
+.logbtn .chev{font-size:1.4rem;opacity:.6}
+.voice{display:flex;align-items:center;gap:12px;width:100%;border:1px dashed var(--line);background:var(--surface);border-radius:var(--r);padding:12px 14px;text-align:left;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.voice .mic{width:48px;height:48px;border-radius:50%;background:var(--surface-2);color:var(--muted);display:grid;place-items:center;flex:none}
+.voice .mic svg{width:22px;height:22px}
+.voice .vt{flex:1;min-width:0;display:flex;flex-direction:column}
+.voice .vt span{font-size:.78rem;color:var(--muted)}
+.voice .soon{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);flex:none}
+.reveal{display:flex;justify-content:center;align-items:center;gap:8px;width:100%;border:1px dashed var(--line);background:none;border-radius:12px;padding:12px;color:var(--muted);font-weight:600;font-size:.9rem}
+.qnum{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--surface-2);font-size:.75rem;font-weight:700;margin-right:6px;color:var(--ink)}
+.heat{display:grid;grid-template-columns:5.2em repeat(5,1fr);gap:4px;margin-top:12px;font-size:.75rem;align-items:center}
+.heat .h{text-align:center;color:var(--muted);font-size:.68rem}
+.heat .rl{color:var(--muted)}
+.heat .c{height:34px;border-radius:8px;display:grid;place-items:center;font-variant-numeric:tabular-nums;font-weight:600;background:var(--surface-2);color:var(--muted)}
+.spark{width:100%;height:auto;display:block;margin-top:10px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.cmp div{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.cmp b{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;font-variant-numeric:tabular-nums}
+.cmp span{font-size:.75rem;color:var(--muted)}
+.empty{border:1px dashed var(--line);border-radius:var(--r);padding:22px 18px;text-align:center;color:var(--muted)}
+
+.daynav{display:flex;align-items:center;gap:8px}
+.daynav .d{flex:1;text-align:center;font-weight:600}
+
+/* Verlauf */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;align-items:end;margin-top:12px}
+.col{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:none;padding:0}
+.bars{height:64px;width:100%;display:flex;flex-direction:column-reverse;gap:2px}
+.bars i{display:block;height:9px;border-radius:3px;background:var(--accent)}
+.bars i.ghost{background:var(--surface-2)}
+.urgedot{width:8px;height:8px;border-radius:50%;background:var(--urge)}
+.urgedot.none{background:transparent;border:1px solid var(--line)}
+.col small{font-size:.62rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.col.today small{color:var(--ink);font-weight:700}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.75rem;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.stat b{display:block;font-family:var(--display);font-size:1.6rem;font-weight:400;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:.75rem;color:var(--muted)}
+.rank{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.rank div{display:grid;grid-template-columns:minmax(0,9em) 1fr 2em;gap:8px;align-items:center;font-size:.875rem}
+.rank .bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.rank .bar i{display:block;height:100%;border-radius:4px}
+.rank .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+
+/* Hilfe */
+.breath{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 8px 8px}
+.circle{width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 50% 45%,var(--accent-soft),transparent 70%);display:grid;place-items:center;position:relative;max-width:100%}
+.circle::before{content:"";position:absolute;inset:18px;border-radius:50%;background:var(--accent);opacity:.18;transform:scale(.6);transition:transform 4s ease-in-out}
+.circle.in::before{transform:scale(1);transition-duration:4s}
+.circle.out::before{transform:scale(.6);transition-duration:6s}
+.circle span{position:relative;font-family:var(--display);font-size:1.25rem}
+.timer{font-variant-numeric:tabular-nums;font-size:2rem;font-family:var(--display)}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:600;background:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.danger{background:var(--sos);color:var(--surface)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.idea{font-family:var(--display);font-size:1.2rem;line-height:1.35;min-height:3.2em;margin:8px 0 12px}
+.contact{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding-block:12px;border-top:1px solid var(--line)}
+.contact:first-of-type{border-top:0}
+.contact .num{font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;user-select:all}
+.contact .num a{color:inherit;text-decoration:none}
+.contact .copy{grid-row:1 / span 2;grid-column:2}
+textarea,input[type=text],input[type=datetime-local],select{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px}
+textarea{min-height:80px;resize:vertical}
+.note{font-size:.8rem;color:var(--muted)}
+
+/* Sheet */
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sheet-inner{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(12px + env(safe-area-inset-top,0px)) calc(120px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:20px}
+.sheet-head{display:flex;align-items:center;gap:10px}
+.sheet-head h2{flex:1}
+.field{display:flex;flex-direction:column;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 12px;font-size:.875rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.scale{display:flex;align-items:center;gap:12px}
+.scale input{flex:1;accent-color:var(--accent)}
+.scale output{font-variant-numeric:tabular-nums;font-weight:700;width:2ch;text-align:right}
+.scale-ends{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+.save-bar{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--bg);border-top:1px solid var(--line);padding-block:12px calc(12px + env(safe-area-inset-bottom,0px))}
+.save-bar .wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:8px}
+.save-bar .btn{flex:1}
+.kind{display:flex;gap:6px}
+.kind button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 6px;font-size:.875rem;font-weight:600}
+.kind button[aria-pressed="true"]{border-color:transparent}
+.gentle{background:var(--urge-soft);border-radius:12px;padding:12px 14px;font-size:.9rem}
+
+/* Tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .wrap{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+nav.tabs button{border:0;background:none;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;font-weight:600;color:var(--muted)}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button[aria-current="page"]{color:var(--accent)}
+nav.tabs button.sos[aria-current="page"]{color:var(--sos)}
+/* Notfall-Knopf & Auswahlfenster */
+.sosbtn{height:40px;padding:0 14px;border-radius:99px;border:0;background:var(--sos);color:var(--surface);font-weight:700;font-size:.85rem;letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px;flex:none}
+.sosbtn svg{width:16px;height:16px}
+.modal{position:fixed;inset:0;z-index:40;background:rgba(10,18,16,.55);display:flex;align-items:flex-end;justify-content:center}
+.dialog{background:var(--surface);width:100%;max-width:560px;border-radius:22px 22px 0 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.dialog-head{display:flex;align-items:center;gap:10px}
+.dialog-head h2{flex:1}
+.callopt{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;border-radius:16px;padding:14px 16px;text-decoration:none}
+.callopt b{font-size:1.1rem}
+.callopt .num{font-variant-numeric:tabular-nums;font-size:1.35rem;font-family:var(--display);user-select:all;overflow-wrap:anywhere}
+.callopt .copy{grid-row:1 / span 2;grid-column:2}
+.call-112{background:var(--sos);color:var(--surface)}
+.call-112 .btn{background:rgba(255,255,255,.22);color:var(--surface)}
+.call-person{background:var(--accent-soft);color:var(--ink)}
+.callopt a{color:inherit;text-decoration:none}
+/* Übungen */
+.seg{display:flex;background:var(--surface-2);border-radius:12px;padding:3px;gap:3px;align-self:stretch}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:8px 6px;font-size:.85rem;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ground{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.ground .big{font-family:var(--display);font-size:3rem;line-height:1;color:var(--accent)}
+.ground .step{font-family:var(--display);font-size:1.2rem;line-height:1.35}
+.ground .dots{display:flex;gap:6px}
+.ground .dots i{width:8px;height:8px;border-radius:50%;background:var(--surface-2)}
+.ground .dots i.on{background:var(--accent)}
+.checkin{background:var(--accent-soft);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:6px}
+.checkin h2{font-size:1.3rem}
+.checkin p{margin:0;color:var(--muted)}
+.checkin .btnrow{margin-top:6px}
+.switchrow{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;padding-block:4px;cursor:pointer}
+.switchrow input,.ci-row input[type=checkbox]{appearance:none;-webkit-appearance:none;margin:0;flex:none;cursor:pointer}
+.switchrow input{width:50px;height:30px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);position:relative;transition:background .2s}
+.switchrow input::after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.switchrow input:checked{background:var(--accent);border-color:var(--accent)}
+.switchrow input:checked::after{transform:translateX(20px)}
+.ci-slots{display:flex;flex-direction:column}
+.ci-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding-block:12px;border-top:1px solid var(--line)}
+.ci-row input[type=checkbox]{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.ci-row input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent)}
+.ci-row input[type=checkbox]:checked::after{content:"";width:6px;height:11px;border:solid var(--on-accent);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.ci-row label{display:flex;flex-direction:column;min-width:0;cursor:pointer}
+.ci-row input[type=time]{width:auto;min-width:6.5em;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:16px;font-variant-numeric:tabular-nums}
+.ci-row.off label,.ci-row.off input[type=time]{opacity:.5}
+.ci-push{display:flex;align-items:center;gap:12px;justify-content:space-between;border:1px dashed var(--line);border-radius:12px;padding:12px 14px;margin-top:4px}
+.ci-push>span:first-child{display:flex;flex-direction:column;min-width:0}
+.soon2{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);flex:none;white-space:nowrap}
+.testbadge{display:inline-block;margin-left:8px;font-size:.62rem;letter-spacing:.08em;padding:2px 7px;border-radius:99px;background:var(--mood-soft);color:var(--mood);vertical-align:1px}
+.welcome{position:fixed;inset:0;z-index:45;background:var(--bg);overflow-y:auto}
+.welcome .in{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(24px + env(safe-area-inset-top,0px)) calc(32px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px}
+.welcome h1{font-size:2.1rem}
+.welcome ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.welcome li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.welcome li b{display:block}
+.welcome li .ic{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:700}
+.welcome .langs{display:flex;flex-wrap:wrap;gap:6px}
+.welcome .langs button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-size:.85rem;font-weight:600}
+.welcome .langs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rate{display:flex;gap:6px}
+.rate button{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 0;font-weight:700;font-variant-numeric:tabular-nums}
+.rate button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+a.btn{text-decoration:none;text-align:center;display:inline-block}
+.btn.wa{background:#1F8A4C;color:#fff}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:.875rem;font-weight:600;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion: reduce){.circle::before{transition:none!important}}
+.langbtn{font-weight:700;font-size:.75rem;letter-spacing:.04em;color:var(--ink)}
+.langlist{display:flex;flex-direction:column;gap:6px}
+.langlist button{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:13px 16px;font-weight:600;font-size:1rem;text-align:left}
+.langlist button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.langlist .code{font-size:.75rem;opacity:.6;letter-spacing:.06em}
+.contact .kind{display:inline-block;font-size:.68rem;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted);vertical-align:1px}
+header.top{flex-wrap:nowrap}
+header.top .title h1{overflow-wrap:break-word;hyphens:auto}
+</style>
+
+</head>
+<body>
+<div class="app" id="app"></div>
+<nav class="tabs" id="tabs" aria-label="Sections"><div class="wrap"></div></nav>
+<div id="sheet" class="sheet" hidden></div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function(){
+const LANGS=[['en','English'],['sv','Svenska'],['de','Deutsch'],['es','Español'],['fr','Français']];
+const LOCALE={en:'en-GB',sv:'sv-SE',de:'de-DE',es:'es-ES',fr:'fr-FR'};
+const OPT={
+  feel:['calm','content','relieved','tired','sad','anxious','stressed','lonely','angry','empty','ashamed','bored','overwhelmed'],
+  trig:['stress','alone','boredom','conflict','body','hungry','foods','social','tired','night'],
+  urge:['binge','purge','skip','exercise','laxatives'],
+  help:['breathing','called','outside','distraction','shower','music','wrote','waited'],
+  slot:['breakfast','snackAm','lunch','snackPm','dinner','snackEve']
+};
+/* Migration: alte deutsche Beschriftungen -> neutrale Schlüssel */
+const DE_KEYS={
+  'ruhig':'calm','zufrieden':'content','erleichtert':'relieved','müde':'tired','traurig':'sad','ängstlich':'anxious','gestresst':'stressed','einsam':'lonely','wütend':'angry','leer':'empty','beschämt':'ashamed','gelangweilt':'bored','überfordert':'overwhelmed',
+  'Stress':'stress','Alleinsein':'alone','Langeweile':'boredom','Konflikt/Streit':'conflict','Körperbild/Spiegel':'body','Lange nichts gegessen':'hungry','Bestimmte Lebensmittel':'foods','Social Media':'social','Müdigkeit':'tired','Abends/Nachts':'night',
+  'Essanfall':'binge','Erbrechen':'purge','Mahlzeit auslassen':'skip','Exzessiver Sport':'exercise','Abführmittel':'laxatives',
+  'Atemübung':'breathing','Jemanden angerufen':'called','Rausgegangen':'outside','Ablenkung':'distraction','Warm geduscht':'shower','Musik':'music','Aufgeschrieben':'wrote','Welle abgewartet':'waited',
+  'Frühstück':'breakfast','Snack vormittags':'snackAm','Mittagessen':'lunch','Snack nachmittags':'snackPm','Abendessen':'dinner','Snack abends':'snackEve',
+  'allein':'alone','mit anderen':'others'
+};
+
+const T={};
+T.en={
+'nav.diary':'Diary','nav.history':'History','nav.exercises':'Exercises','nav.aria':'Sections',
+'greet.morning':'Good morning','greet.day':'Hello','greet.evening':'Good evening','review':'Looking back','today.q':'How are you today?',
+'quicklog':'Quick log','quicklog.sub':'4 short questions · time saved automatically',
+'tile.meal':'Meal','tile.meal.sub':'What & how it was','tile.urge':'Urge','tile.urge.sub':'Catch the wave','tile.mood':'Feeling','tile.mood.sub':'Quick check-in',
+'ov.show':'Show day overview','ov.hide':'Hide day overview','day.today':'Today','day.prev':'Previous day','day.next':'Next day','rhythm':'Eating rhythm',
+'empty':'Nothing logged yet.','empty.sub':'Tap Meal, Urge or Feeling above. A short entry is plenty.',
+'storage.warn':'Your browser isn’t saving anything right now (e.g. a private window). Entries are lost when you close it.',
+'example':'Example','card.urge':'Urge','card.mood':'Feeling','card.log':'Quick log',
+'tag.hunger':'Hunger {n}','tag.full':'Full {n}','tag.strength':'Strength {n}','tag.intensity':'Intensity {n}',
+'yes':'yes','no':'no','Yes':'Yes','No':'No','log.summary':'Purged: {p} · Urge: {u} · Anxiety: {a}',
+'outcome.passed':'The urge passed','outcome.partly':'Partly gave in','outcome.happened':'An episode happened',
+'ob.passed':'Passed','ob.partly':'Partly','ob.happened':'Happened',
+'hist.label':'Last 14 days','hist.title':'History','stat.meals':'Days with 3+ meals','stat.urges':'Urge moments logged','stat.passed':'Waves that passed',
+'strip.title':'Eating rhythm & urges','legend.meal':'Meal / snack','legend.urge':'Urge logged',
+'strip.note':'Tap a day to open it. In bulimia treatment, a regular rhythm of 3 meals and 2–3 snacks helps.',
+'rank.triggers':'Most common triggers','rank.helped':'What helped you','rank.feelings':'Feelings that come up often','nodata':'No data yet.',
+'hist.foot':'This overview shows patterns, not grades. Every entry, even on hard days, is a step. Feel free to bring it to your therapist.',
+'day.aria':'{d}: {m} meals, {u} urges',
+'lp.title':'Quick log: times of day','lp.sub':'How often something happened at each time of day ({n} logs).','lp.empty.title':'Quick log: patterns',
+'lp.empty':'No quick logs yet. After a few entries you’ll see which times of day urges and anxiety come up more often.',
+'bs.0':'Morning','bs.1':'Midday','bs.2':'Aftn.','bs.3':'Evening','bs.4':'Night',
+'lp.ranges':'Morning 5–11 · Midday 11–14 · Afternoon 14–18 · Evening 18–22 · Night 22–5',
+'row.urge':'Urge','row.purged':'Purged','row.anx':'Anxiety ≥ 5',
+'ad.title':'Anxiety & urges','ad.with':'Avg. anxiety when there was an urge','ad.without':'Avg. anxiety without an urge','ad.peak':'Highest anxiety per day',
+'spark.from':'13 days ago','spark.to':'today','spark.aria':'Highest anxiety per day, last 14 days',
+'ex.label':'Distraction & meditation','ex.title':'Exercises','wave.title':'Ride the wave',
+'wave.text':'An urge builds, peaks and fades, usually within 15–20 minutes. Breathe with the circle until the timer runs out.',
+'breath.aria':'Breathing pattern','mode.calm':'Calm breathing','mode.calm.hint':'Breathe in for 4 seconds, out for 6. A longer exhale calms the body.',
+'mode.box':'Box breathing','mode.box.hint':'4 in, 4 hold, 4 out, 4 hold. Gives your mind something to count.',
+'cue.ready':'Ready?','cue.in':'Breathe in','cue.hold':'Hold','cue.out':'Breathe out','cue.done':'Done',
+'btn.start':'Start','btn.pause':'Pause','btn.resume':'Resume','btn.reset':'Reset','btn.again':'Again','toast.wave':'15 minutes done. How strong is the urge now?',
+'ground.title':'5-4-3-2-1 grounding','ground.text':'Brings you back to the here and now through your senses. Tap through step by step.',
+'ground.start':'Start exercise','ground.next':'Next','ground.finish':'Done','ground.back':'Back','ground.end':'Well done. How do you feel now compared to before?','ground.log':'Log a feeling',
+'ground.steps':[['things you can <b>see</b>','Look around slowly. Name five things quietly to yourself, e.g. “the blue mug”.'],['things you can <b>feel</b>','Your feet on the floor, the fabric of your clothes, the temperature of the air …'],['things you can <b>hear</b>','Quiet sounds count too: traffic, your breath, a fridge.'],['things you can <b>smell</b>','If nothing comes to mind, go to a window for a moment or smell your sleeve.'],['thing you can <b>taste</b>','Or name one thing you like about yourself.']],
+'idea.title':'Try this now','idea.next':'Another idea',
+'ideas':['Go outside for 10 minutes, even just around the block.','Text someone you trust – just “Hey, how are you?” is enough.','Put on a playlist and tidy one single drawer.','Make a warm drink and sip it slowly, both hands around the cup.','Name 5 things you see, 4 you hear, 3 you can feel.','Write down what you’re feeling right now – without judging it.','Change rooms. Urges are often tied to a place.','Draw, doodle or do a puzzle for a few minutes.','Call someone and talk about something completely different.','Set a timer for 15 minutes and decide again afterwards.','Read three pages of a book or listen to a podcast.','Remember: an urge is like a wave. It rises, it peaks, it falls.'],
+'plan.title':'My plan for hard moments','plan.text':'In a calm moment, write down what you want to do when the urge comes.','plan.ph':'When I feel the urge, I will …',
+'ex.foot':'If you need someone right away: the red SOS button in the diary connects you to emergency services or your contact person.',
+'sos.aria':'Emergency: choose a call','sos.title':'Who do you want to call?','sos.emergency':'Emergency {n}','sos.emergency.sub':'If you’re in acute danger or feel physically very unwell',
+'sos.callperson':'Call {name}','sos.contact':'Your contact person','sos.defaultName':'contact person','sos.setup':'Set up contact person','sos.setup.sub':'Choose who you can reach here with one tap.',
+'sos.hint':'Tap the number to call. If that doesn’t work, copy it and dial it in your phone app.','sos.country':'Country: {c} · change in settings',
+'copy':'Copy','copied':'Copied','copy.manual':'Please select and copy manually','close':'Close','gear':'Settings','lang.title':'Language',
+'set.title':'Settings','set.lang':'Language','set.country':'Country you live in','set.country.text':'Used for the emergency number in the SOS window and for the helplines below.',
+'contact.title':'Contact person for SOS','contact.text':'This person appears in the red SOS window. Agree with them beforehand that you can call them in hard moments.',
+'contact.name':'Name','contact.name.ph':'e.g. Lea','contact.num':'Phone number','contact.num.ph':'e.g. +44 7700 900123',
+'lines.title':'Helplines','lines.other':'We don’t list helplines for this country yet. You can find one at findahelpline.com.','lines.findlink':'Open findahelpline.com',
+'lines.es.note':'We haven’t found a national eating disorder helpline for Spain. The lines below help in a crisis; your GP or a local association can support you with the eating disorder.',
+'kind.ed':'Eating disorders','kind.crisis':'Crisis & suicide prevention','kind.talk':'Someone to talk to',
+'h24':'24/7','free':'free','local':'local rate','nights':'evenings & nights','seeWeb':'see their website for hours',
+'ex.title2':'Example entries','ex.text':'A few examples are included to show how the overview and history look. They’re marked “Example”.','ex.remove':'Remove examples','ex.removed':'Examples removed',
+'data.title':'Your data','data.text':'Everything stays only in this browser on your device. Nobody else sees your entries. Back them up now and then as text, e.g. in your notes.',
+'data.backup':'Copy backup','data.restoreToggle':'Paste backup','data.restore.ph':'Paste backup text here','data.restore':'Restore','data.restored':'Restored','data.invalid':'That text isn’t a valid backup',
+'data.wipe':'Delete all entries','data.wipe.q':'Really delete everything? This can’t be undone.','del':'Delete','cancel':'Cancel','data.wiped':'All entries deleted',
+'disclaimer':'This app doesn’t replace therapy or medical treatment. It’s meant to support you day to day and make patterns visible.',
+'sheet.meal':'Meal','sheet.urge':'Urge','sheet.mood':'Feeling','sheet.log':'Quick log','sheet.edit':'Edit {t}',
+'f.time':'Time','f.note':'Thoughts & notes','f.note.ph':'What was going through your mind?','save':'Save','saved':'Saved','saved.wave':'Saved. Well done – the wave has passed.',
+'entry.del':'Delete entry','entry.del.q':'Really delete this entry?','entry.deleted':'Entry deleted',
+'f.slot':'Which meal?','f.what':'What did you eat?','f.what.ph':'Just describe it – no amounts or calories','f.where':'Where?','f.where.ph':'e.g. kitchen, work, on the go',
+'f.with':'With whom?','with.alone':'Alone','with.others':'With others','f.hunger':'Hunger before','hunger.lo':'not hungry','hunger.hi':'very hungry',
+'f.full':'Fullness after','full.lo':'not full at all','full.hi':'very full','f.fBefore':'Feelings before','f.fAfter':'Feelings after',
+'f.kinds':'What is the urge to do?','f.intensity':'How strong is the urge?','int.lo':'mild','int.hi':'overwhelming','f.triggers':'What was going on before?','f.helped':'What did you try?','f.outcome':'How did it end?',
+'gentle':'Thank you for writing it down honestly. Relapses are part of recovery. Try to eat your next meal as normal instead of compensating.',
+'need.kind':'Choose at least one kind of urge','f.feelings':'What are you feeling right now?','f.howStrong':'How strong?','mood.lo':'barely','mood.hi':'very strong','need.feel':'Choose at least one feeling',
+'q1':'Have you purged?','q2':'Do you feel the urge to purge?','q2s':'How strong?','q3':'How do you feel?','q4':'Do you feel anxiety?','q4s':'How strong is the anxiety?','anx.lo':'mild','anx.hi':'very strong',
+'gentleLog':'Thank you for noting it honestly. This isn’t failure. Try to eat your next meal as normal. If you feel physically unwell, use the SOS button.',
+'need.one':'Answer at least one question',
+'voice.label':'Voice note','voice.btn':'Hold to speak','voice.sub':'up to 1 minute · automatically turned into text','voice.soon':'Soon',
+'voice.hint':'Coming in a later version. Until then: tap the notes field below and use the microphone on your iPhone keyboard.','voice.toast':'Voice notes are coming soon. Use the keyboard microphone for now.',
+'feel.calm':'calm','feel.content':'content','feel.relieved':'relieved','feel.tired':'tired','feel.sad':'sad','feel.anxious':'anxious','feel.stressed':'stressed','feel.lonely':'lonely','feel.angry':'angry','feel.empty':'empty','feel.ashamed':'ashamed','feel.bored':'bored','feel.overwhelmed':'overwhelmed',
+'trig.stress':'Stress','trig.alone':'Being alone','trig.boredom':'Boredom','trig.conflict':'Conflict/argument','trig.body':'Body image/mirror','trig.hungry':'Long time without food','trig.foods':'Certain foods','trig.social':'Social media','trig.tired':'Tiredness','trig.night':'Evening/night',
+'urge.binge':'Binge eating','urge.purge':'Vomiting','urge.skip':'Skipping a meal','urge.exercise':'Excessive exercise','urge.laxatives':'Laxatives',
+'help.breathing':'Breathing exercise','help.called':'Called someone','help.outside':'Went outside','help.distraction':'Distraction','help.shower':'Warm shower','help.music':'Music','help.wrote':'Wrote it down','help.waited':'Waited out the wave',
+'slot.breakfast':'Breakfast','slot.snackAm':'Morning snack','slot.lunch':'Lunch','slot.snackPm':'Afternoon snack','slot.dinner':'Dinner','slot.snackEve':'Evening snack',
+'ss.breakfast':'Bfast','ss.snackAm':'Snack','ss.lunch':'Lunch','ss.snackPm':'Snack','ss.dinner':'Dinner','ss.snackEve':'Snack',
+'ex.oats':'Oatmeal with banana, tea','ex.kitchen':'Kitchen','ex.pasta':'Pasta with vegetables','ex.canteen':'Canteen','ex.colleagues':'Ate with colleagues, it was good.','ex.busy':'Lots going on at work, my head is full.','ex.walk':'After a 20-minute walk it was much weaker.','ex.yogurt':'Yogurt and an apple','ex.home':'Home','ex.bread':'Bread with cheese','ex.soup':'Soup and bread','ex.skipped':'Skipped dinner. Plan dinner firmly tomorrow.','ex.muesli':'Muesli','ex.rice':'Rice with curry','ex.uni':'University','ex.salad':'Salad with bread',
+'country.DE':'Germany','country.UK':'United Kingdom','country.SE':'Sweden','country.ES':'Spain','country.FR':'France','country.OTHER':'Other country'
+};
+
+T.de={
+'nav.diary':'Tagebuch','nav.history':'Verlauf','nav.exercises':'Übungen','nav.aria':'Bereiche',
+'greet.morning':'Guten Morgen','greet.day':'Hallo','greet.evening':'Guten Abend','review':'Rückblick','today.q':'Wie geht es dir heute?',
+'quicklog':'Schnell-Log','quicklog.sub':'4 kurze Fragen · Zeit wird automatisch gespeichert',
+'tile.meal':'Mahlzeit','tile.meal.sub':'Was & wie es war','tile.urge':'Drang','tile.urge.sub':'Welle festhalten','tile.mood':'Gefühl','tile.mood.sub':'Kurz einchecken',
+'ov.show':'Tagesübersicht anzeigen','ov.hide':'Tagesübersicht ausblenden','day.today':'Heute','day.prev':'Vorheriger Tag','day.next':'Nächster Tag','rhythm':'Essrhythmus',
+'empty':'Noch nichts eingetragen.','empty.sub':'Tippe oben auf Mahlzeit, Drang oder Gefühl. Ein kurzer Eintrag reicht völlig.',
+'storage.warn':'Dein Browser speichert gerade nichts dauerhaft (z. B. privates Fenster). Einträge gehen beim Schließen verloren.',
+'example':'Beispiel','card.urge':'Drang','card.mood':'Gefühl','card.log':'Schnell-Log',
+'tag.hunger':'Hunger {n}','tag.full':'Satt {n}','tag.strength':'Stärke {n}','tag.intensity':'Intensität {n}',
+'yes':'ja','no':'nein','Yes':'Ja','No':'Nein','log.summary':'Erbrochen: {p} · Drang: {u} · Angst: {a}',
+'outcome.passed':'Drang ist vorbeigegangen','outcome.partly':'Teilweise nachgegeben','outcome.happened':'Episode ist passiert',
+'ob.passed':'Vorbeigegangen','ob.partly':'Teilweise','ob.happened':'Passiert',
+'hist.label':'Letzte 14 Tage','hist.title':'Verlauf','stat.meals':'Tage mit 3+ Mahlzeiten','stat.urges':'Drang-Momente notiert','stat.passed':'Wellen vorbeigegangen',
+'strip.title':'Essrhythmus & Drang','legend.meal':'Mahlzeit / Snack','legend.urge':'Drang notiert',
+'strip.note':'Tippe auf einen Tag, um ihn zu öffnen. In der Behandlung von Bulimie hilft ein regelmäßiger Rhythmus aus 3 Mahlzeiten und 2–3 Snacks.',
+'rank.triggers':'Häufigste Auslöser','rank.helped':'Was dir geholfen hat','rank.feelings':'Gefühle, die oft auftauchen','nodata':'Noch keine Daten.',
+'hist.foot':'Diese Übersicht zeigt Muster, keine Noten. Jeder Eintrag, auch an schweren Tagen, ist ein Schritt. Bring den Verlauf gern zu deiner Therapeutin oder deinem Therapeuten mit.',
+'day.aria':'{d}: {m} Mahlzeiten, {u} Drang',
+'lp.title':'Schnell-Log: Tageszeiten','lp.sub':'Wie oft etwas zu welcher Tageszeit vorkam ({n} Logs).','lp.empty.title':'Schnell-Log: Muster',
+'lp.empty':'Noch keine Schnell-Logs. Nach ein paar Einträgen siehst du hier, zu welchen Tageszeiten Drang und Angst häufiger auftreten.',
+'bs.0':'Morgens','bs.1':'Mittags','bs.2':'Nachm.','bs.3':'Abends','bs.4':'Nachts',
+'lp.ranges':'Morgens 5–11 · Mittags 11–14 · Nachmittags 14–18 · Abends 18–22 · Nachts 22–5 Uhr',
+'row.urge':'Drang','row.purged':'Erbrochen','row.anx':'Angst ≥ 5',
+'ad.title':'Angst & Drang','ad.with':'Ø Angst, wenn Drang da war','ad.without':'Ø Angst ohne Drang','ad.peak':'Höchste Angst pro Tag',
+'spark.from':'vor 13 Tagen','spark.to':'heute','spark.aria':'Höchste Angst pro Tag, letzte 14 Tage',
+'ex.label':'Ablenkung & Meditation','ex.title':'Übungen','wave.title':'Die Welle reiten',
+'wave.text':'Ein Drang wird stärker, erreicht einen Höhepunkt und lässt nach, meist innerhalb von 15–20 Minuten. Atme mit dem Kreis, bis der Timer abgelaufen ist.',
+'breath.aria':'Atemmuster','mode.calm':'Ruhig atmen','mode.calm.hint':'4 Sekunden ein, 6 Sekunden aus. Längeres Ausatmen beruhigt den Körper.',
+'mode.box':'Box-Atmung','mode.box.hint':'4 ein, 4 halten, 4 aus, 4 halten. Gibt dem Kopf etwas zum Zählen.',
+'cue.ready':'Bereit?','cue.in':'Einatmen','cue.hold':'Halten','cue.out':'Ausatmen','cue.done':'Geschafft',
+'btn.start':'Starten','btn.pause':'Pause','btn.resume':'Weiter','btn.reset':'Zurücksetzen','btn.again':'Nochmal','toast.wave':'15 Minuten geschafft. Wie stark ist der Drang jetzt?',
+'ground.title':'5-4-3-2-1 Erdung','ground.text':'Holt dich über deine Sinne zurück ins Hier und Jetzt. Tippe dich Schritt für Schritt durch.',
+'ground.start':'Übung starten','ground.next':'Weiter','ground.finish':'Fertig','ground.back':'Zurück','ground.end':'Gut gemacht. Wie fühlst du dich jetzt im Vergleich zu vorher?','ground.log':'Gefühl eintragen',
+'ground.steps':[['Dinge, die du <b>siehst</b>','Schau dich langsam um. Benenne fünf Dinge leise für dich, z. B. „die blaue Tasse“.'],['Dinge, die du <b>spürst</b>','Deine Füße auf dem Boden, der Stoff deiner Kleidung, die Temperatur der Luft …'],['Dinge, die du <b>hörst</b>','Auch leise Geräusche zählen: Verkehr, dein Atem, ein Kühlschrank.'],['Dinge, die du <b>riechst</b>','Wenn dir nichts einfällt: Geh kurz an ein Fenster oder rieche an deinem Ärmel.'],['Ding, das du <b>schmeckst</b>','Oder nenne eine Sache, die du an dir magst.']],
+'idea.title':'Probier das jetzt','idea.next':'Andere Idee',
+'ideas':['Geh für 10 Minuten nach draußen, auch nur um den Block.','Schreib einer Person, der du vertraust – nur „Hey, wie geht’s?“ reicht.','Leg eine Playlist auf und räum eine einzige Schublade auf.','Nimm ein warmes Getränk und trink es langsam mit beiden Händen an der Tasse.','Zähl 5 Dinge, die du siehst, 4 die du hörst, 3 die du spürst.','Schreib auf, was du gerade fühlst – ohne es zu bewerten.','Wechsle den Raum. Der Drang hängt oft am Ort.','Mal, kritzle oder mach ein Puzzle für ein paar Minuten.','Ruf jemanden an und rede über etwas völlig anderes.','Stell einen Timer auf 15 Minuten und entscheide danach neu.','Lies drei Seiten in einem Buch oder hör einen Podcast.','Erinnere dich: Ein Drang ist wie eine Welle. Er steigt, er erreicht einen Gipfel, er fällt.'],
+'plan.title':'Mein Plan für schwere Momente','plan.text':'Schreib in einer ruhigen Minute auf, was du tun willst, wenn der Drang kommt.','plan.ph':'Wenn ich den Drang spüre, dann …',
+'ex.foot':'Wenn du sofort jemanden brauchst: Der rote SOS-Knopf im Tagebuch verbindet dich mit dem Notruf oder deiner Kontaktperson.',
+'sos.aria':'Notfall: Anruf auswählen','sos.title':'Wen möchtest du anrufen?','sos.emergency':'Notruf {n}','sos.emergency.sub':'Bei akuter Gefahr oder wenn es dir körperlich sehr schlecht geht',
+'sos.callperson':'{name} anrufen','sos.contact':'Deine Kontaktperson','sos.defaultName':'Kontaktperson','sos.setup':'Kontaktperson einrichten','sos.setup.sub':'Lege fest, wen du hier mit einem Tipp erreichst.',
+'sos.hint':'Tippe auf die Nummer, um anzurufen. Klappt das nicht, kopiere sie und wähle sie im Telefon.','sos.country':'Land: {c} · in den Einstellungen änderbar',
+'copy':'Kopieren','copied':'Kopiert','copy.manual':'Bitte manuell markieren und kopieren','close':'Schließen','gear':'Einstellungen','lang.title':'Sprache',
+'set.title':'Einstellungen','set.lang':'Sprache','set.country':'Land, in dem du lebst','set.country.text':'Bestimmt die Notrufnummer im SOS-Fenster und die Beratungstelefone unten.',
+'contact.title':'Kontaktperson für SOS','contact.text':'Diese Person erscheint im roten SOS-Fenster. Sprich vorher mit ihr ab, dass du sie in schweren Momenten anrufen darfst.',
+'contact.name':'Name','contact.name.ph':'z. B. Lea','contact.num':'Telefonnummer','contact.num.ph':'z. B. 0151 23456789',
+'lines.title':'Beratung am Telefon','lines.other':'Für dieses Land haben wir noch keine Nummern hinterlegt. Auf findahelpline.com findest du eine Beratungsstelle.','lines.findlink':'findahelpline.com öffnen',
+'lines.es.note':'Für Spanien haben wir keine landesweite Hotline für Essstörungen gefunden. Die Nummern unten helfen in einer Krise; bei der Essstörung unterstützen Hausarzt oder örtliche Vereine.',
+'kind.ed':'Essstörungen','kind.crisis':'Krise & Suizidprävention','kind.talk':'Jemand zum Reden',
+'h24':'rund um die Uhr','free':'kostenlos','local':'Ortstarif','nights':'abends & nachts','seeWeb':'Zeiten siehe Website',
+'ex.title2':'Beispieleinträge','ex.text':'Zum Start sind ein paar Beispiele eingetragen, damit du siehst, wie Übersicht und Verlauf aussehen. Sie sind mit „Beispiel“ markiert.','ex.remove':'Beispiele entfernen','ex.removed':'Beispiele entfernt',
+'data.title':'Deine Daten','data.text':'Alles bleibt nur in diesem Browser auf deinem Gerät. Niemand sonst sieht deine Einträge. Sichere sie ab und zu als Text, z. B. in deinen Notizen.',
+'data.backup':'Sicherung kopieren','data.restoreToggle':'Sicherung einfügen','data.restore.ph':'Sicherungstext hier einfügen','data.restore':'Wiederherstellen','data.restored':'Wiederhergestellt','data.invalid':'Der Text ist keine gültige Sicherung',
+'data.wipe':'Alle Einträge löschen','data.wipe.q':'Wirklich alles löschen? Das lässt sich nicht rückgängig machen.','del':'Löschen','cancel':'Abbrechen','data.wiped':'Alle Einträge gelöscht',
+'disclaimer':'Diese App ersetzt keine Therapie oder ärztliche Behandlung. Sie soll dich im Alltag unterstützen und Muster sichtbar machen.',
+'sheet.meal':'Mahlzeit','sheet.urge':'Drang','sheet.mood':'Gefühl','sheet.log':'Schnell-Log','sheet.edit':'{t} bearbeiten',
+'f.time':'Zeitpunkt','f.note':'Gedanken & Notizen','f.note.ph':'Was ging dir durch den Kopf?','save':'Speichern','saved':'Gespeichert','saved.wave':'Gespeichert. Gut gemacht, die Welle ist vorbei.',
+'entry.del':'Eintrag löschen','entry.del.q':'Eintrag wirklich löschen?','entry.deleted':'Eintrag gelöscht',
+'f.slot':'Welche Mahlzeit?','f.what':'Was hast du gegessen?','f.what.ph':'Einfach beschreiben, ohne Mengen oder Kalorien','f.where':'Wo?','f.where.ph':'z. B. Küche, Arbeit, unterwegs',
+'f.with':'Mit wem?','with.alone':'Allein','with.others':'Mit anderen','f.hunger':'Hunger vorher','hunger.lo':'kein Hunger','hunger.hi':'sehr hungrig',
+'f.full':'Sättigung danach','full.lo':'gar nicht satt','full.hi':'sehr voll','f.fBefore':'Gefühle vorher','f.fAfter':'Gefühle danach',
+'f.kinds':'Wozu drängt es dich?','f.intensity':'Wie stark ist der Drang?','int.lo':'leicht','int.hi':'überwältigend','f.triggers':'Was war vorher los?','f.helped':'Was hast du versucht?','f.outcome':'Wie ist es ausgegangen?',
+'gentle':'Danke, dass du es ehrlich aufschreibst. Rückfälle gehören zur Genesung dazu. Versuche, die nächste Mahlzeit ganz normal zu essen, statt etwas auszugleichen.',
+'need.kind':'Wähle mindestens eine Art von Drang','f.feelings':'Was fühlst du gerade?','f.howStrong':'Wie stark?','mood.lo':'kaum','mood.hi':'sehr stark','need.feel':'Wähle mindestens ein Gefühl',
+'q1':'Hast du erbrochen?','q2':'Spürst du den Drang zu erbrechen?','q2s':'Wie stark?','q3':'Wie fühlst du dich?','q4':'Spürst du Angst?','q4s':'Wie stark ist die Angst?','anx.lo':'leicht','anx.hi':'sehr stark',
+'gentleLog':'Danke, dass du es ehrlich festhältst. Das ist kein Scheitern. Versuche, die nächste Mahlzeit ganz normal zu essen. Wenn es dir körperlich schlecht geht, nutze den SOS-Knopf.',
+'need.one':'Beantworte mindestens eine Frage',
+'voice.label':'Sprachnotiz','voice.btn':'Gedrückt halten zum Sprechen','voice.sub':'bis 1 Minute · wird automatisch in Text umgewandelt','voice.soon':'Bald',
+'voice.hint':'Kommt in einer späteren Version. Bis dahin: Tippe unten ins Notizfeld und nutze das Mikrofon auf deiner iPhone-Tastatur.','voice.toast':'Sprachnotizen kommen bald. Nutze bis dahin das Tastatur-Mikrofon.',
+'feel.calm':'ruhig','feel.content':'zufrieden','feel.relieved':'erleichtert','feel.tired':'müde','feel.sad':'traurig','feel.anxious':'ängstlich','feel.stressed':'gestresst','feel.lonely':'einsam','feel.angry':'wütend','feel.empty':'leer','feel.ashamed':'beschämt','feel.bored':'gelangweilt','feel.overwhelmed':'überfordert',
+'trig.stress':'Stress','trig.alone':'Alleinsein','trig.boredom':'Langeweile','trig.conflict':'Konflikt/Streit','trig.body':'Körperbild/Spiegel','trig.hungry':'Lange nichts gegessen','trig.foods':'Bestimmte Lebensmittel','trig.social':'Social Media','trig.tired':'Müdigkeit','trig.night':'Abends/Nachts',
+'urge.binge':'Essanfall','urge.purge':'Erbrechen','urge.skip':'Mahlzeit auslassen','urge.exercise':'Exzessiver Sport','urge.laxatives':'Abführmittel',
+'help.breathing':'Atemübung','help.called':'Jemanden angerufen','help.outside':'Rausgegangen','help.distraction':'Ablenkung','help.shower':'Warm geduscht','help.music':'Musik','help.wrote':'Aufgeschrieben','help.waited':'Welle abgewartet',
+'slot.breakfast':'Frühstück','slot.snackAm':'Snack vormittags','slot.lunch':'Mittagessen','slot.snackPm':'Snack nachmittags','slot.dinner':'Abendessen','slot.snackEve':'Snack abends',
+'ss.breakfast':'Früh','ss.snackAm':'Snack','ss.lunch':'Mittag','ss.snackPm':'Snack','ss.dinner':'Abend','ss.snackEve':'Snack',
+'ex.oats':'Haferflocken mit Banane, Tee','ex.kitchen':'Küche','ex.pasta':'Nudeln mit Gemüse','ex.canteen':'Kantine','ex.colleagues':'Mit Kolleg:innen gegessen, war gut.','ex.busy':'Viel los im Job, Kopf ist voll.','ex.walk':'Nach 20 Minuten Spaziergang war es deutlich weniger.','ex.yogurt':'Joghurt und Apfel','ex.home':'Zuhause','ex.bread':'Brot mit Käse','ex.soup':'Suppe und Brot','ex.skipped':'Abendessen ausgelassen. Morgen Abendessen fest einplanen.','ex.muesli':'Müsli','ex.rice':'Reis mit Curry','ex.uni':'Uni','ex.salad':'Salat mit Brot',
+'country.DE':'Deutschland','country.UK':'Großbritannien','country.SE':'Schweden','country.ES':'Spanien','country.FR':'Frankreich','country.OTHER':'Anderes Land'
+};
+
+T.sv={
+'nav.diary':'Dagbok','nav.history':'Översikt','nav.exercises':'Övningar','nav.aria':'Avsnitt',
+'greet.morning':'God morgon','greet.day':'Hej','greet.evening':'God kväll','review':'Tillbakablick','today.q':'Hur mår du i dag?',
+'quicklog':'Snabblogg','quicklog.sub':'4 korta frågor · tiden sparas automatiskt',
+'tile.meal':'Måltid','tile.meal.sub':'Vad & hur det var','tile.urge':'Impuls','tile.urge.sub':'Fånga vågen','tile.mood':'Känsla','tile.mood.sub':'Snabb incheckning',
+'ov.show':'Visa dagsöversikt','ov.hide':'Dölj dagsöversikt','day.today':'I dag','day.prev':'Föregående dag','day.next':'Nästa dag','rhythm':'Matrytm',
+'empty':'Inget loggat än.','empty.sub':'Tryck på Måltid, Impuls eller Känsla ovan. En kort anteckning räcker gott.',
+'storage.warn':'Din webbläsare sparar inget just nu (t.ex. privat fönster). Anteckningarna försvinner när du stänger den.',
+'example':'Exempel','card.urge':'Impuls','card.mood':'Känsla','card.log':'Snabblogg',
+'tag.hunger':'Hunger {n}','tag.full':'Mätt {n}','tag.strength':'Styrka {n}','tag.intensity':'Intensitet {n}',
+'yes':'ja','no':'nej','Yes':'Ja','No':'Nej','log.summary':'Kräkts: {p} · Impuls: {u} · Ångest: {a}',
+'outcome.passed':'Impulsen gick över','outcome.partly':'Gav delvis efter','outcome.happened':'En episod hände',
+'ob.passed':'Gick över','ob.partly':'Delvis','ob.happened':'Hände',
+'hist.label':'Senaste 14 dagarna','hist.title':'Översikt','stat.meals':'Dagar med 3+ måltider','stat.urges':'Impulser loggade','stat.passed':'Vågor som gick över',
+'strip.title':'Matrytm & impulser','legend.meal':'Måltid / mellanmål','legend.urge':'Impuls loggad',
+'strip.note':'Tryck på en dag för att öppna den. Vid behandling av bulimi hjälper en regelbunden rytm med 3 måltider och 2–3 mellanmål.',
+'rank.triggers':'Vanligaste utlösare','rank.helped':'Det här hjälpte dig','rank.feelings':'Känslor som ofta dyker upp','nodata':'Inga data än.',
+'hist.foot':'Översikten visar mönster, inte betyg. Varje anteckning, även en svår dag, är ett steg. Ta gärna med den till din terapeut.',
+'day.aria':'{d}: {m} måltider, {u} impulser',
+'lp.title':'Snabblogg: tid på dygnet','lp.sub':'Hur ofta något hände vid olika tider på dygnet ({n} loggar).','lp.empty.title':'Snabblogg: mönster',
+'lp.empty':'Inga snabbloggar än. Efter några anteckningar ser du här vilka tider impulser och ångest oftare dyker upp.',
+'bs.0':'Morgon','bs.1':'Mitt på dagen','bs.2':'Eftermidd.','bs.3':'Kväll','bs.4':'Natt',
+'lp.ranges':'Morgon 5–11 · Mitt på dagen 11–14 · Eftermiddag 14–18 · Kväll 18–22 · Natt 22–5',
+'row.urge':'Impuls','row.purged':'Kräkts','row.anx':'Ångest ≥ 5',
+'ad.title':'Ångest & impulser','ad.with':'Snitt ångest när impuls fanns','ad.without':'Snitt ångest utan impuls','ad.peak':'Högsta ångest per dag',
+'spark.from':'för 13 dagar sedan','spark.to':'i dag','spark.aria':'Högsta ångest per dag, senaste 14 dagarna',
+'ex.label':'Distraktion & meditation','ex.title':'Övningar','wave.title':'Rid på vågen',
+'wave.text':'En impuls växer, når en topp och klingar av, oftast inom 15–20 minuter. Andas med cirkeln tills timern är slut.',
+'breath.aria':'Andningsmönster','mode.calm':'Lugn andning','mode.calm.hint':'Andas in i 4 sekunder, ut i 6. En längre utandning lugnar kroppen.',
+'mode.box':'Fyrkantsandning','mode.box.hint':'4 in, 4 håll, 4 ut, 4 håll. Ger huvudet något att räkna.',
+'cue.ready':'Redo?','cue.in':'Andas in','cue.hold':'Håll','cue.out':'Andas ut','cue.done':'Klart',
+'btn.start':'Starta','btn.pause':'Paus','btn.resume':'Fortsätt','btn.reset':'Återställ','btn.again':'Igen','toast.wave':'15 minuter klart. Hur stark är impulsen nu?',
+'ground.title':'5-4-3-2-1 jordning','ground.text':'Tar dig tillbaka till här och nu genom dina sinnen. Tryck dig igenom steg för steg.',
+'ground.start':'Starta övningen','ground.next':'Nästa','ground.finish':'Klar','ground.back':'Tillbaka','ground.end':'Bra gjort. Hur känner du dig nu jämfört med innan?','ground.log':'Logga en känsla',
+'ground.steps':[['saker du <b>ser</b>','Se dig långsamt omkring. Nämn fem saker tyst för dig själv, t.ex. ”den blå muggen”.'],['saker du <b>känner</b>','Fötterna mot golvet, tyget i dina kläder, luftens temperatur …'],['saker du <b>hör</b>','Även tysta ljud räknas: trafik, din andning, ett kylskåp.'],['saker du <b>luktar</b>','Om inget dyker upp: gå en stund till ett fönster eller lukta på din ärm.'],['sak du <b>smakar</b>','Eller nämn en sak du gillar med dig själv.']],
+'idea.title':'Testa det här nu','idea.next':'En annan idé',
+'ideas':['Gå ut i 10 minuter, även bara runt kvarteret.','Skriv till någon du litar på – bara ”Hej, hur är det?” räcker.','Sätt på en spellista och städa en enda låda.','Gör en varm dryck och drick långsamt med båda händerna runt koppen.','Räkna 5 saker du ser, 4 du hör, 3 du känner.','Skriv ner vad du känner just nu – utan att värdera det.','Byt rum. Impulsen hänger ofta ihop med platsen.','Rita, klottra eller lägg pussel några minuter.','Ring någon och prata om något helt annat.','Ställ en timer på 15 minuter och bestäm dig igen efteråt.','Läs tre sidor i en bok eller lyssna på en podd.','Kom ihåg: en impuls är som en våg. Den stiger, når en topp och sjunker.'],
+'plan.title':'Min plan för svåra stunder','plan.text':'Skriv i en lugn stund ner vad du vill göra när impulsen kommer.','plan.ph':'När jag känner impulsen ska jag …',
+'ex.foot':'Om du behöver någon direkt: den röda SOS-knappen i dagboken kopplar dig till larmnumret eller din kontaktperson.',
+'sos.aria':'Nödläge: välj samtal','sos.title':'Vem vill du ringa?','sos.emergency':'Larmnummer {n}','sos.emergency.sub':'Vid akut fara eller om du mår mycket dåligt fysiskt',
+'sos.callperson':'Ring {name}','sos.contact':'Din kontaktperson','sos.defaultName':'kontaktperson','sos.setup':'Lägg till kontaktperson','sos.setup.sub':'Välj vem du kan nå här med ett tryck.',
+'sos.hint':'Tryck på numret för att ringa. Fungerar det inte, kopiera det och slå det i telefonappen.','sos.country':'Land: {c} · ändra i inställningarna',
+'copy':'Kopiera','copied':'Kopierat','copy.manual':'Markera och kopiera manuellt','close':'Stäng','gear':'Inställningar','lang.title':'Språk',
+'set.title':'Inställningar','set.lang':'Språk','set.country':'Land där du bor','set.country.text':'Styr larmnumret i SOS-fönstret och stödlinjerna nedan.',
+'contact.title':'Kontaktperson för SOS','contact.text':'Den här personen visas i det röda SOS-fönstret. Kom överens i förväg om att du får ringa i svåra stunder.',
+'contact.name':'Namn','contact.name.ph':'t.ex. Lea','contact.num':'Telefonnummer','contact.num.ph':'t.ex. 070-123 45 67',
+'lines.title':'Stödlinjer','lines.other':'Vi har inga nummer för det här landet än. På findahelpline.com hittar du en stödlinje.','lines.findlink':'Öppna findahelpline.com',
+'lines.es.note':'Vi har inte hittat någon nationell stödlinje för ätstörningar i Spanien. Numren nedan hjälper i en kris; din läkare eller en lokal förening kan stötta kring ätstörningen.',
+'kind.ed':'Ätstörningar','kind.crisis':'Kris & suicidprevention','kind.talk':'Någon att prata med',
+'h24':'dygnet runt','free':'avgiftsfritt','local':'lokal taxa','nights':'kvällar & nätter','seeWeb':'se webbplatsen för öppettider',
+'ex.title2':'Exempelanteckningar','ex.text':'Några exempel finns med från början så att du ser hur översikten ser ut. De är markerade med ”Exempel”.','ex.remove':'Ta bort exempel','ex.removed':'Exempel borttagna',
+'data.title':'Dina data','data.text':'Allt stannar bara i den här webbläsaren på din enhet. Ingen annan ser dina anteckningar. Säkerhetskopiera dem som text då och då, t.ex. i dina anteckningar.',
+'data.backup':'Kopiera säkerhetskopia','data.restoreToggle':'Klistra in säkerhetskopia','data.restore.ph':'Klistra in säkerhetskopian här','data.restore':'Återställ','data.restored':'Återställt','data.invalid':'Texten är ingen giltig säkerhetskopia',
+'data.wipe':'Radera alla anteckningar','data.wipe.q':'Vill du verkligen radera allt? Det går inte att ångra.','del':'Radera','cancel':'Avbryt','data.wiped':'Alla anteckningar raderade',
+'disclaimer':'Appen ersätter inte terapi eller medicinsk behandling. Den ska stötta dig i vardagen och göra mönster synliga.',
+'sheet.meal':'Måltid','sheet.urge':'Impuls','sheet.mood':'Känsla','sheet.log':'Snabblogg','sheet.edit':'Redigera {t}',
+'f.time':'Tidpunkt','f.note':'Tankar & anteckningar','f.note.ph':'Vad gick genom huvudet?','save':'Spara','saved':'Sparat','saved.wave':'Sparat. Bra jobbat – vågen har gått över.',
+'entry.del':'Radera anteckning','entry.del.q':'Vill du verkligen radera anteckningen?','entry.deleted':'Anteckning raderad',
+'f.slot':'Vilken måltid?','f.what':'Vad åt du?','f.what.ph':'Beskriv bara – inga mängder eller kalorier','f.where':'Var?','f.where.ph':'t.ex. köket, jobbet, på språng',
+'f.with':'Med vem?','with.alone':'Ensam','with.others':'Med andra','f.hunger':'Hunger innan','hunger.lo':'inte hungrig','hunger.hi':'mycket hungrig',
+'f.full':'Mättnad efteråt','full.lo':'inte alls mätt','full.hi':'mycket mätt','f.fBefore':'Känslor innan','f.fAfter':'Känslor efteråt',
+'f.kinds':'Vad vill impulsen få dig att göra?','f.intensity':'Hur stark är impulsen?','int.lo':'svag','int.hi':'överväldigande','f.triggers':'Vad hände innan?','f.helped':'Vad provade du?','f.outcome':'Hur slutade det?',
+'gentle':'Tack för att du skriver ner det ärligt. Återfall hör till tillfrisknandet. Försök äta nästa måltid som vanligt i stället för att kompensera.',
+'need.kind':'Välj minst en typ av impuls','f.feelings':'Vad känner du just nu?','f.howStrong':'Hur starkt?','mood.lo':'knappt','mood.hi':'mycket starkt','need.feel':'Välj minst en känsla',
+'q1':'Har du kräkts?','q2':'Känner du impulsen att kräkas?','q2s':'Hur stark?','q3':'Hur känner du dig?','q4':'Känner du ångest?','q4s':'Hur stark är ångesten?','anx.lo':'svag','anx.hi':'mycket stark',
+'gentleLog':'Tack för att du noterar det ärligt. Det är inget misslyckande. Försök äta nästa måltid som vanligt. Om du mår dåligt fysiskt, använd SOS-knappen.',
+'need.one':'Svara på minst en fråga',
+'voice.label':'Röstanteckning','voice.btn':'Håll in för att prata','voice.sub':'upp till 1 minut · blir automatiskt till text','voice.soon':'Snart',
+'voice.hint':'Kommer i en senare version. Tills dess: tryck i anteckningsfältet nedan och använd mikrofonen på iPhone-tangentbordet.','voice.toast':'Röstanteckningar kommer snart. Använd tangentbordets mikrofon så länge.',
+'feel.calm':'lugn','feel.content':'nöjd','feel.relieved':'lättad','feel.tired':'trött','feel.sad':'ledsen','feel.anxious':'orolig','feel.stressed':'stressad','feel.lonely':'ensam','feel.angry':'arg','feel.empty':'tom','feel.ashamed':'skamsen','feel.bored':'uttråkad','feel.overwhelmed':'överväldigad',
+'trig.stress':'Stress','trig.alone':'Ensamhet','trig.boredom':'Tristess','trig.conflict':'Konflikt/bråk','trig.body':'Kroppsbild/spegel','trig.hungry':'Länge sedan jag åt','trig.foods':'Vissa livsmedel','trig.social':'Sociala medier','trig.tired':'Trötthet','trig.night':'Kväll/natt',
+'urge.binge':'Hetsätning','urge.purge':'Kräkning','urge.skip':'Hoppa över måltid','urge.exercise':'Överdriven träning','urge.laxatives':'Laxermedel',
+'help.breathing':'Andningsövning','help.called':'Ringde någon','help.outside':'Gick ut','help.distraction':'Distraktion','help.shower':'Varm dusch','help.music':'Musik','help.wrote':'Skrev ner det','help.waited':'Väntade ut vågen',
+'slot.breakfast':'Frukost','slot.snackAm':'Förmiddagsmellanmål','slot.lunch':'Lunch','slot.snackPm':'Eftermiddagsmellanmål','slot.dinner':'Middag','slot.snackEve':'Kvällsmellanmål',
+'ss.breakfast':'Frukost','ss.snackAm':'Mellis','ss.lunch':'Lunch','ss.snackPm':'Mellis','ss.dinner':'Middag','ss.snackEve':'Mellis',
+'ex.oats':'Havregrynsgröt med banan, te','ex.kitchen':'Köket','ex.pasta':'Pasta med grönsaker','ex.canteen':'Matsalen','ex.colleagues':'Åt med kollegor, det var bra.','ex.busy':'Mycket på jobbet, huvudet är fullt.','ex.walk':'Efter en 20 minuters promenad var den mycket svagare.','ex.yogurt':'Yoghurt och ett äpple','ex.home':'Hemma','ex.bread':'Smörgås med ost','ex.soup':'Soppa och bröd','ex.skipped':'Hoppade över middagen. Planera in middag i morgon.','ex.muesli':'Müsli','ex.rice':'Ris med curry','ex.uni':'Universitetet','ex.salad':'Sallad med bröd',
+'country.DE':'Tyskland','country.UK':'Storbritannien','country.SE':'Sverige','country.ES':'Spanien','country.FR':'Frankrike','country.OTHER':'Annat land'
+};
+
+T.es={
+'nav.diary':'Diario','nav.history':'Historial','nav.exercises':'Ejercicios','nav.aria':'Secciones',
+'greet.morning':'Buenos días','greet.day':'Hola','greet.evening':'Buenas tardes','review':'Mirando atrás','today.q':'¿Cómo estás hoy?',
+'quicklog':'Registro rápido','quicklog.sub':'4 preguntas cortas · la hora se guarda sola',
+'tile.meal':'Comida','tile.meal.sub':'Qué y cómo fue','tile.urge':'Impulso','tile.urge.sub':'Anotar la ola','tile.mood':'Emoción','tile.mood.sub':'Revisión rápida',
+'ov.show':'Mostrar resumen del día','ov.hide':'Ocultar resumen del día','day.today':'Hoy','day.prev':'Día anterior','day.next':'Día siguiente','rhythm':'Ritmo de comidas',
+'empty':'Todavía no hay nada.','empty.sub':'Toca Comida, Impulso o Emoción arriba. Una nota breve es suficiente.',
+'storage.warn':'Tu navegador no está guardando nada ahora mismo (p. ej., ventana privada). Las notas se pierden al cerrarlo.',
+'example':'Ejemplo','card.urge':'Impulso','card.mood':'Emoción','card.log':'Registro rápido',
+'tag.hunger':'Hambre {n}','tag.full':'Saciedad {n}','tag.strength':'Fuerza {n}','tag.intensity':'Intensidad {n}',
+'yes':'sí','no':'no','Yes':'Sí','No':'No','log.summary':'Vómito: {p} · Impulso: {u} · Ansiedad: {a}',
+'outcome.passed':'El impulso pasó','outcome.partly':'Cedí en parte','outcome.happened':'Hubo un episodio',
+'ob.passed':'Pasó','ob.partly':'En parte','ob.happened':'Ocurrió',
+'hist.label':'Últimos 14 días','hist.title':'Historial','stat.meals':'Días con 3+ comidas','stat.urges':'Impulsos anotados','stat.passed':'Olas que pasaron',
+'strip.title':'Ritmo de comidas e impulsos','legend.meal':'Comida / tentempié','legend.urge':'Impulso anotado',
+'strip.note':'Toca un día para abrirlo. En el tratamiento de la bulimia ayuda un ritmo regular de 3 comidas y 2–3 tentempiés.',
+'rank.triggers':'Desencadenantes más frecuentes','rank.helped':'Lo que te ayudó','rank.feelings':'Emociones frecuentes','nodata':'Aún no hay datos.',
+'hist.foot':'Este resumen muestra patrones, no notas. Cada registro, también en los días difíciles, es un paso. Puedes llevarlo a tu terapeuta.',
+'day.aria':'{d}: {m} comidas, {u} impulsos',
+'lp.title':'Registro rápido: momentos del día','lp.sub':'Con qué frecuencia ocurrió algo en cada momento del día ({n} registros).','lp.empty.title':'Registro rápido: patrones',
+'lp.empty':'Aún no hay registros rápidos. Tras algunos verás en qué momentos del día aparecen más los impulsos y la ansiedad.',
+'bs.0':'Mañana','bs.1':'Mediodía','bs.2':'Tarde','bs.3':'Noche','bs.4':'Madrug.',
+'lp.ranges':'Mañana 5–11 · Mediodía 11–14 · Tarde 14–18 · Noche 18–22 · Madrugada 22–5',
+'row.urge':'Impulso','row.purged':'Vómito','row.anx':'Ansiedad ≥ 5',
+'ad.title':'Ansiedad e impulsos','ad.with':'Ansiedad media con impulso','ad.without':'Ansiedad media sin impulso','ad.peak':'Ansiedad máxima por día',
+'spark.from':'hace 13 días','spark.to':'hoy','spark.aria':'Ansiedad máxima por día, últimos 14 días',
+'ex.label':'Distracción y meditación','ex.title':'Ejercicios','wave.title':'Surfear la ola',
+'wave.text':'Un impulso crece, llega a un pico y se calma, normalmente en 15–20 minutos. Respira con el círculo hasta que termine el temporizador.',
+'breath.aria':'Patrón de respiración','mode.calm':'Respiración tranquila','mode.calm.hint':'Inhala 4 segundos, exhala 6. Una exhalación más larga calma el cuerpo.',
+'mode.box':'Respiración cuadrada','mode.box.hint':'4 inhalar, 4 mantener, 4 exhalar, 4 mantener. Le da a la mente algo que contar.',
+'cue.ready':'¿Lista/o?','cue.in':'Inhala','cue.hold':'Mantén','cue.out':'Exhala','cue.done':'Lo lograste',
+'btn.start':'Empezar','btn.pause':'Pausa','btn.resume':'Seguir','btn.reset':'Reiniciar','btn.again':'Otra vez','toast.wave':'15 minutos hechos. ¿Qué tan fuerte es el impulso ahora?',
+'ground.title':'Anclaje 5-4-3-2-1','ground.text':'Te trae de vuelta al aquí y ahora a través de tus sentidos. Avanza paso a paso.',
+'ground.start':'Empezar ejercicio','ground.next':'Siguiente','ground.finish':'Hecho','ground.back':'Atrás','ground.end':'Muy bien. ¿Cómo te sientes ahora en comparación con antes?','ground.log':'Anotar una emoción',
+'ground.steps':[['cosas que <b>ves</b>','Mira a tu alrededor despacio. Nombra cinco cosas en voz baja, p. ej. «la taza azul».'],['cosas que <b>sientes</b>','Tus pies en el suelo, la tela de tu ropa, la temperatura del aire …'],['cosas que <b>oyes</b>','También cuentan los sonidos suaves: el tráfico, tu respiración, una nevera.'],['cosas que <b>hueles</b>','Si no se te ocurre nada, acércate a una ventana o huele tu manga.'],['cosa que <b>saboreas</b>','O nombra algo que te guste de ti.']],
+'idea.title':'Prueba esto ahora','idea.next':'Otra idea',
+'ideas':['Sal 10 minutos, aunque sea a dar la vuelta a la manzana.','Escribe a alguien de confianza: basta con «Hola, ¿qué tal?».','Pon una lista de música y ordena un solo cajón.','Prepara una bebida caliente y tómala despacio, con las dos manos en la taza.','Nombra 5 cosas que ves, 4 que oyes y 3 que sientes.','Escribe lo que sientes ahora mismo, sin juzgarlo.','Cambia de habitación. El impulso suele estar ligado al lugar.','Dibuja, garabatea o haz un puzle unos minutos.','Llama a alguien y habla de algo totalmente distinto.','Pon un temporizador de 15 minutos y decide de nuevo después.','Lee tres páginas de un libro o escucha un pódcast.','Recuerda: un impulso es como una ola. Sube, llega a su punto más alto y baja.'],
+'plan.title':'Mi plan para los momentos difíciles','plan.text':'En un momento de calma, escribe qué quieres hacer cuando llegue el impulso.','plan.ph':'Cuando sienta el impulso, voy a …',
+'ex.foot':'Si necesitas a alguien enseguida: el botón rojo SOS del diario te conecta con emergencias o con tu persona de contacto.',
+'sos.aria':'Emergencia: elegir llamada','sos.title':'¿A quién quieres llamar?','sos.emergency':'Emergencias {n}','sos.emergency.sub':'Si estás en peligro o te sientes físicamente muy mal',
+'sos.callperson':'Llamar a {name}','sos.contact':'Tu persona de contacto','sos.defaultName':'persona de contacto','sos.setup':'Añadir persona de contacto','sos.setup.sub':'Elige a quién puedes llamar aquí con un toque.',
+'sos.hint':'Toca el número para llamar. Si no funciona, cópialo y márcalo en el teléfono.','sos.country':'País: {c} · cámbialo en ajustes',
+'copy':'Copiar','copied':'Copiado','copy.manual':'Selecciona y copia manualmente','close':'Cerrar','gear':'Ajustes','lang.title':'Idioma',
+'set.title':'Ajustes','set.lang':'Idioma','set.country':'País donde vives','set.country.text':'Define el número de emergencias en la ventana SOS y las líneas de ayuda de abajo.',
+'contact.title':'Persona de contacto para SOS','contact.text':'Esta persona aparece en la ventana roja SOS. Acuerda con ella antes que puedes llamarla en momentos difíciles.',
+'contact.name':'Nombre','contact.name.ph':'p. ej. Lea','contact.num':'Teléfono','contact.num.ph':'p. ej. 612 345 678',
+'lines.title':'Líneas de ayuda','lines.other':'Aún no tenemos números para este país. En findahelpline.com puedes encontrar una línea de ayuda.','lines.findlink':'Abrir findahelpline.com',
+'lines.es.note':'No hemos encontrado una línea nacional específica para trastornos alimentarios en España. Los números de abajo ayudan en una crisis; tu médico o una asociación local pueden apoyarte con el TCA.',
+'kind.ed':'Trastornos alimentarios','kind.crisis':'Crisis y prevención del suicidio','kind.talk':'Alguien con quien hablar',
+'h24':'24 h','free':'gratuito','local':'tarifa local','nights':'tardes y noches','seeWeb':'horario en su web',
+'ex.title2':'Registros de ejemplo','ex.text':'Al principio hay algunos ejemplos para que veas cómo se ven el resumen y el historial. Están marcados como «Ejemplo».','ex.remove':'Quitar ejemplos','ex.removed':'Ejemplos eliminados',
+'data.title':'Tus datos','data.text':'Todo se queda solo en este navegador de tu dispositivo. Nadie más ve tus registros. Haz una copia en texto de vez en cuando, p. ej. en tus notas.',
+'data.backup':'Copiar copia de seguridad','data.restoreToggle':'Pegar copia de seguridad','data.restore.ph':'Pega aquí el texto de la copia','data.restore':'Restaurar','data.restored':'Restaurado','data.invalid':'El texto no es una copia válida',
+'data.wipe':'Borrar todos los registros','data.wipe.q':'¿Seguro que quieres borrarlo todo? No se puede deshacer.','del':'Borrar','cancel':'Cancelar','data.wiped':'Todos los registros borrados',
+'disclaimer':'Esta app no sustituye la terapia ni el tratamiento médico. Está pensada para acompañarte en el día a día y hacer visibles los patrones.',
+'sheet.meal':'Comida','sheet.urge':'Impulso','sheet.mood':'Emoción','sheet.log':'Registro rápido','sheet.edit':'Editar: {t}',
+'f.time':'Hora','f.note':'Pensamientos y notas','f.note.ph':'¿Qué se te pasaba por la cabeza?','save':'Guardar','saved':'Guardado','saved.wave':'Guardado. Muy bien: la ola ha pasado.',
+'entry.del':'Borrar registro','entry.del.q':'¿Seguro que quieres borrar este registro?','entry.deleted':'Registro borrado',
+'f.slot':'¿Qué comida?','f.what':'¿Qué comiste?','f.what.ph':'Solo descríbelo, sin cantidades ni calorías','f.where':'¿Dónde?','f.where.ph':'p. ej. cocina, trabajo, en la calle',
+'f.with':'¿Con quién?','with.alone':'Sola/o','with.others':'Con otras personas','f.hunger':'Hambre antes','hunger.lo':'sin hambre','hunger.hi':'mucha hambre',
+'f.full':'Saciedad después','full.lo':'nada saciada/o','full.hi':'muy llena/o','f.fBefore':'Emociones antes','f.fAfter':'Emociones después',
+'f.kinds':'¿A qué te empuja el impulso?','f.intensity':'¿Qué tan fuerte es el impulso?','int.lo':'leve','int.hi':'abrumador','f.triggers':'¿Qué pasó antes?','f.helped':'¿Qué intentaste?','f.outcome':'¿Cómo terminó?',
+'gentle':'Gracias por anotarlo con sinceridad. Las recaídas forman parte de la recuperación. Intenta hacer la siguiente comida con normalidad en lugar de compensar.',
+'need.kind':'Elige al menos un tipo de impulso','f.feelings':'¿Qué sientes ahora mismo?','f.howStrong':'¿Con qué intensidad?','mood.lo':'apenas','mood.hi':'muy fuerte','need.feel':'Elige al menos una emoción',
+'q1':'¿Has vomitado?','q2':'¿Sientes el impulso de vomitar?','q2s':'¿Qué tan fuerte?','q3':'¿Cómo te sientes?','q4':'¿Sientes ansiedad?','q4s':'¿Qué tan fuerte es la ansiedad?','anx.lo':'leve','anx.hi':'muy fuerte',
+'gentleLog':'Gracias por anotarlo con sinceridad. No es un fracaso. Intenta hacer la siguiente comida con normalidad. Si te sientes físicamente mal, usa el botón SOS.',
+'need.one':'Responde al menos una pregunta',
+'voice.label':'Nota de voz','voice.btn':'Mantén pulsado para hablar','voice.sub':'hasta 1 minuto · se convierte en texto automáticamente','voice.soon':'Pronto',
+'voice.hint':'Llegará en una versión posterior. Mientras tanto: toca el campo de notas y usa el micrófono del teclado del iPhone.','voice.toast':'Las notas de voz llegarán pronto. Por ahora usa el micrófono del teclado.',
+'feel.calm':'tranquila/o','feel.content':'satisfecha/o','feel.relieved':'aliviada/o','feel.tired':'cansada/o','feel.sad':'triste','feel.anxious':'ansiosa/o','feel.stressed':'estresada/o','feel.lonely':'sola/o','feel.angry':'enfadada/o','feel.empty':'vacía/o','feel.ashamed':'avergonzada/o','feel.bored':'aburrida/o','feel.overwhelmed':'desbordada/o',
+'trig.stress':'Estrés','trig.alone':'Soledad','trig.boredom':'Aburrimiento','trig.conflict':'Conflicto/discusión','trig.body':'Imagen corporal/espejo','trig.hungry':'Mucho tiempo sin comer','trig.foods':'Ciertos alimentos','trig.social':'Redes sociales','trig.tired':'Cansancio','trig.night':'Tarde/noche',
+'urge.binge':'Atracón','urge.purge':'Vómito','urge.skip':'Saltarme una comida','urge.exercise':'Ejercicio excesivo','urge.laxatives':'Laxantes',
+'help.breathing':'Respiración','help.called':'Llamé a alguien','help.outside':'Salí fuera','help.distraction':'Distracción','help.shower':'Ducha caliente','help.music':'Música','help.wrote':'Lo escribí','help.waited':'Esperé a que pasara la ola',
+'slot.breakfast':'Desayuno','slot.snackAm':'Media mañana','slot.lunch':'Comida','slot.snackPm':'Merienda','slot.dinner':'Cena','slot.snackEve':'Tentempié nocturno',
+'ss.breakfast':'Desayuno','ss.snackAm':'Snack','ss.lunch':'Comida','ss.snackPm':'Merienda','ss.dinner':'Cena','ss.snackEve':'Snack',
+'ex.oats':'Avena con plátano, té','ex.kitchen':'Cocina','ex.pasta':'Pasta con verduras','ex.canteen':'Comedor','ex.colleagues':'Comí con compañeros, estuvo bien.','ex.busy':'Mucho trabajo, tengo la cabeza llena.','ex.walk':'Después de 20 minutos de paseo era mucho más débil.','ex.yogurt':'Yogur y una manzana','ex.home':'Casa','ex.bread':'Pan con queso','ex.soup':'Sopa y pan','ex.skipped':'Me salté la cena. Mañana planificar la cena.','ex.muesli':'Muesli','ex.rice':'Arroz con curry','ex.uni':'Universidad','ex.salad':'Ensalada con pan',
+'country.DE':'Alemania','country.UK':'Reino Unido','country.SE':'Suecia','country.ES':'España','country.FR':'Francia','country.OTHER':'Otro país'
+};
+
+T.fr={
+'nav.diary':'Journal','nav.history':'Historique','nav.exercises':'Exercices','nav.aria':'Rubriques',
+'greet.morning':'Bonjour','greet.day':'Bonjour','greet.evening':'Bonsoir','review':'Retour en arrière','today.q':'Comment vas-tu aujourd’hui ?',
+'quicklog':'Saisie rapide','quicklog.sub':'4 questions courtes · l’heure est enregistrée automatiquement',
+'tile.meal':'Repas','tile.meal.sub':'Quoi & comment','tile.urge':'Envie','tile.urge.sub':'Noter la vague','tile.mood':'Émotion','tile.mood.sub':'Point rapide',
+'ov.show':'Afficher la journée','ov.hide':'Masquer la journée','day.today':'Aujourd’hui','day.prev':'Jour précédent','day.next':'Jour suivant','rhythm':'Rythme des repas',
+'empty':'Rien de noté pour l’instant.','empty.sub':'Touche Repas, Envie ou Émotion ci-dessus. Une courte note suffit.',
+'storage.warn':'Ton navigateur n’enregistre rien en ce moment (p. ex. fenêtre privée). Les notes seront perdues à la fermeture.',
+'example':'Exemple','card.urge':'Envie','card.mood':'Émotion','card.log':'Saisie rapide',
+'tag.hunger':'Faim {n}','tag.full':'Rassasiement {n}','tag.strength':'Force {n}','tag.intensity':'Intensité {n}',
+'yes':'oui','no':'non','Yes':'Oui','No':'Non','log.summary':'Vomi : {p} · Envie : {u} · Anxiété : {a}',
+'outcome.passed':'L’envie est passée','outcome.partly':'J’ai cédé en partie','outcome.happened':'Un épisode a eu lieu',
+'ob.passed':'Passée','ob.partly':'En partie','ob.happened':'Arrivé',
+'hist.label':'14 derniers jours','hist.title':'Historique','stat.meals':'Jours avec 3+ repas','stat.urges':'Envies notées','stat.passed':'Vagues passées',
+'strip.title':'Rythme des repas & envies','legend.meal':'Repas / collation','legend.urge':'Envie notée',
+'strip.note':'Touche un jour pour l’ouvrir. Dans le traitement de la boulimie, un rythme régulier de 3 repas et 2–3 collations aide.',
+'rank.triggers':'Déclencheurs les plus fréquents','rank.helped':'Ce qui t’a aidé·e','rank.feelings':'Émotions fréquentes','nodata':'Pas encore de données.',
+'hist.foot':'Cet aperçu montre des tendances, pas des notes. Chaque saisie, même les jours difficiles, est un pas. Tu peux l’apporter à ton ou ta thérapeute.',
+'day.aria':'{d} : {m} repas, {u} envies',
+'lp.title':'Saisie rapide : moments de la journée','lp.sub':'À quelle fréquence quelque chose est arrivé selon le moment ({n} saisies).','lp.empty.title':'Saisie rapide : tendances',
+'lp.empty':'Pas encore de saisies rapides. Après quelques-unes, tu verras ici à quels moments les envies et l’anxiété reviennent le plus.',
+'bs.0':'Matin','bs.1':'Midi','bs.2':'Ap.-midi','bs.3':'Soir','bs.4':'Nuit',
+'lp.ranges':'Matin 5–11 · Midi 11–14 · Après-midi 14–18 · Soir 18–22 · Nuit 22–5 h',
+'row.urge':'Envie','row.purged':'Vomi','row.anx':'Anxiété ≥ 5',
+'ad.title':'Anxiété & envies','ad.with':'Anxiété moy. avec envie','ad.without':'Anxiété moy. sans envie','ad.peak':'Anxiété maximale par jour',
+'spark.from':'il y a 13 jours','spark.to':'aujourd’hui','spark.aria':'Anxiété maximale par jour, 14 derniers jours',
+'ex.label':'Distraction & méditation','ex.title':'Exercices','wave.title':'Surfer la vague',
+'wave.text':'Une envie monte, atteint un pic puis retombe, généralement en 15 à 20 minutes. Respire avec le cercle jusqu’à la fin du minuteur.',
+'breath.aria':'Rythme de respiration','mode.calm':'Respiration calme','mode.calm.hint':'Inspire 4 secondes, expire 6. Une expiration plus longue apaise le corps.',
+'mode.box':'Respiration carrée','mode.box.hint':'4 inspirer, 4 retenir, 4 expirer, 4 retenir. Donne à l’esprit quelque chose à compter.',
+'cue.ready':'Prêt·e ?','cue.in':'Inspire','cue.hold':'Retiens','cue.out':'Expire','cue.done':'Bravo',
+'btn.start':'Démarrer','btn.pause':'Pause','btn.resume':'Reprendre','btn.reset':'Réinitialiser','btn.again':'Encore','toast.wave':'15 minutes réussies. Quelle est la force de l’envie maintenant ?',
+'ground.title':'Ancrage 5-4-3-2-1','ground.text':'Te ramène ici et maintenant grâce à tes sens. Avance étape par étape.',
+'ground.start':'Commencer','ground.next':'Suivant','ground.finish':'Terminé','ground.back':'Retour','ground.end':'Bien joué. Comment te sens-tu maintenant par rapport à avant ?','ground.log':'Noter une émotion',
+'ground.steps':[['choses que tu <b>vois</b>','Regarde lentement autour de toi. Nomme cinq choses pour toi, p. ex. « la tasse bleue ».'],['choses que tu <b>ressens</b>','Tes pieds sur le sol, le tissu de tes vêtements, la température de l’air …'],['choses que tu <b>entends</b>','Les bruits discrets comptent aussi : la circulation, ta respiration, un frigo.'],['choses que tu <b>sens</b> (odeurs)','Si rien ne vient, approche-toi d’une fenêtre ou sens ta manche.'],['chose que tu <b>goûtes</b>','Ou nomme une chose que tu aimes chez toi.']],
+'idea.title':'Essaie ceci maintenant','idea.next':'Une autre idée',
+'ideas':['Sors 10 minutes, même juste pour faire le tour du pâté de maisons.','Écris à une personne de confiance – un simple « Coucou, ça va ? » suffit.','Mets une playlist et range un seul tiroir.','Prépare une boisson chaude et bois-la lentement, les deux mains autour de la tasse.','Nomme 5 choses que tu vois, 4 que tu entends, 3 que tu ressens.','Écris ce que tu ressens maintenant, sans le juger.','Change de pièce. L’envie est souvent liée au lieu.','Dessine, gribouille ou fais un puzzle quelques minutes.','Appelle quelqu’un et parle de tout autre chose.','Mets un minuteur de 15 minutes et décide à nouveau ensuite.','Lis trois pages d’un livre ou écoute un podcast.','Rappelle-toi : une envie est comme une vague. Elle monte, atteint un sommet, puis redescend.'],
+'plan.title':'Mon plan pour les moments difficiles','plan.text':'Dans un moment calme, écris ce que tu veux faire quand l’envie arrive.','plan.ph':'Quand je sens l’envie, je vais …',
+'ex.foot':'Si tu as besoin de quelqu’un tout de suite : le bouton rouge SOS du journal te met en relation avec les urgences ou ta personne de contact.',
+'sos.aria':'Urgence : choisir un appel','sos.title':'Qui veux-tu appeler ?','sos.emergency':'Urgences {n}','sos.emergency.sub':'En cas de danger immédiat ou si tu te sens physiquement très mal',
+'sos.callperson':'Appeler {name}','sos.contact':'Ta personne de contact','sos.defaultName':'personne de contact','sos.setup':'Ajouter une personne de contact','sos.setup.sub':'Choisis qui tu peux joindre ici en un geste.',
+'sos.hint':'Touche le numéro pour appeler. Si ça ne marche pas, copie-le et compose-le dans l’app Téléphone.','sos.country':'Pays : {c} · modifiable dans les réglages',
+'copy':'Copier','copied':'Copié','copy.manual':'Sélectionne et copie manuellement','close':'Fermer','gear':'Réglages','lang.title':'Langue',
+'set.title':'Réglages','set.lang':'Langue','set.country':'Pays où tu vis','set.country.text':'Définit le numéro d’urgence de la fenêtre SOS et les lignes d’écoute ci-dessous.',
+'contact.title':'Personne de contact pour SOS','contact.text':'Cette personne apparaît dans la fenêtre rouge SOS. Convenez à l’avance que tu peux l’appeler dans les moments difficiles.',
+'contact.name':'Nom','contact.name.ph':'p. ex. Léa','contact.num':'Numéro de téléphone','contact.num.ph':'p. ex. 06 12 34 56 78',
+'lines.title':'Lignes d’écoute','lines.other':'Nous n’avons pas encore de numéros pour ce pays. Tu peux en trouver une sur findahelpline.com.','lines.findlink':'Ouvrir findahelpline.com',
+'lines.es.note':'Nous n’avons pas trouvé de ligne nationale pour les troubles alimentaires en Espagne. Les numéros ci-dessous aident en cas de crise ; ton médecin ou une association locale peuvent t’accompagner pour le TCA.',
+'kind.ed':'Troubles alimentaires','kind.crisis':'Crise & prévention du suicide','kind.talk':'Quelqu’un à qui parler',
+'h24':'24 h/24','free':'gratuit','local':'prix d’un appel local','nights':'soirs & nuits','seeWeb':'horaires sur leur site',
+'ex.title2':'Exemples','ex.text':'Quelques exemples sont inclus pour te montrer l’aperçu et l’historique. Ils sont marqués « Exemple ».','ex.remove':'Supprimer les exemples','ex.removed':'Exemples supprimés',
+'data.title':'Tes données','data.text':'Tout reste uniquement dans ce navigateur, sur ton appareil. Personne d’autre ne voit tes saisies. Sauvegarde-les de temps en temps sous forme de texte, p. ex. dans tes notes.',
+'data.backup':'Copier la sauvegarde','data.restoreToggle':'Coller une sauvegarde','data.restore.ph':'Colle ici le texte de sauvegarde','data.restore':'Restaurer','data.restored':'Restauré','data.invalid':'Ce texte n’est pas une sauvegarde valide',
+'data.wipe':'Supprimer toutes les saisies','data.wipe.q':'Vraiment tout supprimer ? C’est irréversible.','del':'Supprimer','cancel':'Annuler','data.wiped':'Toutes les saisies supprimées',
+'disclaimer':'Cette app ne remplace ni une thérapie ni un traitement médical. Elle sert à te soutenir au quotidien et à rendre les tendances visibles.',
+'sheet.meal':'Repas','sheet.urge':'Envie','sheet.mood':'Émotion','sheet.log':'Saisie rapide','sheet.edit':'Modifier : {t}',
+'f.time':'Moment','f.note':'Pensées & notes','f.note.ph':'Qu’est-ce qui te passait par la tête ?','save':'Enregistrer','saved':'Enregistré','saved.wave':'Enregistré. Bravo, la vague est passée.',
+'entry.del':'Supprimer la saisie','entry.del.q':'Vraiment supprimer cette saisie ?','entry.deleted':'Saisie supprimée',
+'f.slot':'Quel repas ?','f.what':'Qu’as-tu mangé ?','f.what.ph':'Décris simplement, sans quantités ni calories','f.where':'Où ?','f.where.ph':'p. ex. cuisine, travail, en route',
+'f.with':'Avec qui ?','with.alone':'Seul·e','with.others':'Avec d’autres','f.hunger':'Faim avant','hunger.lo':'pas faim','hunger.hi':'très faim',
+'f.full':'Rassasiement après','full.lo':'pas du tout rassasié·e','full.hi':'très plein·e','f.fBefore':'Émotions avant','f.fAfter':'Émotions après',
+'f.kinds':'À quoi te pousse l’envie ?','f.intensity':'Quelle est la force de l’envie ?','int.lo':'faible','int.hi':'écrasante','f.triggers':'Que s’est-il passé avant ?','f.helped':'Qu’as-tu essayé ?','f.outcome':'Comment ça s’est terminé ?',
+'gentle':'Merci de le noter honnêtement. Les rechutes font partie du rétablissement. Essaie de prendre ton prochain repas normalement au lieu de compenser.',
+'need.kind':'Choisis au moins un type d’envie','f.feelings':'Que ressens-tu en ce moment ?','f.howStrong':'Avec quelle force ?','mood.lo':'à peine','mood.hi':'très fort','need.feel':'Choisis au moins une émotion',
+'q1':'As-tu vomi ?','q2':'Ressens-tu l’envie de vomir ?','q2s':'Avec quelle force ?','q3':'Comment te sens-tu ?','q4':'Ressens-tu de l’anxiété ?','q4s':'Quelle est la force de l’anxiété ?','anx.lo':'faible','anx.hi':'très forte',
+'gentleLog':'Merci de le noter honnêtement. Ce n’est pas un échec. Essaie de prendre ton prochain repas normalement. Si tu te sens physiquement mal, utilise le bouton SOS.',
+'need.one':'Réponds à au moins une question',
+'voice.label':'Note vocale','voice.btn':'Maintiens pour parler','voice.sub':'jusqu’à 1 minute · transformée automatiquement en texte','voice.soon':'Bientôt',
+'voice.hint':'Disponible dans une prochaine version. En attendant : touche le champ de notes ci-dessous et utilise le micro du clavier de l’iPhone.','voice.toast':'Les notes vocales arrivent bientôt. Utilise le micro du clavier pour l’instant.',
+'feel.calm':'calme','feel.content':'satisfait·e','feel.relieved':'soulagé·e','feel.tired':'fatigué·e','feel.sad':'triste','feel.anxious':'anxieux·se','feel.stressed':'stressé·e','feel.lonely':'seul·e','feel.angry':'en colère','feel.empty':'vide','feel.ashamed':'honteux·se','feel.bored':'ennuyé·e','feel.overwhelmed':'débordé·e',
+'trig.stress':'Stress','trig.alone':'Solitude','trig.boredom':'Ennui','trig.conflict':'Conflit/dispute','trig.body':'Image du corps/miroir','trig.hungry':'Longtemps sans manger','trig.foods':'Certains aliments','trig.social':'Réseaux sociaux','trig.tired':'Fatigue','trig.night':'Soir/nuit',
+'urge.binge':'Crise de boulimie','urge.purge':'Vomissement','urge.skip':'Sauter un repas','urge.exercise':'Sport excessif','urge.laxatives':'Laxatifs',
+'help.breathing':'Respiration','help.called':'Appelé quelqu’un','help.outside':'Sorti·e dehors','help.distraction':'Distraction','help.shower':'Douche chaude','help.music':'Musique','help.wrote':'Je l’ai écrit','help.waited':'Attendu que la vague passe',
+'slot.breakfast':'Petit-déjeuner','slot.snackAm':'Collation du matin','slot.lunch':'Déjeuner','slot.snackPm':'Goûter','slot.dinner':'Dîner','slot.snackEve':'Collation du soir',
+'ss.breakfast':'P.-déj.','ss.snackAm':'Collat.','ss.lunch':'Déj.','ss.snackPm':'Goûter','ss.dinner':'Dîner','ss.snackEve':'Collat.',
+'ex.oats':'Flocons d’avoine à la banane, thé','ex.kitchen':'Cuisine','ex.pasta':'Pâtes aux légumes','ex.canteen':'Cantine','ex.colleagues':'Mangé avec des collègues, c’était bien.','ex.busy':'Beaucoup de travail, la tête pleine.','ex.walk':'Après 20 minutes de marche, c’était bien plus faible.','ex.yogurt':'Yaourt et une pomme','ex.home':'Maison','ex.bread':'Pain et fromage','ex.soup':'Soupe et pain','ex.skipped':'Dîner sauté. Prévoir le dîner demain.','ex.muesli':'Muesli','ex.rice':'Riz au curry','ex.uni':'Université','ex.salad':'Salade avec du pain',
+'country.DE':'Allemagne','country.UK':'Royaume-Uni','country.SE':'Suède','country.ES':'Espagne','country.FR':'France','country.OTHER':'Autre pays'
+};
+
+Object.assign(T.en,{"ci.title": "Daily check-ins", "ci.text": "The app asks you up to three times a day how you’re doing. The question appears when you open the app.", "ci.toggle": "Check-ins on", "ci.m.midday": "How’s your day going?", "ci.m.afternoon": "How are you doing?", "ci.m.evening": "How was your day? Time to wind down.", "ci.sub": "Take 10 seconds for a quick log.", "ci.log": "Quick log", "ci.later": "Not now", "ci.push": "Push notifications", "ci.push.text": "Reminders on your lock screen are coming with the iPhone app.", "ci.soon": "iPhone app", "ci.time": "Time", "ci.slot.midday": "Midday", "ci.slot.afternoon": "Afternoon", "ci.slot.evening": "Evening"});
+Object.assign(T.de,{"ci.title": "Tägliche Check-ins", "ci.text": "Die App fragt dich bis zu dreimal am Tag, wie es dir geht. Die Frage erscheint, wenn du die App öffnest.", "ci.toggle": "Check-ins aktiv", "ci.m.midday": "Wie läuft dein Tag?", "ci.m.afternoon": "Wie geht es dir?", "ci.m.evening": "Wie war dein Tag? Zeit, runterzukommen.", "ci.sub": "Nimm dir 10 Sekunden für einen Schnell-Log.", "ci.log": "Schnell-Log", "ci.later": "Jetzt nicht", "ci.push": "Push-Mitteilungen", "ci.push.text": "Erinnerungen auf dem Sperrbildschirm kommen mit der iPhone-App.", "ci.soon": "iPhone-App", "ci.time": "Uhrzeit", "ci.slot.midday": "Mittags", "ci.slot.afternoon": "Nachmittags", "ci.slot.evening": "Abends"});
+Object.assign(T.sv,{"ci.title": "Dagliga incheckningar", "ci.text": "Appen frågar dig upp till tre gånger om dagen hur du mår. Frågan visas när du öppnar appen.", "ci.toggle": "Incheckningar på", "ci.m.midday": "Hur går din dag?", "ci.m.afternoon": "Hur mår du?", "ci.m.evening": "Hur var din dag? Dags att varva ner.", "ci.sub": "Ta 10 sekunder för en snabblogg.", "ci.log": "Snabblogg", "ci.later": "Inte nu", "ci.push": "Pushnotiser", "ci.push.text": "Påminnelser på låsskärmen kommer med iPhone-appen.", "ci.soon": "iPhone-app", "ci.time": "Tid", "ci.slot.midday": "Mitt på dagen", "ci.slot.afternoon": "Eftermiddag", "ci.slot.evening": "Kväll"});
+Object.assign(T.es,{"ci.title": "Revisiones diarias", "ci.text": "La app te pregunta hasta tres veces al día cómo estás. La pregunta aparece cuando abres la app.", "ci.toggle": "Revisiones activadas", "ci.m.midday": "¿Cómo va tu día?", "ci.m.afternoon": "¿Cómo estás?", "ci.m.evening": "¿Qué tal tu día? Hora de desconectar.", "ci.sub": "Dedica 10 segundos a un registro rápido.", "ci.log": "Registro rápido", "ci.later": "Ahora no", "ci.push": "Notificaciones push", "ci.push.text": "Los recordatorios en la pantalla de bloqueo llegarán con la app para iPhone.", "ci.soon": "App iPhone", "ci.time": "Hora", "ci.slot.midday": "Mediodía", "ci.slot.afternoon": "Tarde", "ci.slot.evening": "Noche"});
+Object.assign(T.fr,{"ci.title": "Points quotidiens", "ci.text": "L’app te demande jusqu’à trois fois par jour comment tu vas. La question apparaît quand tu ouvres l’app.", "ci.toggle": "Points activés", "ci.m.midday": "Comment se passe ta journée ?", "ci.m.afternoon": "Comment vas-tu ?", "ci.m.evening": "Comment s’est passée ta journée ? C’est l’heure de décompresser.", "ci.sub": "Prends 10 secondes pour une saisie rapide.", "ci.log": "Saisie rapide", "ci.later": "Pas maintenant", "ci.push": "Notifications push", "ci.push.text": "Les rappels sur l’écran verrouillé arriveront avec l’app iPhone.", "ci.soon": "App iPhone", "ci.time": "Heure", "ci.slot.midday": "Midi", "ci.slot.afternoon": "Après-midi", "ci.slot.evening": "Soir"});
+/* Länder: Notruf + Beratungstelefone (recherchiert 25.10.2026) */
+const COUNTRIES={
+  DE:{emergency:'112',lines:[
+    {name:'BIÖG – Beratungstelefon Essstörungen',num:'0221 892031',kind:'ed',hours:[[[1,2,3,4],10,22],[[5,6,0],10,18]],cost:'local'},
+    {name:'TelefonSeelsorge',num:'0800 111 0 111',kind:'crisis',h24:true,cost:'free'},
+    {name:'TelefonSeelsorge',num:'0800 111 0 222',kind:'crisis',h24:true,cost:'free'}]},
+  UK:{emergency:'999',lines:[
+    {name:'Beat – England',num:'0808 801 0677',kind:'ed',hours:[[[1,2,3,4,5],15,20]],cost:'free'},
+    {name:'Beat – Scotland',num:'0808 801 0432',kind:'ed',hours:[[[1,2,3,4,5],15,20]],cost:'free'},
+    {name:'Beat – Wales',num:'0808 801 0433',kind:'ed',hours:[[[1,2,3,4,5],15,20]],cost:'free'},
+    {name:'Beat – Northern Ireland',num:'0808 801 0434',kind:'ed',hours:[[[1,2,3,4,5],15,20]],cost:'free'},
+    {name:'Samaritans',num:'116 123',kind:'crisis',h24:true,cost:'free'}]},
+  SE:{emergency:'112',lines:[
+    {name:'Frisk & Fri',num:'020-20 80 18',kind:'ed',seeWeb:true},
+    {name:'Självmordslinjen (Mind)',num:'90101',kind:'crisis',h24:true},
+    {name:'Jourhavande medmänniska',num:'08-702 16 80',kind:'talk',nights:true}]},
+  ES:{emergency:'112',note:'lines.es.note',lines:[
+    {name:'024 – Línea de atención a la conducta suicida',num:'024',kind:'crisis',h24:true,cost:'free'},
+    {name:'Teléfono de la Esperanza',num:'717 003 717',kind:'crisis',h24:true}]},
+  FR:{emergency:'112',lines:[
+    {name:'Anorexie Boulimie Info Écoute',num:'09 69 325 900',kind:'ed',hours:[[[1,2,4,5],16,18]]},
+    {name:'3114 – Prévention du suicide',num:'3114',kind:'crisis',h24:true,cost:'free'}]},
+  OTHER:{emergency:'112',note:'lines.other',find:true,lines:[]}
+};
+Object.assign(T.en,{"w.label": "Test version", "w.title": "Welcome to Lichtung", "w.intro": "A diary that supports you day to day with bulimia. Thanks for trying it out.", "w.1t": "This is a test version", "w.1": "Things may still change. Your feedback helps a lot – you’ll find it under the gear icon.", "w.2t": "Your data stays with you", "w.2": "Everything is saved only in this browser on your device. Nobody else sees your entries.", "w.3t": "Not a replacement for therapy", "w.3": "The app is meant to support you and make patterns visible, not to treat.", "w.4t": "Help in hard moments", "w.4": "The red SOS button at the top right connects you to emergency services or your contact person. Please choose your country in the settings.", "w.ex": "A few example entries are included to start with. You can remove them in the settings.", "w.go": "Let’s go", "fb.title": "Feedback on the test version", "fb.text": "Thanks for testing! Write down briefly what you notice. “Send via WhatsApp” opens WhatsApp with your text – choose the contact there.", "fb.rate": "Overall impression", "fb.lo": "not helpful at all", "fb.hi": "very helpful", "fb.good": "What do you like?", "fb.bad": "What was unclear or bothered you?", "fb.miss": "What’s missing for you?", "fb.wa": "Send via WhatsApp", "fb.copy": "Copy text", "fb.private": "Your diary entries are not sent – only this feedback text.", "fb.msg": "Feedback Lichtung (test version v6 · Test 5)", "fb.m.rate": "Overall impression", "fb.m.good": "I like", "fb.m.bad": "Unclear/bothered me", "fb.m.miss": "Missing for me", "ver": "Lichtung test version · v6 · Test 5"});
+Object.assign(T.de,{"w.label": "Testversion", "w.title": "Willkommen bei Lichtung", "w.intro": "Ein Tagebuch, das dich bei Bulimie im Alltag begleitet. Schön, dass du es ausprobierst.", "w.1t": "Das ist eine Testversion", "w.1": "Manches kann sich noch ändern. Dein Feedback hilft sehr – du findest es unter dem Zahnrad.", "w.2t": "Deine Daten bleiben bei dir", "w.2": "Alles wird nur in diesem Browser auf deinem Gerät gespeichert. Niemand sonst sieht deine Einträge.", "w.3t": "Kein Ersatz für Therapie", "w.3": "Die App soll unterstützen und Muster sichtbar machen, nicht behandeln.", "w.4t": "Hilfe in schweren Momenten", "w.4": "Der rote SOS-Knopf oben rechts verbindet dich mit dem Notruf oder deiner Kontaktperson. Wähle bitte in den Einstellungen dein Land.", "w.ex": "Zum Start sind ein paar Beispieleinträge drin. Du kannst sie in den Einstellungen entfernen.", "w.go": "Los geht’s", "fb.title": "Feedback zur Testversion", "fb.text": "Danke fürs Testen! Schreib kurz auf, was dir auffällt. Mit „Per WhatsApp senden“ öffnet sich WhatsApp mit deinem Text, dort wählst du den Kontakt aus.", "fb.rate": "Gesamteindruck", "fb.lo": "gar nicht hilfreich", "fb.hi": "sehr hilfreich", "fb.good": "Was gefällt dir?", "fb.bad": "Was war unklar oder hat gestört?", "fb.miss": "Was fehlt dir?", "fb.wa": "Per WhatsApp senden", "fb.copy": "Text kopieren", "fb.private": "Deine Tagebucheinträge werden dabei nicht mitgeschickt, nur dieser Feedback-Text.", "fb.msg": "Feedback Lichtung (Testversion v6 · Test 5)", "fb.m.rate": "Gesamteindruck", "fb.m.good": "Gefällt mir", "fb.m.bad": "Unklar/gestört", "fb.m.miss": "Fehlt mir", "ver": "Lichtung Testversion · v6 · Test 5"});
+Object.assign(T.sv,{"w.label": "Testversion", "w.title": "Välkommen till Lichtung", "w.intro": "En dagbok som stöttar dig i vardagen vid bulimi. Tack för att du testar den.", "w.1t": "Det här är en testversion", "w.1": "Saker kan fortfarande ändras. Din feedback hjälper mycket – du hittar den under kugghjulet.", "w.2t": "Dina data stannar hos dig", "w.2": "Allt sparas bara i den här webbläsaren på din enhet. Ingen annan ser dina anteckningar.", "w.3t": "Ersätter inte terapi", "w.3": "Appen ska stötta och göra mönster synliga, inte behandla.", "w.4t": "Hjälp i svåra stunder", "w.4": "Den röda SOS-knappen uppe till höger kopplar dig till larmnumret eller din kontaktperson. Välj ditt land i inställningarna.", "w.ex": "Några exempelanteckningar finns med från början. Du kan ta bort dem i inställningarna.", "w.go": "Nu kör vi", "fb.title": "Feedback om testversionen", "fb.text": "Tack för att du testar! Skriv kort vad du lägger märke till. ”Skicka via WhatsApp” öppnar WhatsApp med din text – välj kontakten där.", "fb.rate": "Helhetsintryck", "fb.lo": "inte alls till hjälp", "fb.hi": "till stor hjälp", "fb.good": "Vad gillar du?", "fb.bad": "Vad var oklart eller störde dig?", "fb.miss": "Vad saknar du?", "fb.wa": "Skicka via WhatsApp", "fb.copy": "Kopiera text", "fb.private": "Dina dagboksanteckningar skickas inte med, bara den här feedbacktexten.", "fb.msg": "Feedback Lichtung (testversion v6 · Test 5)", "fb.m.rate": "Helhetsintryck", "fb.m.good": "Jag gillar", "fb.m.bad": "Oklart/störande", "fb.m.miss": "Jag saknar", "ver": "Lichtung testversion · v6 · Test 5"});
+Object.assign(T.es,{"w.label": "Versión de prueba", "w.title": "Te damos la bienvenida a Lichtung", "w.intro": "Un diario que te acompaña en el día a día con la bulimia. Gracias por probarlo.", "w.1t": "Es una versión de prueba", "w.1": "Algunas cosas aún pueden cambiar. Tu opinión ayuda mucho: la encontrarás en el icono del engranaje.", "w.2t": "Tus datos se quedan contigo", "w.2": "Todo se guarda solo en este navegador de tu dispositivo. Nadie más ve tus registros.", "w.3t": "No sustituye la terapia", "w.3": "La app quiere acompañarte y hacer visibles los patrones, no tratar.", "w.4t": "Ayuda en momentos difíciles", "w.4": "El botón rojo SOS arriba a la derecha te conecta con emergencias o con tu persona de contacto. Elige tu país en los ajustes.", "w.ex": "Al principio hay algunos registros de ejemplo. Puedes quitarlos en los ajustes.", "w.go": "Empezar", "fb.title": "Opinión sobre la versión de prueba", "fb.text": "¡Gracias por probarla! Escribe brevemente lo que notes. «Enviar por WhatsApp» abre WhatsApp con tu texto: elige allí el contacto.", "fb.rate": "Impresión general", "fb.lo": "nada útil", "fb.hi": "muy útil", "fb.good": "¿Qué te gusta?", "fb.bad": "¿Qué no quedó claro o te molestó?", "fb.miss": "¿Qué echas en falta?", "fb.wa": "Enviar por WhatsApp", "fb.copy": "Copiar texto", "fb.private": "Tus registros del diario no se envían, solo este texto de opinión.", "fb.msg": "Opinión Lichtung (versión de prueba v6 · Test 5)", "fb.m.rate": "Impresión general", "fb.m.good": "Me gusta", "fb.m.bad": "Poco claro/molesto", "fb.m.miss": "Echo en falta", "ver": "Lichtung versión de prueba · v6 · Test 5"});
+Object.assign(T.fr,{"w.label": "Version test", "w.title": "Bienvenue dans Lichtung", "w.intro": "Un journal qui t’accompagne au quotidien face à la boulimie. Merci de l’essayer.", "w.1t": "C’est une version test", "w.1": "Certaines choses peuvent encore changer. Ton avis aide beaucoup – tu le trouveras sous l’icône d’engrenage.", "w.2t": "Tes données restent chez toi", "w.2": "Tout est enregistré uniquement dans ce navigateur, sur ton appareil. Personne d’autre ne voit tes saisies.", "w.3t": "Ne remplace pas une thérapie", "w.3": "L’app sert à te soutenir et à rendre les tendances visibles, pas à soigner.", "w.4t": "De l’aide dans les moments difficiles", "w.4": "Le bouton rouge SOS en haut à droite te met en relation avec les urgences ou ta personne de contact. Choisis ton pays dans les réglages.", "w.ex": "Quelques exemples sont inclus pour commencer. Tu peux les supprimer dans les réglages.", "w.go": "C’est parti", "fb.title": "Avis sur la version test", "fb.text": "Merci de tester ! Note brièvement ce que tu remarques. « Envoyer via WhatsApp » ouvre WhatsApp avec ton texte – choisis le contact là-bas.", "fb.rate": "Impression générale", "fb.lo": "pas du tout utile", "fb.hi": "très utile", "fb.good": "Qu’est-ce qui te plaît ?", "fb.bad": "Qu’est-ce qui était flou ou t’a gêné·e ?", "fb.miss": "Qu’est-ce qui te manque ?", "fb.wa": "Envoyer via WhatsApp", "fb.copy": "Copier le texte", "fb.private": "Tes saisies du journal ne sont pas envoyées, seulement ce texte d’avis.", "fb.msg": "Avis Lichtung (version test v6 · Test 5)", "fb.m.rate": "Impression générale", "fb.m.good": "J’aime", "fb.m.bad": "Flou/gênant", "fb.m.miss": "Il me manque", "ver": "Lichtung version test · v6 · Test 5"});
+const COUNTRY_ORDER=['DE','UK','SE','ES','FR','OTHER'];
+
+const KEY='lichtung.web.v1';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+
+/* ---------- i18n ---------- */
+let lang='en';
+function t(k,vars){let s=T[lang]&&T[lang][k];if(s==null)s=T.en[k];if(s==null)return k;
+  if(vars&&typeof s==='string')s=s.replace(/\{(\w+)\}/g,(m,v)=>vars[v]??'');return s}
+const o=(g,k)=>t(g+'.'+k);
+const txt=v=>typeof v==='string'&&v.startsWith('ex:')?t('ex.'+v.slice(3)):(v||'');
+const loc=()=>LOCALE[lang]||'en-GB';
+
+/* ---------- storage ---------- */
+let state={entries:[],plan:'',contactName:'',contactNumber:'',seeded:false,lang:'en',country:null,welcomed:false,fb:{rate:0,good:'',bad:'',miss:''}};
+let storageOk=true;
+function guessCountry(){const l=(navigator.language||'').toLowerCase();
+  if(l.startsWith('de'))return 'DE';if(l.startsWith('sv'))return 'SE';if(l.startsWith('es'))return 'ES';if(l.startsWith('fr'))return 'FR';if(l==='en-gb')return 'UK';return 'OTHER'}
+function load(){
+  let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){storageOk=false}
+  if(raw){try{state=Object.assign(state,JSON.parse(raw))}catch(e){}}
+  if(!state.fb)state.fb={rate:0,good:'',bad:'',miss:''};
+  if(state.person&&!state.contactName){state.contactName=state.person;delete state.person}
+  if(!raw)state.schema=2;
+  if(!state.schema||state.schema<2)migrate();
+  if(!state.seeded){state.entries=examples();state.seeded=true;state.seededLog=true}
+  else if(!state.seededLog){if(state.entries.some(e=>e.example))state.entries.push(...logExamples());state.seededLog=true}
+  if(!state.country)state.country=guessCountry();
+  if(!state.checkins)state.checkins={on:true,slots:[{id:'midday',time:'13:00',on:true},{id:'afternoon',time:'17:00',on:true},{id:'evening',time:'22:00',on:true}],dismissed:{}};
+  if(!T[state.lang])state.lang='en';
+  lang=state.lang;save();
+}
+function migrate(){
+  const k=v=>DE_KEYS[v]||v; const arr=a=>(a||[]).map(k);
+  const hadEx=state.entries.some(e=>e.example);
+  state.entries=state.entries.filter(e=>!e.example).map(e=>{e=Object.assign({},e);
+    ['fBefore','fAfter','feelings','kinds','triggers','helped'].forEach(f=>{if(e[f])e[f]=arr(e[f])});
+    if(e.slot)e.slot=k(e.slot);if(e.company)e.company=k(e.company);return e});
+  if(hadEx){state.entries.push(...examples());state.seededLog=true}
+  if(!state.lang||state.schema==null)state.lang='en';
+  state.schema=2;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){storageOk=false}}
+
+function examples(){
+  const d=(off,h,m)=>{const x=new Date();x.setDate(x.getDate()-off);x.setHours(h,m,0,0);return x.getTime()};
+  const E=o=>Object.assign({id:uid(),example:true},o);
+  return [
+    E({type:'meal',ts:d(0,8,10),slot:'breakfast',what:'ex:oats',where:'ex:kitchen',company:'alone',hunger:6,full:5,fBefore:['tired'],fAfter:['calm'],note:''}),
+    E({type:'mood',ts:d(0,11,30),feelings:['stressed','overwhelmed'],intensity:6,note:'ex:busy'}),
+    E({type:'meal',ts:d(0,12,45),slot:'lunch',what:'ex:pasta',where:'ex:canteen',company:'others',hunger:7,full:6,fBefore:['stressed'],fAfter:['content'],note:'ex:colleagues'}),
+    E({type:'urge',ts:d(0,16,20),kinds:['binge'],intensity:7,triggers:['stress','hungry'],helped:['outside','waited'],outcome:'passed',note:'ex:walk'}),
+    E({type:'meal',ts:d(0,16,50),slot:'snackPm',what:'ex:yogurt',where:'ex:home',company:'alone',hunger:6,full:5,fBefore:['relieved'],fAfter:['calm'],note:''}),
+    E({type:'meal',ts:d(1,8,30),slot:'breakfast',what:'ex:bread',where:'ex:kitchen',company:'alone',hunger:5,full:5,fBefore:['calm'],fAfter:['calm'],note:''}),
+    E({type:'meal',ts:d(1,13,0),slot:'lunch',what:'ex:soup',where:'ex:home',company:'alone',hunger:6,full:6,fBefore:[],fAfter:['content'],note:''}),
+    E({type:'urge',ts:d(1,21,40),kinds:['binge','purge'],intensity:8,triggers:['alone','night'],helped:['music'],outcome:'happened',note:'ex:skipped'}),
+    E({type:'meal',ts:d(2,9,0),slot:'breakfast',what:'ex:muesli',where:'ex:kitchen',company:'alone',hunger:5,full:5,fBefore:[],fAfter:[],note:''}),
+    E({type:'meal',ts:d(2,12,30),slot:'lunch',what:'ex:rice',where:'ex:uni',company:'others',hunger:7,full:6,fBefore:[],fAfter:['content'],note:''}),
+    E({type:'meal',ts:d(2,18,45),slot:'dinner',what:'ex:salad',where:'ex:home',company:'others',hunger:6,full:6,fBefore:['calm'],fAfter:['calm'],note:''}),
+    E({type:'urge',ts:d(3,17,10),kinds:['exercise'],intensity:5,triggers:['body','social'],helped:['called'],outcome:'passed',note:''}),
+    ...logExamples()
+  ];
+}
+function logExamples(){
+  const d=(off,h,m)=>{const x=new Date();x.setDate(x.getDate()-off);x.setHours(h,m,0,0);return x.getTime()};
+  const L=(off,h,m,purged,u,a,feelings)=>({id:uid(),example:true,type:'log',ts:d(off,h,m),purged,urge:u>0,urgeLevel:u,anxiety:a>0,anxLevel:a,feelings,note:''});
+  return [L(0,9,15,false,0,3,['tired']),L(0,15,40,false,6,7,['stressed','anxious']),L(1,10,0,false,0,2,['calm']),L(1,21,10,true,8,8,['lonely','empty']),
+    L(2,13,20,false,2,4,['content']),L(2,20,45,false,5,6,['bored']),L(3,8,40,false,0,0,['calm']),L(3,22,30,false,7,7,['anxious','overwhelmed']),
+    L(4,16,10,false,4,5,['stressed']),L(5,21,50,true,9,8,['ashamed','lonely']),L(6,12,0,false,0,2,['content']),L(7,20,30,false,6,6,['sad'])];
+}
+
+/* ---------- helpers ---------- */
+const dayKey=ts=>{const d=new Date(ts);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()};
+const sameDay=(a,b)=>dayKey(a)===dayKey(b);
+const fmtTime=ts=>new Date(ts).toLocaleTimeString(loc(),{hour:'2-digit',minute:'2-digit'});
+const fmtDay=ts=>new Date(ts).toLocaleDateString(loc(),{weekday:'long',day:'numeric',month:'long'});
+const toLocalInput=ts=>{const d=new Date(ts);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
+const fromLocalInput=v=>new Date(v).getTime();
+function toast(msg){const el=$('#toast');el.textContent=msg;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2400)}
+function copyText(text){const done=()=>toast(t('copied'));
+  const fallback=()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done()}catch(e){toast(t('copy.manual'))}ta.remove()};
+  try{navigator.clipboard.writeText(text).then(done,fallback)}catch(e){fallback()}}
+const country=()=>COUNTRIES[state.country]||COUNTRIES.OTHER;
+function dayName(d){const base=new Date(2024,0,7+d);return base.toLocaleDateString(loc(),{weekday:'short'}).replace('.','')}
+function fmtDays(days){const consec=days.every((d,i)=>i===0||d===(days[i-1]+1)%7);
+  return consec&&days.length>2?dayName(days[0])+'–'+dayName(days[days.length-1]):days.map(dayName).join(', ')}
+function lineInfo(l){const parts=[];
+  if(l.h24)parts.push(t('h24'));
+  if(l.hours)parts.push(l.hours.map(([d,f,to])=>`${fmtDays(d)} ${f}–${to}`).join(' · '));
+  if(l.nights)parts.push(t('nights'));if(l.seeWeb)parts.push(t('seeWeb'));
+  if(l.cost)parts.push(t(l.cost));return parts.join(' · ')}
+
+/* ---------- shell ---------- */
+let tab='heute', viewDay=Date.now(), showOverview=false;
+const app=$('#app'), sheet=$('#sheet'), modal=$('#modal');
+const ICON={
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  diary:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>',
+  hist:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  ex:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity=".55"/><circle cx="12" cy="12" r="10.5" opacity=".3"/></svg>'
+};
+function headTools(withSos){return `<button class="iconbtn langbtn" id="langBtn" aria-label="${esc(t('lang.title'))}">${lang.toUpperCase()}</button><button class="iconbtn" id="gearBtn" aria-label="${esc(t('gear'))}">${ICON.gear}</button>`+
+  (withSos?`<button class="sosbtn" id="sosBtn" aria-label="${esc(t('sos.aria'))}">${ICON.phone}SOS</button>`:'')}
+function renderNav(){$('#tabs').setAttribute('aria-label',t('nav.aria'));
+  $('#tabs .wrap').innerHTML=[['heute','diary','nav.diary'],['verlauf','hist','nav.history'],['uebungen','ex','nav.exercises']]
+    .map(([k,i,l])=>`<button data-tab="${k}" aria-current="${tab===k?'page':'false'}">${ICON[i]}${esc(t(l))}</button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(!sheet.hidden){sheet.hidden=true;sheet.innerHTML='';document.body.style.overflow=''}closeModal();
+    tab=b.dataset.tab;if(tab==='heute')viewDay=Date.now();render();scrollTo(0,0)})}
+function render(){
+  document.documentElement.lang=lang;stopBreath();renderNav();
+  if(tab==='heute')renderToday();else if(tab==='verlauf')renderHistory();else renderExercises();
+  const g=$('#gearBtn');if(g)g.onclick=openSettings;const lb=$('#langBtn');if(lb)lb.onclick=openLang;
+}
+function setLang(l){lang=l;state.lang=l;save();if(!sheet.hidden&&sheet.dataset.kind==='settings'){openSettings()}render()}
+
+/* ---------- Tagebuch ---------- */
+function entryCard(e){
+  let k,body,tags=[];
+  if(e.type==='meal'){k=o('slot',e.slot);body=esc(txt(e.what)||'—');
+    if(e.hunger!=null)tags.push(t('tag.hunger',{n:e.hunger}));if(e.full!=null)tags.push(t('tag.full',{n:e.full}));(e.fAfter||[]).forEach(f=>tags.push(o('feel',f)))}
+  else if(e.type==='urge'){k=t('card.urge')+' · '+(e.kinds||[]).map(x=>o('urge',x)).join(', ');body=esc(t('outcome.'+(e.outcome||'passed')));
+    tags.push(t('tag.strength',{n:e.intensity}));(e.triggers||[]).forEach(x=>tags.push(o('trig',x)))}
+  else if(e.type==='log'){k=t('card.log');const yn=v=>v===true?t('yes'):v===false?t('no'):'–';
+    body=esc(t('log.summary',{p:yn(e.purged),u:yn(e.urge)+(e.urge?' ('+e.urgeLevel+')':''),a:yn(e.anxiety)+(e.anxiety?' ('+e.anxLevel+')':'')}));
+    (e.feelings||[]).forEach(f=>tags.push(o('feel',f)))}
+  else{k=t('card.mood');body=esc((e.feelings||[]).map(f=>o('feel',f)).join(', ')||'—');tags.push(t('tag.intensity',{n:e.intensity}))}
+  const note=e.note?`<p class="small muted">${esc(txt(e.note))}</p>`:'';
+  return `<button class="entry t-${e.type}" data-id="${e.id}"><div class="time">${fmtTime(e.ts)}</div><div class="rail"><span class="pip"></span></div>
+  <div class="card"><div class="k">${esc(k)}${e.example?`<span class="ex">${esc(t('example'))}</span>`:''}</div><p>${body}</p>${note}<div class="tags">${tags.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div></div></button>`;
+}
+function renderToday(){
+  const isToday=sameDay(viewDay,Date.now());
+  const list=state.entries.filter(e=>sameDay(e.ts,viewDay)).sort((a,b)=>a.ts-b.ts);
+  const meals=list.filter(e=>e.type==='meal');
+  const h=new Date().getHours();const greet=t(h<11?'greet.morning':h<17?'greet.day':'greet.evening');
+  app.innerHTML=`
+  <header class="top"><div class="title"><div class="label">${esc(isToday?greet:t('review'))}<span class="testbadge">TEST</span></div><h1>${esc(isToday?t('today.q'):fmtDay(viewDay))}</h1></div>${headTools(true)}</header>
+  <div class="view">
+    ${!storageOk?`<div class="banner"><span>${esc(t('storage.warn'))}</span></div>`:''}
+    ${checkinCard()}
+    <button class="logbtn" id="quickLog"><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="txt"><b>${esc(t('quicklog'))}</b><span>${esc(t('quicklog.sub'))}</span></span><span aria-hidden="true" class="chev">›</span></button>
+    <div class="quick">
+      <button class="qbtn q-meal" data-new="meal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="7"/><path d="M12 6V3M8 13a4 4 0 0 1 4-4"/></svg><div><b>${esc(t('tile.meal'))}</b><br><span>${esc(t('tile.meal.sub'))}</span></div></button>
+      <button class="qbtn q-urge" data-new="urge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 15c3 0 3-4 6-4s3 6 6 6 3-8 6-8"/></svg><div><b>${esc(t('tile.urge'))}</b><br><span>${esc(t('tile.urge.sub'))}</span></div></button>
+      <button class="qbtn q-mood" data-new="mood"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.1 1.8 3.5 1.8s2.5-.6 3.5-1.8M9 9.5h.01M15 9.5h.01"/></svg><div><b>${esc(t('tile.mood'))}</b><br><span>${esc(t('tile.mood.sub'))}</span></div></button>
+    </div>
+    <button class="reveal" id="toggleOv" aria-expanded="${showOverview}">${esc(t(showOverview?'ov.hide':'ov.show'))}<span aria-hidden="true">${showOverview?'▴':'▾'}</span></button>
+    ${showOverview?`<section class="field">
+      <div class="daynav"><button class="iconbtn" id="prevDay" aria-label="${esc(t('day.prev'))}">‹</button><div class="d">${esc(isToday?t('day.today'):fmtDay(viewDay))}</div><button class="iconbtn" id="nextDay" aria-label="${esc(t('day.next'))}" ${isToday?'disabled style="opacity:.35"':''}>›</button></div>
+      <div class="rhythm" aria-label="${esc(t('rhythm'))}">${OPT.slot.map(s=>`<span class="slot ${meals.some(m=>m.slot===s)?'on':''}" title="${esc(o('slot',s))}">${esc(o('ss',s))}</span>`).join('')}<span class="small muted" style="margin-left:4px">${esc(t('rhythm'))}</span></div>
+    </section>
+    <section class="timeline">${list.length?list.map(entryCard).join(''):`<div class="empty">${esc(t('empty'))}<br><span class="small">${esc(t('empty.sub'))}</span></div>`}</section>`:''}
+  </div>`;
+  app.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>openSheet({type:b.dataset.new}));
+  app.querySelectorAll('.entry').forEach(b=>b.onclick=()=>openSheet(state.entries.find(e=>e.id===b.dataset.id)));
+  $('#sosBtn').onclick=openSos;
+  $('#quickLog').onclick=()=>openSheet({type:'log'});
+  const cl=$('#ciLog');if(cl)cl.onclick=()=>openSheet({type:'log'});
+  const cz=$('#ciLater');if(cz)cz.onclick=()=>{const d=dueSlot();if(d){state.checkins.dismissed={[todayKey()+':'+d.id]:true,...pruneDismissed()};save()}render()};
+  $('#toggleOv').onclick=()=>{showOverview=!showOverview;if(!showOverview)viewDay=Date.now();render()};
+  if(showOverview){$('#prevDay').onclick=()=>{viewDay-=864e5;render()};$('#nextDay').onclick=()=>{if(!isToday){viewDay+=864e5;render()}}}
+}
+
+/* ---------- Check-ins ---------- */
+const todayKey=()=>dayKey(Date.now());
+function pruneDismissed(){const k=todayKey()+':',o={};Object.keys(state.checkins.dismissed||{}).forEach(x=>{if(x.startsWith(k))o[x]=true});return o}
+function dueSlot(){const c=state.checkins;if(!c||!c.on)return null;const now=new Date(),nowM=now.getHours()*60+now.getMinutes();let best=null;
+  for(const sl of c.slots){if(!sl.on||!/^\d{1,2}:\d{2}$/.test(sl.time||''))continue;const [h,m]=sl.time.split(':').map(Number),sm=h*60+m;
+    if(sm<=nowM&&(!best||sm>best.sm))best=Object.assign({sm,h,m},sl)}
+  if(!best)return null;const st=new Date();st.setHours(best.h,best.m,0,0);
+  if(state.entries.some(e=>e.type==='log'&&!e.example&&e.ts>=st.getTime()))return null;
+  if((c.dismissed||{})[todayKey()+':'+best.id])return null;return best}
+function checkinCard(){const d=dueSlot();if(!d)return '';
+  return `<section class="checkin" aria-live="polite"><div class="label">${esc(t('ci.slot.'+d.id))} · ${esc(d.time)}</div><h2>${esc(t('ci.m.'+d.id))}</h2><p class="small">${esc(t('ci.sub'))}</p>
+    <div class="btnrow"><button class="btn" id="ciLog">${esc(t('ci.log'))}</button><button class="btn ghost" id="ciLater">${esc(t('ci.later'))}</button></div></section>`}
+let lastDue=null;
+setInterval(()=>{const d=dueSlot(),k=d?d.id:null;if(k!==lastDue){lastDue=k;if(tab==='heute'&&sheet.hidden&&modal.hidden)render()}},30000);
+
+/* ---------- Verlauf ---------- */
+function renderHistory(){
+  const now=new Date();now.setHours(0,0,0,0);
+  const days=[];for(let i=13;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);days.push(d.getTime())}
+  const recent=state.entries.filter(e=>e.ts>=days[0]);
+  const cols=days.map(d=>{const es=recent.filter(e=>sameDay(e.ts,d));return{d,meals:es.filter(e=>e.type==='meal').length,urges:es.filter(e=>e.type==='urge'||(e.type==='log'&&e.urge)).length}});
+  const urges=recent.filter(e=>e.type==='urge');
+  const passed=urges.filter(u=>u.outcome==='passed').length;
+  const mealDays=cols.filter(c=>c.meals>=3).length;
+  const count=arr=>{const m={};arr.forEach(x=>m[x]=(m[x]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,5)};
+  const trig=count(urges.flatMap(u=>u.triggers||[])).map(([k,n])=>[o('trig',k),n]);
+  const help=count(urges.filter(u=>u.outcome!=='happened').flatMap(u=>u.helped||[])).map(([k,n])=>[o('help',k),n]);
+  const feel=count(recent.flatMap(e=>(e.type==='mood'||e.type==='log')?e.feelings||[]:e.type==='meal'?(e.fBefore||[]):[])).map(([k,n])=>[o('feel',k),n]);
+  const rank=(rows,color)=>{if(!rows.length)return `<p class="small muted">${esc(t('nodata'))}</p>`;const max=rows[0][1];
+    return `<div class="rank">${rows.map(([k,n])=>`<div><span>${esc(k)}</span><span class="bar"><i style="width:${n/max*100}%;background:${color}"></i></span><span class="n">${n}</span></div>`).join('')}</div>`};
+  app.innerHTML=`
+  <header class="top"><div class="title"><div class="label">${esc(t('hist.label'))}</div><h1>${esc(t('hist.title'))}</h1></div>${headTools(false)}</header>
+  <div class="view">
+    <div class="stats">
+      <div class="stat"><b>${mealDays}</b><span>${esc(t('stat.meals'))}</span></div>
+      <div class="stat"><b>${urges.length}</b><span>${esc(t('stat.urges'))}</span></div>
+      <div class="stat"><b>${passed}</b><span>${esc(t('stat.passed'))}</span></div>
+    </div>
+    <section class="panel">
+      <h3>${esc(t('strip.title'))}</h3>
+      <div class="strip">${cols.map(c=>{const bars=[];for(let i=0;i<6;i++)bars.push(`<i class="${i<c.meals?'':'ghost'}"></i>`);
+        return `<button class="col ${sameDay(c.d,Date.now())?'today':''}" data-day="${c.d}" aria-label="${esc(t('day.aria',{d:fmtDay(c.d),m:c.meals,u:c.urges}))}"><span class="bars">${bars.join('')}</span><span class="urgedot ${c.urges?'':'none'}"></span><small>${new Date(c.d).getDate()}</small></button>`}).join('')}</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>${esc(t('legend.meal'))}</span><span><i style="background:var(--urge);border-radius:50%"></i>${esc(t('legend.urge'))}</span></div>
+      <p class="note" style="margin:10px 0 0">${esc(t('strip.note'))}</p>
+    </section>
+    ${logPatterns(recent,days)}
+    <section class="panel"><h3>${esc(t('rank.triggers'))}</h3>${rank(trig,'var(--urge)')}</section>
+    <section class="panel"><h3>${esc(t('rank.helped'))}</h3>${rank(help,'var(--accent)')}</section>
+    <section class="panel"><h3>${esc(t('rank.feelings'))}</h3>${rank(feel,'var(--mood)')}</section>
+    <p class="note">${esc(t('hist.foot'))}</p>
+  </div>`;
+  app.querySelectorAll('.col').forEach(b=>b.onclick=()=>{viewDay=+b.dataset.day;tab='heute';showOverview=true;render();scrollTo(0,0)});
+}
+function logPatterns(recent,days){
+  const logs=recent.filter(e=>e.type==='log');
+  if(!logs.length)return `<section class="panel"><h3>${esc(t('lp.empty.title'))}</h3><p class="small muted" style="margin:6px 0 0">${esc(t('lp.empty'))}</p></section>`;
+  const bucket=ts=>{const h=new Date(ts).getHours();return h>=5&&h<11?0:h>=11&&h<14?1:h>=14&&h<18?2:h>=18&&h<22?3:4};
+  const rows=[['row.urge',l=>l.urge===true,'--urge'],['row.purged',l=>l.purged===true,'--sos'],['row.anx',l=>l.anxLevel>=5,'--mood']];
+  const grid=rows.map(([lab,fn,col])=>{const c=[0,0,0,0,0];logs.filter(fn).forEach(l=>c[bucket(l.ts)]++);const mx=Math.max(1,...c);
+    return `<span class="rl">${esc(t(lab))}</span>`+c.map(n=>{const p=n?Math.round(25+n/mx*65):0;
+      return `<span class="c" style="${n?`background:color-mix(in srgb,var(${col}) ${p}%,var(--surface-2));color:${p>55?'var(--surface)':'var(--ink)'}`:''}">${n||'·'}</span>`}).join('')}).join('');
+  const avg=a=>a.length?(a.reduce((s,x)=>s+x,0)/a.length).toLocaleString(loc(),{minimumFractionDigits:1,maximumFractionDigits:1}):'–';
+  const withU=logs.filter(l=>l.urge===true).map(l=>l.anxLevel||0),noU=logs.filter(l=>l.urge===false).map(l=>l.anxLevel||0);
+  const W=300,H=90,x0=24,x1=292,y=v=>74-v/10*62;
+  const pts=days.map((d,i)=>{const a=logs.filter(l=>sameDay(l.ts,d)).map(l=>l.anxLevel||0);return a.length?[x0+i*(x1-x0)/13,y(Math.max(...a))]:null}).filter(Boolean);
+  const spark=`<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('spark.aria'))}">
+    ${[0,5,10].map(v=>`<line x1="${x0}" x2="${x1}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" ${v?'stroke-dasharray="3 4"':''}/><text x="0" y="${y(v)+4}" font-size="10" fill="var(--muted)">${v}</text>`).join('')}
+    ${pts.length>1?`<polyline points="${pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" fill="none" stroke="var(--mood)" stroke-width="2" stroke-linejoin="round"/>`:''}
+    ${pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i===pts.length-1?4:2.5}" fill="var(--mood)"/>`).join('')}
+    <text x="${x0}" y="${H-2}" font-size="10" fill="var(--muted)">${esc(t('spark.from'))}</text><text x="${x1}" y="${H-2}" font-size="10" fill="var(--muted)" text-anchor="end">${esc(t('spark.to'))}</text></svg>`;
+  return `<section class="panel"><h3>${esc(t('lp.title'))}</h3>
+    <p class="small muted" style="margin:4px 0 0">${esc(t('lp.sub',{n:logs.length}))}</p>
+    <div class="heat"><span></span>${[0,1,2,3,4].map(i=>`<span class="h">${esc(t('bs.'+i))}</span>`).join('')}${grid}</div>
+    <p class="note" style="margin:8px 0 0">${esc(t('lp.ranges'))}</p></section>
+  <section class="panel"><h3>${esc(t('ad.title'))}</h3>
+    <div class="cmp"><div><b>${avg(withU)}</b><span>${esc(t('ad.with'))}</span></div><div><b>${avg(noU)}</b><span>${esc(t('ad.without'))}</span></div></div>
+    <p class="label" style="margin:14px 0 0">${esc(t('ad.peak'))}</p>${spark}</section>`;
+}
+
+/* ---------- Übungen ---------- */
+let ideaIdx=Math.floor(Math.random()*12), groundIdx=-1, breathMode='calm';
+const BREATH={calm:[['in','cue.in',4],['out','cue.out',6]],box:[['in','cue.in',4],['in','cue.hold',4],['out','cue.out',4],['out','cue.hold',4]]};
+function renderExercises(){
+  const ideas=t('ideas');
+  app.innerHTML=`
+  <header class="top"><div class="title"><div class="label">${esc(t('ex.label'))}</div><h1>${esc(t('ex.title'))}</h1></div>${headTools(false)}</header>
+  <div class="view">
+    <section class="panel">
+      <h3>${esc(t('wave.title'))}</h3>
+      <p class="small muted" style="margin:4px 0 12px">${esc(t('wave.text'))}</p>
+      <div class="seg" role="group" aria-label="${esc(t('breath.aria'))}">${['calm','box'].map(k=>`<button data-mode="${k}" aria-pressed="${k===breathMode}">${esc(t('mode.'+k))}</button>`).join('')}</div>
+      <p class="note" id="bhint" style="margin:8px 0 0">${esc(t('mode.'+breathMode+'.hint'))}</p>
+      <div class="breath"><div class="circle" id="circle"><span id="cue">${esc(t('cue.ready'))}</span></div><div class="timer" id="timer">${fmtRemain()}</div>
+        <div class="btnrow"><button class="btn" id="startB">${esc(t(remaining<900?'btn.resume':'btn.start'))}</button><button class="btn ghost" id="resetB">${esc(t('btn.reset'))}</button></div></div>
+    </section>
+    <section class="panel">
+      <h3>${esc(t('ground.title'))}</h3>
+      <p class="small muted" style="margin:4px 0 0">${esc(t('ground.text'))}</p>
+      <div class="ground" id="ground"></div>
+    </section>
+    <section class="panel">
+      <h3>${esc(t('idea.title'))}</h3>
+      <p class="idea" id="idea">${esc(ideas[ideaIdx%ideas.length])}</p>
+      <button class="btn ghost" id="nextIdea">${esc(t('idea.next'))}</button>
+    </section>
+    <section class="panel field">
+      <h3>${esc(t('plan.title'))}</h3>
+      <p class="small muted" style="margin:0">${esc(t('plan.text'))}</p>
+      <textarea id="plan" placeholder="${esc(t('plan.ph'))}">${esc(state.plan)}</textarea>
+    </section>
+    <p class="note">${esc(t('ex.foot'))}</p>
+  </div>`;
+  renderGround();
+  app.querySelectorAll('[data-mode]').forEach(x=>x.onclick=()=>{const was=running;stopBreath();breathMode=x.dataset.mode;
+    app.querySelectorAll('[data-mode]').forEach(y=>y.setAttribute('aria-pressed',y===x));$('#bhint').textContent=t('mode.'+breathMode+'.hint');
+    if(was)toggleBreath();else $('#cue').textContent=t('cue.ready')});
+  $('#nextIdea').onclick=()=>{ideaIdx++;$('#idea').textContent=ideas[ideaIdx%ideas.length]};
+  $('#plan').oninput=e=>{state.plan=e.target.value;save()};
+  $('#startB').onclick=toggleBreath;
+  $('#resetB').onclick=()=>{stopBreath();remaining=900;$('#timer').textContent=fmtRemain();$('#cue').textContent=t('cue.ready');$('#startB').textContent=t('btn.start')};
+}
+function renderGround(){
+  const g=$('#ground');if(!g)return;const steps=t('ground.steps');
+  if(groundIdx<0){g.innerHTML=`<button class="btn" id="gStart" style="align-self:flex-start">${esc(t('ground.start'))}</button>`;$('#gStart').onclick=()=>{groundIdx=0;renderGround()};return}
+  if(groundIdx>=steps.length){g.innerHTML=`<p class="step">${esc(t('ground.end'))}</p><div class="btnrow"><button class="btn" id="gMood">${esc(t('ground.log'))}</button><button class="btn ghost" id="gAgain">${esc(t('btn.again'))}</button></div>`;
+    $('#gMood').onclick=()=>openSheet({type:'mood'});$('#gAgain').onclick=()=>{groundIdx=0;renderGround()};return}
+  const [what,tip]=steps[groundIdx];const n=5-groundIdx;
+  g.innerHTML=`<div class="dots">${steps.map((_,i)=>`<i class="${i<=groundIdx?'on':''}"></i>`).join('')}</div>
+    <div style="display:flex;gap:14px;align-items:baseline"><span class="big">${n}</span><span class="step">${what}</span></div>
+    <p class="small muted" style="margin:0">${esc(tip)}</p>
+    <div class="btnrow"><button class="btn" id="gNext">${esc(t(groundIdx===steps.length-1?'ground.finish':'ground.next'))}</button>${groundIdx>0?`<button class="btn ghost" id="gBack">${esc(t('ground.back'))}</button>`:''}</div>`;
+  $('#gNext').onclick=()=>{groundIdx++;renderGround()};const bk=$('#gBack');if(bk)bk.onclick=()=>{groundIdx--;renderGround()};
+}
+let remaining=900,breathTimer=null,phaseTimer=null,running=false;
+function fmtRemain(){return String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0')}
+function toggleBreath(){if(running){stopBreath();$('#startB').textContent=t('btn.resume');return}
+  running=true;$('#startB').textContent=t('btn.pause');
+  breathTimer=setInterval(()=>{remaining--;const el=$('#timer');if(!el)return stopBreath();el.textContent=fmtRemain();
+    if(remaining<=0){stopBreath();$('#cue').textContent=t('cue.done');$('#startB').textContent=t('btn.again');remaining=900;toast(t('toast.wave'))}},1000);
+  let i=0;const ph=BREATH[breathMode];
+  const phase=()=>{const c=$('#circle');if(!c||!running)return;const [cls,key,sec]=ph[i%ph.length];
+    c.style.transitionDuration=sec+'s';c.className='circle '+cls;$('#cue').textContent=t(key);phaseTimer=setTimeout(phase,sec*1000);i++};phase()}
+function stopBreath(){running=false;clearInterval(breathTimer);clearTimeout(phaseTimer);const c=$('#circle');if(c)c.className='circle'}
+
+/* ---------- Modal: SOS & Sprache ---------- */
+function closeModal(){modal.hidden=true;modal.innerHTML=''}
+function showModal(inner,labelId){
+  modal.innerHTML=`<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="${labelId}">${inner}</div>`;modal.hidden=false;
+  modal.onclick=e=>{if(e.target===modal)closeModal()};const c=$('#mClose');if(c)c.onclick=closeModal;
+  modal.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copyText(b.dataset.copy));}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
+function callOpt(cls,title,num,sub){const tel=num.replace(/[^\d+]/g,'');
+  return `<div class="callopt ${cls}"><a href="tel:${esc(tel)}"><b>${esc(title)}</b><div class="num">${esc(num)}</div>${sub?`<div class="small" style="opacity:.85">${esc(sub)}</div>`:''}</a><button class="btn ghost copy" data-copy="${esc(num)}">${esc(t('copy'))}</button></div>`}
+function openSos(){
+  const c=country();const has=(state.contactNumber||'').trim();
+  showModal(`<div class="dialog-head"><h2 id="mT">${esc(t('sos.title'))}</h2><button class="iconbtn" id="mClose" aria-label="${esc(t('close'))}">${ICON.x}</button></div>
+    ${callOpt('call-112',t('sos.emergency',{n:c.emergency}),c.emergency,t('sos.emergency.sub'))}
+    ${has?callOpt('call-person',t('sos.callperson',{name:(state.contactName||'').trim()||t('sos.defaultName')}),has,t('sos.contact'))
+      :`<button class="callopt call-person" id="setupContact" style="border:0;text-align:left;width:100%"><span><b>${esc(t('sos.setup'))}</b><div class="small muted">${esc(t('sos.setup.sub'))}</div></span><span aria-hidden="true">›</span></button>`}
+    <p class="note" style="margin:0">${esc(t('sos.hint'))}</p>
+    <button class="linkbtn" id="sosCountry" style="align-self:flex-start">${esc(t('sos.country',{c:o('country',state.country)}))}</button>`,'mT');
+  const sc=$('#setupContact');if(sc)sc.onclick=()=>{closeModal();openSettings()};
+  $('#sosCountry').onclick=()=>{closeModal();openSettings()};
+}
+function openLang(){
+  showModal(`<div class="dialog-head"><h2 id="mL">${esc(t('lang.title'))}</h2><button class="iconbtn" id="mClose" aria-label="${esc(t('close'))}">${ICON.x}</button></div>
+    <div class="langlist">${LANGS.map(([k,n])=>`<button data-lang="${k}" aria-pressed="${k===lang}" lang="${k}"><span>${esc(n)}</span><span class="code">${k.toUpperCase()}</span></button>`).join('')}</div>`,'mL');
+  modal.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{closeModal();setLang(b.dataset.lang)});
+}
+
+/* ---------- Einstellungen ---------- */
+function lineRow(l){const tel=l.num.replace(/[^\d+]/g,'');
+  return `<div class="contact"><div><b>${esc(l.name)}</b> <span class="kind">${esc(t('kind.'+l.kind))}</span></div><button class="btn ghost copy" data-copy="${esc(l.num)}">${esc(t('copy'))}</button><div><div class="num"><a href="tel:${esc(tel)}">${esc(l.num)}</a></div><div class="small muted">${esc(lineInfo(l))}</div></div></div>`}
+function openSettings(){
+  stopBreath();const c=country();
+  sheet.dataset.kind='settings';
+  sheet.innerHTML=`<div class="sheet-inner">
+    <div class="sheet-head"><h2>${esc(t('set.title'))}</h2><button class="iconbtn" id="closeSet" aria-label="${esc(t('close'))}">${ICON.x}</button></div>
+    <section class="panel field">
+      <label class="label" for="setLang">${esc(t('set.lang'))}</label>
+      <select id="setLang">${LANGS.map(([k,n])=>`<option value="${k}" ${k===lang?'selected':''}>${esc(n)}</option>`).join('')}</select>
+      <label class="label" for="setCountry">${esc(t('set.country'))}</label>
+      <select id="setCountry">${COUNTRY_ORDER.map(k=>`<option value="${k}" ${k===state.country?'selected':''}>${esc(o('country',k))}</option>`).join('')}</select>
+      <p class="small muted" style="margin:0">${esc(t('set.country.text'))}</p>
+    </section>
+    <section class="panel field">
+      <h3>${esc(t('contact.title'))}</h3>
+      <p class="small muted" style="margin:0">${esc(t('contact.text'))}</p>
+      <label class="label" for="cName">${esc(t('contact.name'))}</label><input type="text" id="cName" value="${esc(state.contactName)}" placeholder="${esc(t('contact.name.ph'))}" autocomplete="off">
+      <label class="label" for="cNum">${esc(t('contact.num'))}</label><input type="text" id="cNum" inputmode="tel" value="${esc(state.contactNumber)}" placeholder="${esc(t('contact.num.ph'))}" autocomplete="off">
+    </section>
+    <section class="panel field" id="ciPanel">
+      <h3>${esc(t('ci.title'))}</h3>
+      <p class="small muted" style="margin:0">${esc(t('ci.text'))}</p>
+      <label class="switchrow" for="ciOn"><span>${esc(t('ci.toggle'))}</span><input type="checkbox" id="ciOn" role="switch" ${state.checkins.on?'checked':''}></label>
+      <div class="ci-slots" id="ciSlots" ${state.checkins.on?'':'hidden'}>${state.checkins.slots.map(sl=>`<div class="ci-row ${sl.on?'':'off'}"><input type="checkbox" id="ci_${sl.id}" data-ci="${sl.id}" ${sl.on?'checked':''}><label for="ci_${sl.id}"><b>${esc(t('ci.slot.'+sl.id))}</b><span class="small muted">${esc(t('ci.m.'+sl.id))}</span></label><input type="time" id="cit_${sl.id}" data-cit="${sl.id}" value="${esc(sl.time)}" aria-label="${esc(t('ci.time')+' '+t('ci.slot.'+sl.id))}"></div>`).join('')}</div>
+      <div class="ci-push"><span><b>${esc(t('ci.push'))}</b><span class="small muted">${esc(t('ci.push.text'))}</span></span><span class="soon2">${esc(t('ci.soon'))}</span></div>
+    </section>
+    <section class="panel">
+      <h3>${esc(t('lines.title'))} · ${esc(o('country',state.country))}</h3>
+      ${c.note?`<p class="small muted" style="margin:6px 0 4px">${esc(t(c.note))}</p>`:''}
+      ${c.find?`<p style="margin:6px 0 0"><a class="btn ghost" href="https://findahelpline.com" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">${esc(t('lines.findlink'))}</a></p>`:''}
+      ${c.lines.map(lineRow).join('')}
+      <div class="contact"><div><b>${esc(t('sos.emergency',{n:c.emergency}))}</b></div><button class="btn ghost copy" data-copy="${esc(c.emergency)}">${esc(t('copy'))}</button><div><div class="num"><a href="tel:${esc(c.emergency)}">${esc(c.emergency)}</a></div><div class="small muted">${esc(t('sos.emergency.sub'))}</div></div></div>
+    </section>
+    ${state.entries.some(e=>e.example)?`<section class="panel field">
+      <h3>${esc(t('ex.title2'))}</h3><p class="small muted" style="margin:0">${esc(t('ex.text'))}</p>
+      <div class="btnrow"><button class="btn ghost" id="clearEx">${esc(t('ex.remove'))}</button></div></section>`:''}
+    <section class="panel field">
+      <h3>${esc(t('data.title'))}</h3>
+      <p class="small muted" style="margin:0">${esc(t('data.text'))}</p>
+      <div class="btnrow"><button class="btn ghost" id="backup">${esc(t('data.backup'))}</button><button class="btn ghost" id="restoreToggle">${esc(t('data.restoreToggle'))}</button></div>
+      <div id="restoreBox" class="field" hidden><textarea id="restoreText" placeholder="${esc(t('data.restore.ph'))}"></textarea><button class="btn" id="restore">${esc(t('data.restore'))}</button></div>
+      <div class="btnrow"><button class="btn ghost" id="wipe" style="color:var(--sos)">${esc(t('data.wipe'))}</button></div>
+      <div id="wipeConfirm" class="banner" hidden><span>${esc(t('data.wipe.q'))}</span><span class="btnrow"><button class="btn danger" id="wipeYes">${esc(t('del'))}</button><button class="btn ghost" id="wipeNo">${esc(t('cancel'))}</button></span></div>
+    </section>
+    <section class="panel field" id="fbPanel">
+      <h3>${esc(t('fb.title'))}</h3>
+      <p class="small muted" style="margin:0">${esc(t('fb.text'))}</p>
+      <span class="label">${esc(t('fb.rate'))}</span>
+      <div class="rate" id="fbRate">${[1,2,3,4,5].map(n=>`<button type="button" data-r="${n}" aria-pressed="${state.fb.rate===n}">${n}</button>`).join('')}</div>
+      <div class="scale-ends"><span>${esc(t('fb.lo'))}</span><span>${esc(t('fb.hi'))}</span></div>
+      <label class="label" for="fbGood">${esc(t('fb.good'))}</label><textarea id="fbGood">${esc(state.fb.good)}</textarea>
+      <label class="label" for="fbBad">${esc(t('fb.bad'))}</label><textarea id="fbBad">${esc(state.fb.bad)}</textarea>
+      <label class="label" for="fbMiss">${esc(t('fb.miss'))}</label><textarea id="fbMiss">${esc(state.fb.miss)}</textarea>
+      <div class="btnrow"><a class="btn wa" id="fbWa" href="#" target="_blank" rel="noopener">${esc(t('fb.wa'))}</a><button class="btn ghost" id="fbCopy">${esc(t('fb.copy'))}</button></div>
+      <p class="note" style="margin:0">${esc(t('fb.private'))}</p>
+    </section>
+    <p class="note">${esc(t('ver'))}</p>
+    <p class="note">${esc(t('disclaimer'))}</p>
+  </div>`;
+  sheet.hidden=false;document.body.style.overflow='hidden';
+  $('#closeSet').onclick=()=>closeSheet(true);
+  $('#setLang').onchange=e=>{const y=sheet.scrollTop;setLang(e.target.value);sheet.scrollTop=y};
+  $('#setCountry').onchange=e=>{const y=sheet.scrollTop;state.country=e.target.value;save();openSettings();sheet.scrollTop=y};
+  $('#cName').oninput=e=>{state.contactName=e.target.value;save()};
+  $('#cNum').oninput=e=>{state.contactNumber=e.target.value;save()};
+  $('#ciOn').onchange=e=>{state.checkins.on=e.target.checked;save();$('#ciSlots').hidden=!e.target.checked};
+  sheet.querySelectorAll('[data-ci]').forEach(cb=>cb.onchange=()=>{const sl=state.checkins.slots.find(x=>x.id===cb.dataset.ci);sl.on=cb.checked;save();cb.closest('.ci-row').classList.toggle('off',!cb.checked)});
+  sheet.querySelectorAll('[data-cit]').forEach(inp=>inp.onchange=()=>{if(!/^\d{1,2}:\d{2}/.test(inp.value))return;const sl=state.checkins.slots.find(x=>x.id===inp.dataset.cit);sl.time=inp.value.slice(0,5);save()});
+  sheet.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copyText(b.dataset.copy));
+  $('#backup').onclick=()=>copyText(JSON.stringify(state));
+  $('#restoreToggle').onclick=()=>{$('#restoreBox').hidden=!$('#restoreBox').hidden};
+  $('#restore').onclick=()=>{try{const d=JSON.parse($('#restoreText').value);if(!Array.isArray(d.entries))throw 0;
+    state=Object.assign({entries:[],plan:'',contactName:'',contactNumber:'',seeded:true,seededLog:true},d);if(!state.schema||state.schema<2)migrate();
+    if(!state.checkins)state.checkins={on:true,slots:[{id:'midday',time:'13:00',on:true},{id:'afternoon',time:'17:00',on:true},{id:'evening',time:'22:00',on:true}],dismissed:{}};lang=T[state.lang]?state.lang:'en';save();toast(t('data.restored'));closeSheet(true)}catch(e){toast(t('data.invalid'))}};
+  const ce=$('#clearEx');if(ce)ce.onclick=()=>{state.entries=state.entries.filter(e=>!e.example);save();toast(t('ex.removed'));closeSheet(true)};
+  const fbText=()=>{const f=state.fb;return `${t('fb.msg')}\n\n${t('fb.m.rate')}: ${f.rate?f.rate+'/5':'–'}\n\n${t('fb.m.good')}:\n${f.good||'–'}\n\n${t('fb.m.bad')}:\n${f.bad||'–'}\n\n${t('fb.m.miss')}:\n${f.miss||'–'}`};
+  const fbSync=()=>{$('#fbWa').href='https://wa.me/?text='+encodeURIComponent(fbText())};fbSync();
+  [['fbGood','good'],['fbBad','bad'],['fbMiss','miss']].forEach(([id,k])=>$('#'+id).oninput=e=>{state.fb[k]=e.target.value;save();fbSync()});
+  $('#fbRate').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.fb.rate=+b.dataset.r;save();$('#fbRate').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));fbSync()});
+  $('#fbCopy').onclick=()=>copyText(fbText());
+  $('#wipe').onclick=()=>{$('#wipeConfirm').hidden=false};
+  $('#wipeNo').onclick=()=>{$('#wipeConfirm').hidden=true};
+  $('#wipeYes').onclick=()=>{state.entries=[];save();toast(t('data.wiped'));closeSheet(true)};
+}
+
+/* ---------- Eintrags-Formular ---------- */
+function chipGroup(id,group,sel){sel=sel||[];return `<div class="chips" data-group="${id}">${OPT[group].map(k=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${sel.includes(k)}">${esc(o(group==='feel'?'feel':group,k))}</button>`).join('')}</div>`}
+function scale(id,label,val,lo,hi){val=val??5;return `<div class="field"><label class="label" for="${id}">${esc(label)}</label><div class="scale"><input type="range" id="${id}" min="0" max="10" value="${val}"><output id="${id}o">${val}</output></div><div class="scale-ends"><span>${esc(lo)}</span><span>${esc(hi)}</span></div></div>`}
+function single(id,opts,val){return `<div class="kind" data-single="${id}">${opts.map(([k,l])=>`<button type="button" data-v="${k}" aria-pressed="${val===k}">${esc(l)}</button>`).join('')}</div>`}
+const yesno=()=>[['nein',t('No')],['ja',t('Yes')]];
+function openSheet(e){
+  const isNew=!e.id,ty=e.type;let form='';
+  const yn=v=>v===true?'ja':v===false?'nein':null;
+  if(ty==='log'){form=`
+    <div class="field"><span class="label"><span class="qnum">1</span>${esc(t('q1'))}</span>${single('purged',yesno(),yn(e.purged))}</div>
+    <div class="field"><span class="label"><span class="qnum">2</span>${esc(t('q2'))}</span>${single('urge',yesno(),yn(e.urge))}
+      <div id="urgeWrap" ${e.urge?'':'hidden'}>${scale('urgeLevel',t('q2s'),e.urgeLevel,t('int.lo'),t('int.hi'))}</div></div>
+    <div class="field"><span class="label"><span class="qnum">3</span>${esc(t('q3'))}</span>${chipGroup('feelings','feel',e.feelings)}</div>
+    <div class="field"><span class="label"><span class="qnum">4</span>${esc(t('q4'))}</span>${single('anxiety',yesno(),yn(e.anxiety))}
+      <div id="anxietyWrap" ${e.anxiety?'':'hidden'}>${scale('anxLevel',t('q4s'),e.anxLevel,t('anx.lo'),t('anx.hi'))}</div></div>
+    <div class="field"><span class="label">${esc(t('voice.label'))}</span>
+      <button type="button" class="voice" id="voiceBtn" aria-describedby="voiceHint"><span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span class="vt"><b>${esc(t('voice.btn'))}</b><span>${esc(t('voice.sub'))}</span></span><span class="soon">${esc(t('voice.soon'))}</span></button>
+      <p class="note" id="voiceHint" style="margin:0">${esc(t('voice.hint'))}</p></div>
+    <div class="gentle" id="gentleLog" ${e.purged?'':'hidden'}>${esc(t('gentleLog'))}</div>`}
+  else if(ty==='meal'){form=`
+    <div class="field"><label class="label" for="slot">${esc(t('f.slot'))}</label><select id="slot">${OPT.slot.map(s=>`<option value="${s}" ${e.slot===s?'selected':''}>${esc(o('slot',s))}</option>`).join('')}</select></div>
+    <div class="field"><label class="label" for="what">${esc(t('f.what'))}</label><input type="text" id="what" value="${esc(txt(e.what))}" placeholder="${esc(t('f.what.ph'))}"></div>
+    <div class="field"><label class="label" for="where">${esc(t('f.where'))}</label><input type="text" id="where" value="${esc(txt(e.where))}" placeholder="${esc(t('f.where.ph'))}"></div>
+    <div class="field"><span class="label">${esc(t('f.with'))}</span>${single('company',[['alone',t('with.alone')],['others',t('with.others')]],e.company)}</div>
+    ${scale('hunger',t('f.hunger'),e.hunger,t('hunger.lo'),t('hunger.hi'))}
+    ${scale('full',t('f.full'),e.full,t('full.lo'),t('full.hi'))}
+    <div class="field"><span class="label">${esc(t('f.fBefore'))}</span>${chipGroup('fBefore','feel',e.fBefore)}</div>
+    <div class="field"><span class="label">${esc(t('f.fAfter'))}</span>${chipGroup('fAfter','feel',e.fAfter)}</div>`}
+  else if(ty==='urge'){form=`
+    <div class="field"><span class="label">${esc(t('f.kinds'))}</span>${chipGroup('kinds','urge',e.kinds)}</div>
+    ${scale('intensity',t('f.intensity'),e.intensity,t('int.lo'),t('int.hi'))}
+    <div class="field"><span class="label">${esc(t('f.triggers'))}</span>${chipGroup('triggers','trig',e.triggers)}</div>
+    <div class="field"><span class="label">${esc(t('f.helped'))}</span>${chipGroup('helped','help',e.helped)}</div>
+    <div class="field"><span class="label">${esc(t('f.outcome'))}</span>${single('outcome',[['passed',t('ob.passed')],['partly',t('ob.partly')],['happened',t('ob.happened')]],e.outcome)}</div>
+    <div class="gentle" id="gentle" ${e.outcome==='happened'||e.outcome==='partly'?'':'hidden'}>${esc(t('gentle'))}</div>`}
+  else{form=`
+    <div class="field"><span class="label">${esc(t('f.feelings'))}</span>${chipGroup('feelings','feel',e.feelings)}</div>
+    ${scale('intensity',t('f.howStrong'),e.intensity,t('mood.lo'),t('mood.hi'))}`}
+  const title=t('sheet.'+ty);
+  sheet.dataset.kind='entry';
+  sheet.innerHTML=`<div class="sheet-inner">
+    <div class="sheet-head"><h2>${esc(isNew?title:t('sheet.edit',{t:title}))}</h2><button class="iconbtn" id="closeS" aria-label="${esc(t('close'))}">${ICON.x}</button></div>
+    <div class="field"><label class="label" for="ts">${esc(t('f.time'))}</label><input type="datetime-local" id="ts" value="${toLocalInput(e.ts||Date.now())}"></div>
+    ${form}
+    <div class="field"><label class="label" for="note">${esc(t('f.note'))}</label><textarea id="note" placeholder="${esc(t('f.note.ph'))}">${esc(txt(e.note))}</textarea></div>
+    ${isNew?'':`<div class="btnrow"><button class="btn ghost" id="del" style="color:var(--sos)">${esc(t('entry.del'))}</button></div><div id="delC" class="banner" hidden><span>${esc(t('entry.del.q'))}</span><span class="btnrow"><button class="btn danger" id="delY">${esc(t('del'))}</button><button class="btn ghost" id="delN">${esc(t('cancel'))}</button></span></div>`}
+  </div>
+  <div class="save-bar"><div class="wrap"><button class="btn" id="saveS">${esc(t('save'))}</button></div></div>`;
+  sheet.hidden=false;document.body.style.overflow='hidden';sheet.scrollTop=0;
+  sheet.querySelectorAll('.chip').forEach(c=>c.onclick=()=>c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')!=='true'));
+  const paint=b=>{b.style.background='var(--ink)';b.style.color='var(--bg)'};
+  sheet.querySelectorAll('[data-single]').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    g.querySelectorAll('button').forEach(x=>{x.setAttribute('aria-pressed','false');x.style.background='';x.style.color=''});
+    b.setAttribute('aria-pressed','true');paint(b);
+    if(g.dataset.single==='outcome')$('#gentle').hidden=!(b.dataset.v==='happened'||b.dataset.v==='partly');
+    const w=$('#'+g.dataset.single+'Wrap');if(w)w.hidden=b.dataset.v!=='ja';
+    if(g.dataset.single==='purged')$('#gentleLog').hidden=b.dataset.v!=='ja'}));
+  sheet.querySelectorAll('[data-single] button[aria-pressed="true"]').forEach(paint);
+  sheet.querySelectorAll('input[type=range]').forEach(r=>r.oninput=()=>{$('#'+r.id+'o').textContent=r.value});
+  $('#closeS').onclick=()=>closeSheet();
+  const vb=$('#voiceBtn');if(vb)vb.onclick=()=>toast(t('voice.toast'));
+  const del=$('#del');if(del){del.onclick=()=>$('#delC').hidden=false;$('#delN').onclick=()=>$('#delC').hidden=true;
+    $('#delY').onclick=()=>{state.entries=state.entries.filter(x=>x.id!==e.id);save();closeSheet();toast(t('entry.deleted'))}}
+  $('#saveS').onclick=()=>{
+    const chips=g=>[...sheet.querySelectorAll(`[data-group="${g}"] .chip[aria-pressed="true"]`)].map(c=>c.dataset.k);
+    const one=g=>{const b=sheet.querySelector(`[data-single="${g}"] button[aria-pressed="true"]`);return b?b.dataset.v:null};
+    const v=id=>{const el=$('#'+id);return el?el.value:''};
+    const b3=g=>{const x=one(g);return x==='ja'?true:x==='nein'?false:null};
+    const rec={id:e.id||uid(),type:ty,ts:fromLocalInput(v('ts'))||Date.now(),note:v('note').trim()};
+    if(e.example&&rec.note===txt(e.note))rec.note=e.note;
+    if(ty==='log'){const r={purged:b3('purged'),urge:b3('urge'),anxiety:b3('anxiety'),feelings:chips('feelings')};
+      if(r.purged===null&&r.urge===null&&r.anxiety===null&&!r.feelings.length){toast(t('need.one'));return}
+      r.urgeLevel=r.urge?+v('urgeLevel'):0;r.anxLevel=r.anxiety?+v('anxLevel'):0;Object.assign(rec,r)}
+    else if(ty==='meal'){Object.assign(rec,{slot:v('slot'),what:v('what').trim(),where:v('where').trim(),company:one('company'),hunger:+v('hunger'),full:+v('full'),fBefore:chips('fBefore'),fAfter:chips('fAfter')});
+      if(e.example){if(rec.what===txt(e.what))rec.what=e.what;if(rec.where===txt(e.where))rec.where=e.where}}
+    else if(ty==='urge'){if(!chips('kinds').length){toast(t('need.kind'));return}
+      Object.assign(rec,{kinds:chips('kinds'),intensity:+v('intensity'),triggers:chips('triggers'),helped:chips('helped'),outcome:one('outcome')||'passed'})}
+    else{if(!chips('feelings').length){toast(t('need.feel'));return}Object.assign(rec,{feelings:chips('feelings'),intensity:+v('intensity')})}
+    if(e.example)rec.example=true;
+    const i=state.entries.findIndex(x=>x.id===rec.id);if(i>=0)state.entries[i]=rec;else state.entries.push(rec);
+    save();viewDay=rec.ts;closeSheet();
+    toast(ty==='urge'&&rec.outcome==='passed'?t('saved.wave'):t('saved'));
+  };
+}
+function closeSheet(keepTab){sheet.hidden=true;sheet.innerHTML='';sheet.dataset.kind='';document.body.style.overflow='';if(!keepTab)tab='heute';render()}
+
+load();
+const h0=(location.hash||'').slice(1);if(['heute','verlauf','uebungen'].includes(h0))tab=h0;
+render();
+function showWelcome(){let w=document.querySelector('.welcome');if(!w){w=document.createElement('div');w.className='welcome';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');document.body.appendChild(w)}
+  w.innerHTML=`<div class="in"><div class="langs" role="group" aria-label="${esc(t('lang.title'))}">${LANGS.map(([k,n])=>`<button data-wl="${k}" aria-pressed="${k===lang}" lang="${k}">${esc(n)}</button>`).join('')}</div>
+  <div class="label">${esc(t('w.label'))}</div><h1>${esc(t('w.title'))}</h1>
+  <p class="muted" style="margin:0">${esc(t('w.intro'))}</p>
+  <ul>
+   <li><span class="ic" style="background:var(--mood-soft);color:var(--mood)">T</span><span><b>${esc(t('w.1t'))}</b><span class="small muted">${esc(t('w.1'))}</span></span></li>
+   <li><span class="ic" style="background:var(--accent-soft);color:var(--accent)">✓</span><span><b>${esc(t('w.2t'))}</b><span class="small muted">${esc(t('w.2'))}</span></span></li>
+   <li><span class="ic" style="background:var(--urge-soft);color:var(--urge)">i</span><span><b>${esc(t('w.3t'))}</b><span class="small muted">${esc(t('w.3'))}</span></span></li>
+   <li><span class="ic" style="background:var(--sos);color:var(--surface)">!</span><span><b>${esc(t('w.4t'))}</b><span class="small muted">${esc(t('w.4'))}</span></span></li>
+  </ul>
+  <p class="small muted" style="margin:0">${esc(t('w.ex'))}</p>
+  <button class="btn" id="welcomeGo">${esc(t('w.go'))}</button></div>`;
+  document.body.style.overflow='hidden';
+  w.querySelectorAll('[data-wl]').forEach(b=>b.onclick=()=>{setLang(b.dataset.wl);showWelcome()});
+  w.querySelector('#welcomeGo').onclick=()=>{state.welcomed=true;save();w.remove();document.body.style.overflow=''};}
+if(!state.welcomed)showWelcome();
+
+})();
+</script>
+</body>
+</html>
