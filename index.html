@@ -1,13 +1,22 @@
 <!doctype html>
+<!--
+  Mika
+  Copyright (c) 2026 Marten Schmidt. All rights reserved.
+  No use, copying, modification or distribution of this software, its design,
+  texts or graphics, in whole or in part, without prior written permission.
+  Contact: marten_schmidt@outlook.de
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Lichtung</title>
+<title>Mika</title>
 <meta name="description" content="A diary that supports you day to day with bulimia.">
+<meta name="author" content="Marten Schmidt">
+<meta name="copyright" content="© 2026 Marten Schmidt. All rights reserved.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Lichtung">
+<meta name="apple-mobile-web-app-title" content="Mika">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#EDF2F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111816" media="(prefers-color-scheme: dark)">
@@ -111,6 +120,7 @@ header.top .title{flex:1;min-width:0}
 .t-urge .pip{background:var(--urge)} .t-urge .k{color:var(--urge)}
 .t-mood .pip{background:var(--mood)} .t-mood .k{color:var(--mood)}
 .t-log .pip{background:var(--ink)} .t-log .k{color:var(--ink)}
+.t-acute .pip{background:var(--urge)} .t-acute .k{color:var(--urge)}
 .logbtn{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:var(--r);padding:16px;background:var(--ink);color:var(--bg);text-align:left}
 .logbtn .ring{width:44px;height:44px;border-radius:50%;background:var(--bg);color:var(--ink);display:grid;place-items:center;flex:none}
 .logbtn .ring svg{width:24px;height:24px}
@@ -260,6 +270,59 @@ nav.tabs button.sos[aria-current="page"]{color:var(--sos)}
 .ci-push{display:flex;align-items:center;gap:12px;justify-content:space-between;border:1px dashed var(--line);border-radius:12px;padding:12px 14px;margin-top:4px}
 .ci-push>span:first-child{display:flex;flex-direction:column;min-width:0}
 .soon2{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);flex:none;white-space:nowrap}
+.copyright{margin:0;text-align:center;font-size:.72rem;color:var(--muted);opacity:.8;padding-block:4px 8px}
+.acutebtn{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:var(--r);padding:16px;background:var(--urge-soft);color:var(--ink);text-align:left}
+.acutebtn .ring{width:44px;height:44px;border-radius:50%;background:var(--urge);color:var(--surface);display:grid;place-items:center;flex:none}
+.acutebtn .ring svg{width:24px;height:24px}
+.acutebtn .txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.acutebtn b{font-size:1.1rem}
+.acutebtn .txt span{font-size:.8rem;color:var(--muted)}
+.acutebtn .chev{font-size:1.4rem;color:var(--urge)}
+.acute-resume{background:var(--urge-soft)}
+.acute{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ac-in{max-width:560px;margin:0 auto;min-height:100%;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(12px + env(safe-area-inset-top,0px)) 0;display:flex;flex-direction:column;gap:16px}
+.ac-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ac-top .linkbtn{font-size:1rem;padding:8px 4px}
+.ac-dots{display:flex;gap:6px}
+.ac-dots i{flex:1;height:4px;border-radius:2px;background:var(--surface-2)}
+.ac-dots i.on{background:var(--urge)}
+.ac-body{flex:1;display:flex;flex-direction:column;gap:16px}
+.ac-body h2{font-size:1.6rem}
+.ac-quote{font-family:var(--display);font-size:1.15rem;line-height:1.4;padding:14px 16px;border-radius:14px;background:var(--urge-soft);margin:0}
+.ac-tip{margin:0;font-size:1rem;line-height:1.5}
+.ac-msg{font-family:var(--display);font-size:1.05rem;padding:12px 14px;border-radius:12px;background:var(--surface-2)}
+.ac-plan{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.ac-ideas{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.ac-nav{position:sticky;bottom:0;display:flex;gap:8px;background:var(--bg);border-top:1px solid var(--line);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));padding-block:12px calc(12px + env(safe-area-inset-bottom,0px))}
+.ac-nav .btn{flex:1;padding-block:14px;font-size:1rem}
+.ac-needs,.ac-out{display:flex;flex-direction:column;gap:10px}
+.bigbtn{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:16px 18px;font-weight:600;font-size:1.05rem;text-align:left}
+.bigbtn[aria-pressed="true"]{border-color:var(--urge);box-shadow:inset 0 0 0 1px var(--urge);background:var(--urge-soft)}
+.bigbtn.out-ok{border-color:var(--accent);color:var(--accent)}
+.need-detail{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.timepick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.timepick button{padding:22px 0;font-size:1.2rem;font-weight:700;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.ac-timer{font-family:var(--display);font-size:3.2rem;text-align:center;font-variant-numeric:tabular-nums;line-height:1}
+.ac-timer.small-t{font-size:1.8rem;color:var(--muted)}
+.compassion{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:14px;background:var(--urge-soft)}
+.compassion p{font-family:var(--display);font-size:1.2rem;margin:0}
+.ac-center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding-top:24px}
+.ac-bigicon{width:64px;height:64px;color:var(--accent)}
+.ac-sos{align-self:flex-start;height:48px}
+.btn.wa2{background:#1F8A4C;color:#fff}
+a.btn{text-decoration:none;text-align:center;display:inline-block}
+.ac-sum{font-family:var(--display);font-size:1.25rem;margin:6px 0 0}
+.tipgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tipgrid button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 4px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.tipgrid button b{font-family:var(--display);font-weight:400;font-size:1.35rem;font-variant-numeric:tabular-nums}
+.tipgrid button span{font-size:.75rem;color:var(--muted)}
+.tipthanks{background:var(--accent-soft);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.plans{display:flex;flex-direction:column;gap:10px}
+.plan{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.plan.cur{border-color:var(--accent)}
+.plan-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.plan-head b{font-size:1.05rem}
+.plan ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:3px;font-size:.875rem}
 .testbadge{display:inline-block;margin-left:8px;font-size:.62rem;letter-spacing:.08em;padding:2px 7px;border-radius:99px;background:var(--mood-soft);color:var(--mood);vertical-align:1px}
 .welcome{position:fixed;inset:0;z-index:45;background:var(--bg);overflow-y:auto}
 .welcome .in{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(24px + env(safe-area-inset-top,0px)) calc(32px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px}
@@ -295,9 +358,11 @@ header.top .title h1{overflow-wrap:break-word;hyphens:auto}
 <div id="sheet" class="sheet" hidden></div>
 <div id="modal" class="modal" hidden></div>
 <div id="toast" class="toast" hidden></div>
+<div id="acute" class="acute" hidden></div>
 
 <script>
 (function(){
+const APP_NAME='Mika'; /* App-Name an EINER Stelle – ändern mit: python3 set_name.py "Name" */
 const LANGS=[['en','English'],['sv','Svenska'],['de','Deutsch'],['es','Español'],['fr','Français']];
 const LOCALE={en:'en-GB',sv:'sv-SE',de:'de-DE',es:'es-ES',fr:'fr-FR'};
 const OPT={
@@ -718,6 +783,29 @@ Object.assign(T.de,{"ci.title": "Tägliche Check-ins", "ci.text": "Die App fragt
 Object.assign(T.sv,{"ci.title": "Dagliga incheckningar", "ci.text": "Appen frågar dig upp till tre gånger om dagen hur du mår. Frågan visas när du öppnar appen.", "ci.toggle": "Incheckningar på", "ci.m.midday": "Hur går din dag?", "ci.m.afternoon": "Hur mår du?", "ci.m.evening": "Hur var din dag? Dags att varva ner.", "ci.sub": "Ta 10 sekunder för en snabblogg.", "ci.log": "Snabblogg", "ci.later": "Inte nu", "ci.push": "Pushnotiser", "ci.push.text": "Påminnelser på låsskärmen kommer med iPhone-appen.", "ci.soon": "iPhone-app", "ci.time": "Tid", "ci.slot.midday": "Mitt på dagen", "ci.slot.afternoon": "Eftermiddag", "ci.slot.evening": "Kväll"});
 Object.assign(T.es,{"ci.title": "Revisiones diarias", "ci.text": "La app te pregunta hasta tres veces al día cómo estás. La pregunta aparece cuando abres la app.", "ci.toggle": "Revisiones activadas", "ci.m.midday": "¿Cómo va tu día?", "ci.m.afternoon": "¿Cómo estás?", "ci.m.evening": "¿Qué tal tu día? Hora de desconectar.", "ci.sub": "Dedica 10 segundos a un registro rápido.", "ci.log": "Registro rápido", "ci.later": "Ahora no", "ci.push": "Notificaciones push", "ci.push.text": "Los recordatorios en la pantalla de bloqueo llegarán con la app para iPhone.", "ci.soon": "App iPhone", "ci.time": "Hora", "ci.slot.midday": "Mediodía", "ci.slot.afternoon": "Tarde", "ci.slot.evening": "Noche"});
 Object.assign(T.fr,{"ci.title": "Points quotidiens", "ci.text": "L’app te demande jusqu’à trois fois par jour comment tu vas. La question apparaît quand tu ouvres l’app.", "ci.toggle": "Points activés", "ci.m.midday": "Comment se passe ta journée ?", "ci.m.afternoon": "Comment vas-tu ?", "ci.m.evening": "Comment s’est passée ta journée ? C’est l’heure de décompresser.", "ci.sub": "Prends 10 secondes pour une saisie rapide.", "ci.log": "Saisie rapide", "ci.later": "Pas maintenant", "ci.push": "Notifications push", "ci.push.text": "Les rappels sur l’écran verrouillé arriveront avec l’app iPhone.", "ci.soon": "App iPhone", "ci.time": "Heure", "ci.slot.midday": "Midi", "ci.slot.afternoon": "Après-midi", "ci.slot.evening": "Soir"});
+Object.assign(T.en,{"copyright": "© 2026 Marten Schmidt · All rights reserved"});
+Object.assign(T.de,{"copyright": "© 2026 Marten Schmidt · Alle Rechte vorbehalten"});
+Object.assign(T.sv,{"copyright": "© 2026 Marten Schmidt · Alla rättigheter förbehållna"});
+Object.assign(T.es,{"copyright": "© 2026 Marten Schmidt · Todos los derechos reservados"});
+Object.assign(T.fr,{"copyright": "© 2026 Marten Schmidt · Tous droits réservés"});
+/* Drang akut (v8) – Übersetzungen von Claude, BITTE GEGENLESEN LASSEN */
+Object.assign(T.en,{"ac.title": "Urge now", "ac.sub": "I’ll walk you through the wave", "ac.resume.title": "You started riding a wave", "ac.resume.text": "Would you like to continue or finish?", "ac.resume.go": "Continue", "ac.resume.end": "Finish", "ac.end": "End", "ac.back": "Back", "ac.skip": "Skip", "ac.next": "Next", "ac.step": "Step {n} of 5", "ac.breathe.title": "Breathe with me", "ac.breathe.text": "About one minute. In for 4, out for 6.", "ac.name.title": "What’s here right now?", "ac.name.quote": "An urge is a feeling, not a command. It comes and goes like a wave.", "ac.urge": "Urge", "ac.anx": "Anxiety", "ac.feel": "Feelings", "feel.exhausted": "exhausted", "ac.need.title": "What do you need right now?", "ac.need.text": "Pick what fits best.", "need.hunger": "Food", "need.lonely": "Company", "need.exhausted": "Rest", "need.stress": "Relief", "need.bored": "Something to do", "ac.hunger.q": "When did you last eat?", "ac.hunger.lt2": "under 2 h", "ac.hunger.2to4": "2–4 h", "ac.hunger.gt4": "over 4 h", "ac.hunger.tip": "Have a normal meal or snack now – at the table, on a plate.", "ac.hunger.tip2": "A small snack can help now – at the table, on a plate.", "ac.hunger.ok": "Then hunger is probably not the main thing. Take a look at the other needs too.", "ac.lonely.text": "Let someone know – one tap is enough.", "ac.lonely.msg": "I’m having a hard moment right now, could you write to me for a bit?", "ac.lonely.sms": "Send as SMS", "ac.lonely.wa": "Send via WhatsApp", "ac.lonely.none": "No contact person set up yet. You can add one later in the settings.", "ac.rest.text": "Your body may need rest more than anything. Lie down for a moment, get warm, go to bed earlier tonight.", "ac.stress.text": "Write down one thing that’s weighing on you – or hand it over to someone. Then step outside for a few minutes.", "ac.bored.plan": "Your plan", "ac.bored.noplan": "You can write your own plan for hard moments under Exercises.", "ac.bored.ideas": "Ideas", "ac.time.title": "Win some time", "ac.time.text": "Leave the kitchen or the room for a moment.", "ac.time.pick": "Set a timer", "ac.time.min": "{n} min", "ac.time.done": "Time’s up.", "ac.time.plus5": "+5 minutes", "ac.time.action": "What will you do meanwhile?", "act.room": "Change rooms", "act.walk": "Short walk outside", "act.shower": "Warm shower", "act.call": "Call someone", "act.music": "Music", "act.drink": "Warm drink", "act.write": "Write it down", "act.hands": "Something for my hands", "ac.check.title": "How strong is it now?", "ac.out.passed": "The wave has eased", "ac.out.strong": "Still strong", "ac.out.ate": "I ate", "ac.passed.title": "You let the wave pass.", "ac.passed.text": "That took strength. This moment is now in your diary.", "ac.finish": "Finish", "ac.strong.title": "It’s still strong. That’s okay.", "ac.strong.text": "Waves can come in sets. Let’s give it a little more time.", "ac.strong.more": "{n} more minutes", "ac.strong.contact": "Write to my contact person", "ac.strong.eased": "It has eased now", "ac.ate.title": "How do you feel now?", "ac.ate.text": "There’s no right or wrong answer.", "af.relieved": "relieved", "af.calmer": "calmer", "af.neutral": "neutral", "af.full": "too full / ate too much", "af.shame": "shame / bad", "af.anxious": "anxious / restless", "af.compensate": "urge to make up for it", "ac.trig.title": "What set it off? (optional)", "at.buildup": "It built up over the day", "at.lastdrop": "A small thing was the last straw", "at.hungry": "I hadn’t eaten for a long time", "at.unknown": "I don’t know", "ac.trig.what": "What was it?", "ac.optional": "optional", "ac.reply.title": "Thank you for noting it.", "ac.r.relieved": "Relief is understandable. Eating helped you bear something heavy. Would you like to note what made it so heavy?", "ac.r.full": "Take care of your body: comfortable clothes, warmth, something warm to drink, rest. Next meal completely normal – don’t skip anything, otherwise the next urge gets stronger.", "ac.r.shame": "A moment of self-compassion:", "ac.r.shame1": "This is hard right now.", "ac.r.shame2": "Others know this too.", "ac.r.shame3": "I may be kind to myself.", "ac.r.lastdrop": "Often it isn’t the small thing, but everything that built up before.", "ac.r.builtup": "What had built up?", "ac.r.compensate": "This is a second wave. It will pass too, without you having to do anything.", "ac.r.second": "Ride the second wave", "ac.r.default": "Whatever you feel now is okay. Next meal completely normal.", "ac.second.title": "The second wave", "ac.second.meal": "Next meal completely normal.", "ac.offer.title": "Shall I walk you through the wave?", "ac.offer.text": "You noted a strong urge. “Urge now” helps you right in the moment.", "ac.offer.yes": "Yes, please", "ac.offer.no": "No thanks", "ac.hist.summary": "{n}× used · {p}× the wave eased", "ac.hist.avg": "Urge on average {a} → {b}", "ac.hist.feel": "Common feelings", "ac.hist.trig": "Common triggers", "ac.hist.empty": "Not used yet. When an urge comes, “Urge now” walks you through it.", "ac.hist.note": "Every wave that passed counts.", "card.acute": "Urge now", "ac.entry": "Urge {a} → {b} · {o}", "ac.o.passed": "eased", "ac.o.strong": "still strong", "ac.o.ate": "ate", "ac.o.none": "ended early", "ac.detail.need": "Need", "ac.detail.action": "Meanwhile", "ac.detail.timer": "Timer", "ac.detail.after": "Afterwards"});
+Object.assign(T.de,{"ac.title": "Drang akut", "ac.sub": "Ich begleite dich durch die Welle", "ac.resume.title": "Du hast angefangen, eine Welle zu reiten", "ac.resume.text": "Möchtest du weitermachen oder beenden?", "ac.resume.go": "Weitermachen", "ac.resume.end": "Beenden", "ac.end": "Beenden", "ac.back": "Zurück", "ac.skip": "Überspringen", "ac.next": "Weiter", "ac.step": "Schritt {n} von 5", "ac.breathe.title": "Atme mit mir", "ac.breathe.text": "Etwa eine Minute. 4 Sekunden ein, 6 aus.", "ac.name.title": "Was ist gerade da?", "ac.name.quote": "Drang ist ein Gefühl, kein Befehl. Er kommt und geht wie eine Welle.", "ac.urge": "Drang", "ac.anx": "Angst", "ac.feel": "Gefühle", "feel.exhausted": "erschöpft", "ac.need.title": "Was brauchst du gerade?", "ac.need.text": "Wähle, was am besten passt.", "need.hunger": "Essen", "need.lonely": "Nähe", "need.exhausted": "Ruhe", "need.stress": "Entlastung", "need.bored": "Beschäftigung", "ac.hunger.q": "Wann hast du zuletzt gegessen?", "ac.hunger.lt2": "unter 2 Std.", "ac.hunger.2to4": "2–4 Std.", "ac.hunger.gt4": "über 4 Std.", "ac.hunger.tip": "Iss jetzt eine normale Mahlzeit oder einen Snack – am Tisch, auf einem Teller.", "ac.hunger.tip2": "Ein kleiner Snack kann jetzt helfen – am Tisch, auf einem Teller.", "ac.hunger.ok": "Dann ist Hunger wahrscheinlich nicht das Wichtigste. Schau auch auf die anderen Bedürfnisse.", "ac.lonely.text": "Sag jemandem Bescheid – ein Tipp reicht.", "ac.lonely.msg": "Hab grad einen schweren Moment, kannst du kurz schreiben?", "ac.lonely.sms": "Als SMS senden", "ac.lonely.wa": "Per WhatsApp senden", "ac.lonely.none": "Noch keine Kontaktperson eingerichtet. Du kannst sie später in den Einstellungen anlegen.", "ac.rest.text": "Vielleicht braucht dein Körper vor allem Ruhe. Leg dich kurz hin, mach es dir warm, geh heute früher ins Bett.", "ac.stress.text": "Schreib eine Sache auf, die dich gerade belastet – oder gib sie ab. Dann geh für ein paar Minuten kurz raus.", "ac.bored.plan": "Dein Plan", "ac.bored.noplan": "Unter Übungen kannst du deinen eigenen Plan für schwere Momente aufschreiben.", "ac.bored.ideas": "Ideen", "ac.time.title": "Zeit gewinnen", "ac.time.text": "Verlass kurz die Küche oder den Raum.", "ac.time.pick": "Timer stellen", "ac.time.min": "{n} Min.", "ac.time.done": "Die Zeit ist um.", "ac.time.plus5": "+5 Minuten", "ac.time.action": "Was machst du in der Zwischenzeit?", "act.room": "Raum wechseln", "act.walk": "Kurz an die frische Luft", "act.shower": "Warm duschen", "act.call": "Jemanden anrufen", "act.music": "Musik", "act.drink": "Warmes Getränk", "act.write": "Aufschreiben", "act.hands": "Etwas für die Hände", "ac.check.title": "Wie stark ist es jetzt?", "ac.out.passed": "Die Welle ist abgeebbt", "ac.out.strong": "Noch stark", "ac.out.ate": "Ich habe gegessen", "ac.passed.title": "Du hast die Welle vorbeiziehen lassen.", "ac.passed.text": "Das hat Kraft gekostet. Dieser Moment steht jetzt in deinem Tagebuch.", "ac.finish": "Fertig", "ac.strong.title": "Es ist noch stark. Das ist okay.", "ac.strong.text": "Wellen kommen manchmal in Serien. Lass uns noch etwas Zeit gewinnen.", "ac.strong.more": "Noch {n} Minuten", "ac.strong.contact": "Kontaktperson schreiben", "ac.strong.eased": "Jetzt ist es abgeebbt", "ac.ate.title": "Wie fühlst du dich jetzt?", "ac.ate.text": "Es gibt keine richtige oder falsche Antwort.", "af.relieved": "erleichtert", "af.calmer": "ruhiger", "af.neutral": "neutral", "af.full": "zu voll / zu viel gegessen", "af.shame": "Scham / schlecht", "af.anxious": "ängstlich / unruhig", "af.compensate": "Drang, es auszugleichen", "ac.trig.title": "Was hat es ausgelöst? (optional)", "at.buildup": "Es hat sich über den Tag angestaut", "at.lastdrop": "Eine Kleinigkeit hat das Fass zum Überlaufen gebracht", "at.hungry": "Ich hatte lange nichts gegessen", "at.unknown": "Weiß nicht", "ac.trig.what": "Was war es?", "ac.optional": "optional", "ac.reply.title": "Danke, dass du es festhältst.", "ac.r.relieved": "Erleichterung ist verständlich. Das Essen hat dir geholfen, etwas Schweres auszuhalten. Magst du festhalten, was es so schwer gemacht hat?", "ac.r.full": "Sorg für deinen Körper: bequeme Kleidung, Wärme, etwas Warmes trinken, ausruhen. Nächste Mahlzeit ganz normal – nichts auslassen, sonst wird der nächste Drang stärker.", "ac.r.shame": "Eine Mitgefühls-Pause:", "ac.r.shame1": "Das ist gerade schwer.", "ac.r.shame2": "Andere kennen das auch.", "ac.r.shame3": "Ich darf freundlich zu mir sein.", "ac.r.lastdrop": "Oft ist es nicht die Kleinigkeit, sondern alles, was sich davor angesammelt hat.", "ac.r.builtup": "Was hatte sich angestaut?", "ac.r.compensate": "Das ist eine zweite Welle. Auch sie geht vorbei, ohne dass du etwas tun musst.", "ac.r.second": "Durch die zweite Welle", "ac.r.default": "Was auch immer du jetzt fühlst, ist okay. Nächste Mahlzeit ganz normal.", "ac.second.title": "Die zweite Welle", "ac.second.meal": "Nächste Mahlzeit ganz normal.", "ac.offer.title": "Soll ich dich durch die Welle begleiten?", "ac.offer.text": "Du hast einen starken Drang notiert. „Drang akut“ hilft dir direkt im Moment.", "ac.offer.yes": "Ja, bitte", "ac.offer.no": "Nein danke", "ac.hist.summary": "{n}× genutzt · {p}× ist die Welle abgeebbt", "ac.hist.avg": "Drang im Schnitt {a} → {b}", "ac.hist.feel": "Häufige Gefühle", "ac.hist.trig": "Häufige Auslöser", "ac.hist.empty": "Noch nicht genutzt. Wenn ein Drang kommt, begleitet dich „Drang akut“ hindurch.", "ac.hist.note": "Jede Welle, die vorbeigezogen ist, zählt.", "card.acute": "Drang akut", "ac.entry": "Drang {a} → {b} · {o}", "ac.o.passed": "abgeebbt", "ac.o.strong": "noch stark", "ac.o.ate": "gegessen", "ac.o.none": "vorzeitig beendet", "ac.detail.need": "Bedürfnis", "ac.detail.action": "In der Zwischenzeit", "ac.detail.timer": "Timer", "ac.detail.after": "Danach"});
+Object.assign(T.sv,{"ac.title": "Akut sug", "ac.sub": "Jag följer dig genom vågen", "ac.resume.title": "Du började rida på en våg", "ac.resume.text": "Vill du fortsätta eller avsluta?", "ac.resume.go": "Fortsätt", "ac.resume.end": "Avsluta", "ac.end": "Avsluta", "ac.back": "Tillbaka", "ac.skip": "Hoppa över", "ac.next": "Nästa", "ac.step": "Steg {n} av 5", "ac.breathe.title": "Andas med mig", "ac.breathe.text": "Ungefär en minut. In i 4, ut i 6.", "ac.name.title": "Vad finns här just nu?", "ac.name.quote": "Ett sug är en känsla, inte en order. Det kommer och går som en våg.", "ac.urge": "Sug", "ac.anx": "Ångest", "ac.feel": "Känslor", "feel.exhausted": "utmattad", "ac.need.title": "Vad behöver du just nu?", "ac.need.text": "Välj det som passar bäst.", "need.hunger": "Mat", "need.lonely": "Närhet", "need.exhausted": "Vila", "need.stress": "Avlastning", "need.bored": "Sysselsättning", "ac.hunger.q": "När åt du senast?", "ac.hunger.lt2": "under 2 tim", "ac.hunger.2to4": "2–4 tim", "ac.hunger.gt4": "över 4 tim", "ac.hunger.tip": "Ät en vanlig måltid eller ett mellanmål nu – vid bordet, på en tallrik.", "ac.hunger.tip2": "Ett litet mellanmål kan hjälpa nu – vid bordet, på en tallrik.", "ac.hunger.ok": "Då är hunger troligen inte det viktigaste. Titta även på de andra behoven.", "ac.lonely.text": "Säg till någon – ett tryck räcker.", "ac.lonely.msg": "Har ett tungt ögonblick just nu, kan du skriva en stund?", "ac.lonely.sms": "Skicka som sms", "ac.lonely.wa": "Skicka via WhatsApp", "ac.lonely.none": "Ingen kontaktperson tillagd än. Du kan lägga till en senare i inställningarna.", "ac.rest.text": "Kanske behöver din kropp framför allt vila. Lägg dig en stund, håll dig varm, gå och lägg dig tidigare i kväll.", "ac.stress.text": "Skriv ner en sak som tynger dig just nu – eller lämna över den. Gå sedan ut en kort stund.", "ac.bored.plan": "Din plan", "ac.bored.noplan": "Under Övningar kan du skriva din egen plan för svåra stunder.", "ac.bored.ideas": "Idéer", "ac.time.title": "Vinn lite tid", "ac.time.text": "Lämna köket eller rummet en stund.", "ac.time.pick": "Ställ en timer", "ac.time.min": "{n} min", "ac.time.done": "Tiden är ute.", "ac.time.plus5": "+5 minuter", "ac.time.action": "Vad gör du under tiden?", "act.room": "Byt rum", "act.walk": "Kort tur ut i friska luften", "act.shower": "Varm dusch", "act.call": "Ring någon", "act.music": "Musik", "act.drink": "Varm dryck", "act.write": "Skriv ner det", "act.hands": "Något för händerna", "ac.check.title": "Hur starkt är det nu?", "ac.out.passed": "Vågen har ebbat ut", "ac.out.strong": "Fortfarande starkt", "ac.out.ate": "Jag har ätit", "ac.passed.title": "Du lät vågen passera.", "ac.passed.text": "Det krävde styrka. Det här ögonblicket finns nu i din dagbok.", "ac.finish": "Klar", "ac.strong.title": "Det är fortfarande starkt. Det är okej.", "ac.strong.text": "Vågor kommer ibland i serier. Låt oss vinna lite mer tid.", "ac.strong.more": "{n} minuter till", "ac.strong.contact": "Skriv till kontaktpersonen", "ac.strong.eased": "Nu har det ebbat ut", "ac.ate.title": "Hur känner du dig nu?", "ac.ate.text": "Det finns inget rätt eller fel svar.", "af.relieved": "lättad", "af.calmer": "lugnare", "af.neutral": "neutral", "af.full": "för mätt / åt för mycket", "af.shame": "skam / dåligt", "af.anxious": "orolig / rastlös", "af.compensate": "sug att kompensera", "ac.trig.title": "Vad utlöste det? (valfritt)", "at.buildup": "Det byggdes upp under dagen", "at.lastdrop": "En liten sak fick bägaren att rinna över", "at.hungry": "Jag hade inte ätit på länge", "at.unknown": "Vet inte", "ac.trig.what": "Vad var det?", "ac.optional": "valfritt", "ac.reply.title": "Tack för att du skriver ner det.", "ac.r.relieved": "Lättnad är förståelig. Maten hjälpte dig att stå ut med något tungt. Vill du skriva ner vad som gjorde det så tungt?", "ac.r.full": "Ta hand om din kropp: bekväma kläder, värme, något varmt att dricka, vila. Nästa måltid helt som vanligt – hoppa inte över något, annars blir nästa sug starkare.", "ac.r.shame": "En stund av självmedkänsla:", "ac.r.shame1": "Det här är svårt just nu.", "ac.r.shame2": "Andra känner också igen det här.", "ac.r.shame3": "Jag får vara vänlig mot mig själv.", "ac.r.lastdrop": "Ofta är det inte den lilla saken, utan allt som samlats innan.", "ac.r.builtup": "Vad hade samlats?", "ac.r.compensate": "Det här är en andra våg. Även den går över, utan att du behöver göra något.", "ac.r.second": "Genom den andra vågen", "ac.r.default": "Vad du än känner nu är okej. Nästa måltid helt som vanligt.", "ac.second.title": "Den andra vågen", "ac.second.meal": "Nästa måltid helt som vanligt.", "ac.offer.title": "Ska jag följa dig genom vågen?", "ac.offer.text": "Du noterade ett starkt sug. ”Akut sug” hjälper dig direkt i stunden.", "ac.offer.yes": "Ja, tack", "ac.offer.no": "Nej tack", "ac.hist.summary": "{n}× använt · {p}× ebbade vågen ut", "ac.hist.avg": "Sug i snitt {a} → {b}", "ac.hist.feel": "Vanliga känslor", "ac.hist.trig": "Vanliga utlösare", "ac.hist.empty": "Inte använt än. När ett sug kommer följer ”Akut sug” dig igenom det.", "ac.hist.note": "Varje våg som har passerat räknas.", "card.acute": "Akut sug", "ac.entry": "Sug {a} → {b} · {o}", "ac.o.passed": "ebbade ut", "ac.o.strong": "fortfarande starkt", "ac.o.ate": "åt", "ac.o.none": "avslutat i förtid", "ac.detail.need": "Behov", "ac.detail.action": "Under tiden", "ac.detail.timer": "Timer", "ac.detail.after": "Efteråt"});
+Object.assign(T.es,{"ac.title": "Impulso ahora", "ac.sub": "Te acompaño a través de la ola", "ac.resume.title": "Empezaste a surfear una ola", "ac.resume.text": "¿Quieres seguir o terminar?", "ac.resume.go": "Seguir", "ac.resume.end": "Terminar", "ac.end": "Terminar", "ac.back": "Atrás", "ac.skip": "Saltar", "ac.next": "Siguiente", "ac.step": "Paso {n} de 5", "ac.breathe.title": "Respira conmigo", "ac.breathe.text": "Más o menos un minuto. Inhala 4, exhala 6.", "ac.name.title": "¿Qué hay ahora mismo?", "ac.name.quote": "Un impulso es una emoción, no una orden. Viene y se va como una ola.", "ac.urge": "Impulso", "ac.anx": "Ansiedad", "ac.feel": "Emociones", "feel.exhausted": "agotada/o", "ac.need.title": "¿Qué necesitas ahora?", "ac.need.text": "Elige lo que mejor encaje.", "need.hunger": "Comer", "need.lonely": "Compañía", "need.exhausted": "Descanso", "need.stress": "Alivio", "need.bored": "Algo que hacer", "ac.hunger.q": "¿Cuándo comiste por última vez?", "ac.hunger.lt2": "menos de 2 h", "ac.hunger.2to4": "2–4 h", "ac.hunger.gt4": "más de 4 h", "ac.hunger.tip": "Haz ahora una comida o un tentempié normal: en la mesa, en un plato.", "ac.hunger.tip2": "Un pequeño tentempié puede ayudar ahora: en la mesa, en un plato.", "ac.hunger.ok": "Entonces probablemente el hambre no sea lo principal. Mira también las otras necesidades.", "ac.lonely.text": "Avísale a alguien: basta con un toque.", "ac.lonely.msg": "Estoy pasando un momento difícil, ¿me escribes un rato?", "ac.lonely.sms": "Enviar por SMS", "ac.lonely.wa": "Enviar por WhatsApp", "ac.lonely.none": "Aún no hay persona de contacto. Puedes añadirla más tarde en los ajustes.", "ac.rest.text": "Quizá tu cuerpo necesite sobre todo descanso. Túmbate un momento, abrígate, acuéstate antes esta noche.", "ac.stress.text": "Escribe una cosa que te pese ahora mismo, o delégala. Luego sal fuera unos minutos.", "ac.bored.plan": "Tu plan", "ac.bored.noplan": "En Ejercicios puedes escribir tu propio plan para los momentos difíciles.", "ac.bored.ideas": "Ideas", "ac.time.title": "Ganar tiempo", "ac.time.text": "Sal un momento de la cocina o de la habitación.", "ac.time.pick": "Poner un temporizador", "ac.time.min": "{n} min", "ac.time.done": "Se acabó el tiempo.", "ac.time.plus5": "+5 minutos", "ac.time.action": "¿Qué harás mientras tanto?", "act.room": "Cambiar de habitación", "act.walk": "Salir a tomar el aire", "act.shower": "Ducha caliente", "act.call": "Llamar a alguien", "act.music": "Música", "act.drink": "Bebida caliente", "act.write": "Escribirlo", "act.hands": "Algo para las manos", "ac.check.title": "¿Qué tan fuerte es ahora?", "ac.out.passed": "La ola ha bajado", "ac.out.strong": "Sigue fuerte", "ac.out.ate": "He comido", "ac.passed.title": "Dejaste pasar la ola.", "ac.passed.text": "Eso requirió fuerza. Este momento ya está en tu diario.", "ac.finish": "Listo", "ac.strong.title": "Sigue siendo fuerte. Está bien.", "ac.strong.text": "A veces las olas vienen en series. Ganemos un poco más de tiempo.", "ac.strong.more": "{n} minutos más", "ac.strong.contact": "Escribir a mi persona de contacto", "ac.strong.eased": "Ahora ha bajado", "ac.ate.title": "¿Cómo te sientes ahora?", "ac.ate.text": "No hay respuestas correctas o incorrectas.", "af.relieved": "aliviada/o", "af.calmer": "más tranquila/o", "af.neutral": "neutral", "af.full": "demasiado llena/o", "af.shame": "vergüenza / mal", "af.anxious": "ansiosa/o / inquieta/o", "af.compensate": "impulso de compensar", "ac.trig.title": "¿Qué lo desencadenó? (opcional)", "at.buildup": "Se fue acumulando durante el día", "at.lastdrop": "Una pequeñez fue la gota que colmó el vaso", "at.hungry": "Llevaba mucho sin comer", "at.unknown": "No lo sé", "ac.trig.what": "¿Qué fue?", "ac.optional": "opcional", "ac.reply.title": "Gracias por anotarlo.", "ac.r.relieved": "El alivio es comprensible. La comida te ayudó a soportar algo pesado. ¿Quieres anotar qué lo hizo tan pesado?", "ac.r.full": "Cuida tu cuerpo: ropa cómoda, calor, algo caliente para beber, descanso. La siguiente comida, totalmente normal: no te saltes nada, o el próximo impulso será más fuerte.", "ac.r.shame": "Una pausa de autocompasión:", "ac.r.shame1": "Esto es difícil ahora mismo.", "ac.r.shame2": "A otras personas también les pasa.", "ac.r.shame3": "Puedo ser amable conmigo.", "ac.r.lastdrop": "Muchas veces no es la pequeñez, sino todo lo que se acumuló antes.", "ac.r.builtup": "¿Qué se había acumulado?", "ac.r.compensate": "Es una segunda ola. También pasará, sin que tengas que hacer nada.", "ac.r.second": "Atravesar la segunda ola", "ac.r.default": "Sientas lo que sientas ahora, está bien. La siguiente comida, totalmente normal.", "ac.second.title": "La segunda ola", "ac.second.meal": "La siguiente comida, totalmente normal.", "ac.offer.title": "¿Te acompaño a través de la ola?", "ac.offer.text": "Anotaste un impulso fuerte. «Impulso ahora» te ayuda justo en el momento.", "ac.offer.yes": "Sí, por favor", "ac.offer.no": "No, gracias", "ac.hist.summary": "{n}× usado · {p}× la ola bajó", "ac.hist.avg": "Impulso de media {a} → {b}", "ac.hist.feel": "Emociones frecuentes", "ac.hist.trig": "Desencadenantes frecuentes", "ac.hist.empty": "Aún no lo has usado. Cuando llegue un impulso, «Impulso ahora» te acompaña.", "ac.hist.note": "Cada ola que pasó cuenta.", "card.acute": "Impulso ahora", "ac.entry": "Impulso {a} → {b} · {o}", "ac.o.passed": "bajó", "ac.o.strong": "sigue fuerte", "ac.o.ate": "comí", "ac.o.none": "terminado antes", "ac.detail.need": "Necesidad", "ac.detail.action": "Mientras tanto", "ac.detail.timer": "Temporizador", "ac.detail.after": "Después"});
+Object.assign(T.fr,{"ac.title": "Envie urgente", "ac.sub": "Je t’accompagne à travers la vague", "ac.resume.title": "Tu as commencé à traverser une vague", "ac.resume.text": "Veux-tu continuer ou terminer ?", "ac.resume.go": "Continuer", "ac.resume.end": "Terminer", "ac.end": "Terminer", "ac.back": "Retour", "ac.skip": "Passer", "ac.next": "Suivant", "ac.step": "Étape {n} sur 5", "ac.breathe.title": "Respire avec moi", "ac.breathe.text": "Environ une minute. Inspire 4, expire 6.", "ac.name.title": "Qu’est-ce qui est là maintenant ?", "ac.name.quote": "Une envie est une émotion, pas un ordre. Elle vient et repart comme une vague.", "ac.urge": "Envie", "ac.anx": "Anxiété", "ac.feel": "Émotions", "feel.exhausted": "épuisé·e", "ac.need.title": "De quoi as-tu besoin maintenant ?", "ac.need.text": "Choisis ce qui correspond le mieux.", "need.hunger": "Manger", "need.lonely": "Présence", "need.exhausted": "Repos", "need.stress": "Soulagement", "need.bored": "Occupation", "ac.hunger.q": "Quand as-tu mangé pour la dernière fois ?", "ac.hunger.lt2": "moins de 2 h", "ac.hunger.2to4": "2–4 h", "ac.hunger.gt4": "plus de 4 h", "ac.hunger.tip": "Prends maintenant un repas ou une collation normale – à table, dans une assiette.", "ac.hunger.tip2": "Une petite collation peut aider maintenant – à table, dans une assiette.", "ac.hunger.ok": "Alors la faim n’est sans doute pas l’essentiel. Regarde aussi les autres besoins.", "ac.lonely.text": "Préviens quelqu’un – un geste suffit.", "ac.lonely.msg": "Je traverse un moment difficile, tu peux m’écrire un peu ?", "ac.lonely.sms": "Envoyer par SMS", "ac.lonely.wa": "Envoyer via WhatsApp", "ac.lonely.none": "Pas encore de personne de contact. Tu pourras en ajouter une plus tard dans les réglages.", "ac.rest.text": "Ton corps a peut-être surtout besoin de repos. Allonge-toi un moment, mets-toi au chaud, couche-toi plus tôt ce soir.", "ac.stress.text": "Note une chose qui te pèse en ce moment – ou confie-la à quelqu’un. Puis sors quelques minutes.", "ac.bored.plan": "Ton plan", "ac.bored.noplan": "Dans Exercices, tu peux écrire ton propre plan pour les moments difficiles.", "ac.bored.ideas": "Idées", "ac.time.title": "Gagner du temps", "ac.time.text": "Quitte un moment la cuisine ou la pièce.", "ac.time.pick": "Régler un minuteur", "ac.time.min": "{n} min", "ac.time.done": "Le temps est écoulé.", "ac.time.plus5": "+5 minutes", "ac.time.action": "Que fais-tu en attendant ?", "act.room": "Changer de pièce", "act.walk": "Prendre l’air un moment", "act.shower": "Douche chaude", "act.call": "Appeler quelqu’un", "act.music": "Musique", "act.drink": "Boisson chaude", "act.write": "L’écrire", "act.hands": "Occuper mes mains", "ac.check.title": "Quelle est sa force maintenant ?", "ac.out.passed": "La vague est retombée", "ac.out.strong": "Encore forte", "ac.out.ate": "J’ai mangé", "ac.passed.title": "Tu as laissé passer la vague.", "ac.passed.text": "Cela demandait de la force. Ce moment est maintenant dans ton journal.", "ac.finish": "Terminé", "ac.strong.title": "C’est encore fort. C’est normal.", "ac.strong.text": "Les vagues arrivent parfois en séries. Gagnons encore un peu de temps.", "ac.strong.more": "{n} minutes de plus", "ac.strong.contact": "Écrire à ma personne de contact", "ac.strong.eased": "Maintenant c’est retombé", "ac.ate.title": "Comment te sens-tu maintenant ?", "ac.ate.text": "Il n’y a pas de bonne ou de mauvaise réponse.", "af.relieved": "soulagé·e", "af.calmer": "plus calme", "af.neutral": "neutre", "af.full": "trop plein·e / trop mangé", "af.shame": "honte / mal", "af.anxious": "anxieux·se / agité·e", "af.compensate": "envie de compenser", "ac.trig.title": "Qu’est-ce qui l’a déclenché ? (facultatif)", "at.buildup": "Ça s’est accumulé pendant la journée", "at.lastdrop": "Un petit rien a fait déborder le vase", "at.hungry": "Je n’avais pas mangé depuis longtemps", "at.unknown": "Je ne sais pas", "ac.trig.what": "Qu’est-ce que c’était ?", "ac.optional": "facultatif", "ac.reply.title": "Merci de l’avoir noté.", "ac.r.relieved": "Le soulagement est compréhensible. Manger t’a aidé·e à supporter quelque chose de lourd. Veux-tu noter ce qui l’a rendu si lourd ?", "ac.r.full": "Prends soin de ton corps : vêtements confortables, chaleur, une boisson chaude, du repos. Prochain repas tout à fait normal – ne saute rien, sinon la prochaine envie sera plus forte.", "ac.r.shame": "Une pause d’autocompassion :", "ac.r.shame1": "C’est difficile en ce moment.", "ac.r.shame2": "D’autres connaissent ça aussi.", "ac.r.shame3": "J’ai le droit d’être bienveillant·e envers moi.", "ac.r.lastdrop": "Souvent, ce n’est pas le petit rien, mais tout ce qui s’est accumulé avant.", "ac.r.builtup": "Qu’est-ce qui s’était accumulé ?", "ac.r.compensate": "C’est une deuxième vague. Elle passera aussi, sans que tu aies à faire quoi que ce soit.", "ac.r.second": "Traverser la deuxième vague", "ac.r.default": "Quoi que tu ressentes maintenant, c’est d’accord. Prochain repas tout à fait normal.", "ac.second.title": "La deuxième vague", "ac.second.meal": "Prochain repas tout à fait normal.", "ac.offer.title": "Veux-tu que je t’accompagne à travers la vague ?", "ac.offer.text": "Tu as noté une envie forte. « Envie urgente » t’aide sur le moment.", "ac.offer.yes": "Oui, s’il te plaît", "ac.offer.no": "Non merci", "ac.hist.summary": "{n}× utilisé · {p}× la vague est retombée", "ac.hist.avg": "Envie en moyenne {a} → {b}", "ac.hist.feel": "Émotions fréquentes", "ac.hist.trig": "Déclencheurs fréquents", "ac.hist.empty": "Pas encore utilisé. Quand une envie arrive, « Envie urgente » t’accompagne.", "ac.hist.note": "Chaque vague passée compte.", "card.acute": "Envie urgente", "ac.entry": "Envie {a} → {b} · {o}", "ac.o.passed": "retombée", "ac.o.strong": "encore forte", "ac.o.ate": "mangé", "ac.o.none": "arrêté plus tôt", "ac.detail.need": "Besoin", "ac.detail.action": "En attendant", "ac.detail.timer": "Minuteur", "ac.detail.after": "Après"});
+/* {app} unterstützen + Pläne (v9) – Übersetzungen von Claude, BITTE GEGENLESEN LASSEN */
+Object.assign(T.en,{"sup.title": "Support {app}", "sup.text": "{app} is free and has no ads. If it helps you, you can support its development with a small tip – completely voluntary.", "sup.small": "Small", "sup.medium": "Medium", "sup.large": "Large", "sup.test": "Test version – no money is charged.", "sup.thanks": "Thank you! Your support helps keep {app} free for everyone who needs it.", "sup.thanks.test": "Test version – nothing was charged.", "plans.title": "Plans", "plans.text": "The therapist edition is in planning and not available yet.", "plans.soon": "In planning", "plans.current": "Current", "plan.free": "Free", "plan.free.price": "For everyone affected", "plan.free.f1": "Everything essential: diary, quick log, urge now, exercises, SOS", "plan.free.f2": "Simple PDF export for therapy (in planning)", "plan.pro": "Pro", "plan.pro.price": "Subscription or one-time purchase", "plan.pro.who": "For people who want more comfort", "plan.pro.f1": "iCloud sync & backup", "plan.pro.f2": "Apple Watch quick log", "plan.pro.f3": "Smartwatch connection incl. heart rate", "plan.pro.f4": "More detailed insights", "plan.ther": "Therapist edition", "plan.ther.price": "Subscription for practices and clinics", "plan.ther.who": "For therapists, practices and clinics", "plan.ther.f1": "Patients share data via QR code or encrypted file", "plan.ther.f2": "Overview of several patients", "plan.ther.f3": "Session preparation"});
+Object.assign(T.de,{"sup.title": "{app} unterstützen", "sup.text": "{app} ist kostenlos und werbefrei. Wenn sie dir hilft, kannst du die Weiterentwicklung mit einem kleinen Trinkgeld unterstützen – ganz freiwillig.", "sup.small": "Klein", "sup.medium": "Mittel", "sup.large": "Groß", "sup.test": "Testversion – es wird nichts abgebucht.", "sup.thanks": "Danke! Deine Unterstützung hilft, {app} für alle kostenlos zu halten, die sie brauchen.", "sup.thanks.test": "Testversion – es wurde nichts abgebucht.", "plans.title": "Pläne", "plans.text": "Die Therapeuten-Version ist in Planung und noch nicht verfügbar.", "plans.soon": "In Planung", "plans.current": "Aktuell", "plan.free": "Kostenlos", "plan.free.price": "Für alle Betroffenen", "plan.free.f1": "Alles Wichtige: Tagebuch, Schnell-Log, Drang akut, Übungen, SOS", "plan.free.f2": "Einfacher PDF-Export für die Therapie (in Planung)", "plan.pro": "Pro", "plan.pro.price": "Abo oder Einmalkauf", "plan.pro.who": "Für Betroffene, die mehr Komfort wollen", "plan.pro.f1": "iCloud-Sync & Backup", "plan.pro.f2": "Apple-Watch-Schnell-Log", "plan.pro.f3": "Smartwatch-Anbindung inkl. Herzfrequenz", "plan.pro.f4": "Ausführlichere Auswertungen", "plan.ther": "Therapeuten-Version", "plan.ther.price": "Abo für Praxen und Kliniken", "plan.ther.who": "Für Therapeut:innen, Praxen und Kliniken", "plan.ther.f1": "Patient:in teilt Daten per QR-Code oder verschlüsselter Datei", "plan.ther.f2": "Übersicht über mehrere Patient:innen", "plan.ther.f3": "Vorbereitung der Sitzung"});
+Object.assign(T.sv,{"sup.title": "Stöd {app}", "sup.text": "{app} är gratis och reklamfri. Om den hjälper dig kan du stödja utvecklingen med en liten dricks – helt frivilligt.", "sup.small": "Liten", "sup.medium": "Mellan", "sup.large": "Stor", "sup.test": "Testversion – inga pengar dras.", "sup.thanks": "Tack! Ditt stöd hjälper till att hålla {app} gratis för alla som behöver den.", "sup.thanks.test": "Testversion – inget har dragits.", "plans.title": "Planer", "plans.text": "Terapeutversionen är under planering och finns inte än.", "plans.soon": "Under planering", "plans.current": "Nuvarande", "plan.free": "Gratis", "plan.free.price": "För alla som berörs", "plan.free.f1": "Allt viktigt: dagbok, snabblogg, akut sug, övningar, SOS", "plan.free.f2": "Enkel PDF-export för terapin (under planering)", "plan.pro": "Pro", "plan.pro.price": "Abonnemang eller engångsköp", "plan.pro.who": "För dig som vill ha mer bekvämlighet", "plan.pro.f1": "iCloud-synk & säkerhetskopia", "plan.pro.f2": "Snabblogg på Apple Watch", "plan.pro.f3": "Smartklocka inkl. puls", "plan.pro.f4": "Mer detaljerade analyser", "plan.ther": "Terapeutversion", "plan.ther.price": "Abonnemang för mottagningar och kliniker", "plan.ther.who": "För terapeuter, mottagningar och kliniker", "plan.ther.f1": "Patienten delar data via QR-kod eller krypterad fil", "plan.ther.f2": "Översikt över flera patienter", "plan.ther.f3": "Förberedelse inför sessionen"});
+Object.assign(T.es,{"sup.title": "Apoyar {app}", "sup.text": "{app} es gratuita y sin anuncios. Si te ayuda, puedes apoyar su desarrollo con una pequeña propina, totalmente voluntaria.", "sup.small": "Pequeña", "sup.medium": "Mediana", "sup.large": "Grande", "sup.test": "Versión de prueba: no se cobra nada.", "sup.thanks": "¡Gracias! Tu apoyo ayuda a que {app} siga siendo gratuita para quien la necesite.", "sup.thanks.test": "Versión de prueba: no se ha cobrado nada.", "plans.title": "Planes", "plans.text": "La versión para terapeutas está en planificación y aún no está disponible.", "plans.soon": "En planificación", "plans.current": "Actual", "plan.free": "Gratis", "plan.free.price": "Para todas las personas afectadas", "plan.free.f1": "Todo lo esencial: diario, registro rápido, impulso ahora, ejercicios, SOS", "plan.free.f2": "Exportación sencilla en PDF para la terapia (en planificación)", "plan.pro": "Pro", "plan.pro.price": "Suscripción o compra única", "plan.pro.who": "Para quien quiere más comodidad", "plan.pro.f1": "Sincronización y copia en iCloud", "plan.pro.f2": "Registro rápido en Apple Watch", "plan.pro.f3": "Conexión con smartwatch incl. frecuencia cardiaca", "plan.pro.f4": "Análisis más detallados", "plan.ther": "Versión para terapeutas", "plan.ther.price": "Suscripción para consultas y clínicas", "plan.ther.who": "Para terapeutas, consultas y clínicas", "plan.ther.f1": "La persona paciente comparte datos por código QR o archivo cifrado", "plan.ther.f2": "Vista de varias personas pacientes", "plan.ther.f3": "Preparación de la sesión"});
+Object.assign(T.fr,{"sup.title": "Soutenir {app}", "sup.text": "{app} est gratuite et sans publicité. Si elle t’aide, tu peux soutenir son développement avec un petit pourboire – entièrement facultatif.", "sup.small": "Petit", "sup.medium": "Moyen", "sup.large": "Grand", "sup.test": "Version test – aucun montant n’est débité.", "sup.thanks": "Merci ! Ton soutien aide à garder {app} gratuite pour toutes les personnes qui en ont besoin.", "sup.thanks.test": "Version test – rien n’a été débité.", "plans.title": "Formules", "plans.text": "La version thérapeute est en préparation et pas encore disponible.", "plans.soon": "En préparation", "plans.current": "Actuelle", "plan.free": "Gratuite", "plan.free.price": "Pour toutes les personnes concernées", "plan.free.f1": "L’essentiel : journal, saisie rapide, envie urgente, exercices, SOS", "plan.free.f2": "Export PDF simple pour la thérapie (en préparation)", "plan.pro": "Pro", "plan.pro.price": "Abonnement ou achat unique", "plan.pro.who": "Pour plus de confort", "plan.pro.f1": "Synchronisation et sauvegarde iCloud", "plan.pro.f2": "Saisie rapide sur Apple Watch", "plan.pro.f3": "Montre connectée avec fréquence cardiaque", "plan.pro.f4": "Analyses plus détaillées", "plan.ther": "Version thérapeute", "plan.ther.price": "Abonnement pour cabinets et cliniques", "plan.ther.who": "Pour thérapeutes, cabinets et cliniques", "plan.ther.f1": "La personne suivie partage ses données par QR code ou fichier chiffré", "plan.ther.f2": "Vue d’ensemble de plusieurs personnes suivies", "plan.ther.f3": "Préparation de la séance"});
+/* Export für die Therapie (v13) – Übersetzungen von Claude, BITTE GEGENLESEN LASSEN */
+Object.assign(T.en,{"exp.title": "Export for therapy", "exp.text": "Create a PDF of your entries to take to therapy or send to your therapist. It is created on your device – nothing is uploaded.", "exp.period": "Period", "exp.days": "{n} days", "exp.notes": "Include personal notes", "exp.btn": "Create PDF", "exp.busy": "Creating PDF …", "exp.done": "PDF saved", "exp.shared": "PDF ready to share", "exp.declined": "Not saved", "exp.fail": "The PDF couldn’t be created. Please check your internet connection and try again.", "exp.private": "This file contains sensitive health data. Only share it with people you trust.", "exp.examples": "Example entries are not included.", "exp.hist": "Export for therapy (PDF)", "pdf.title": "Diary summary for therapy", "pdf.period": "Period: {a} – {b}", "pdf.created": "Created on {d}", "pdf.overview": "Overview", "pdf.mealdays": "Days with 3+ meals: {n} of {d}", "pdf.meals": "Meals and snacks logged: {n}", "pdf.urges": "Urge moments logged: {n} · waves that passed: {p}", "pdf.acute": "{name}: used {n}× · eased {p}× · urge on average {a} -> {b}", "pdf.logs": "Quick logs: {n} · vomiting noted: {k}", "pdf.anx": "Average anxiety with urge: {a} · without urge: {b}", "pdf.triggers": "Common triggers", "pdf.feelings": "Common feelings", "pdf.helped": "What helped", "pdf.times": "Quick log by time of day", "pdf.days": "Day by day", "pdf.none": "No entries", "pdf.empty": "No entries in this period.", "pdf.note": "Note", "pdf.footer": "{app} · not a medical document", "pdf.page": "Page {p} of {n}", "pdf.after": "after", "pdf.need": "Need", "pdf.action": "Meanwhile", "pdf.trigger": "Trigger", "plan.free.f2": "Simple PDF export for therapy"});
+Object.assign(T.de,{"exp.title": "Export für die Therapie", "exp.text": "Erstelle ein PDF deiner Einträge, um es in die Therapie mitzunehmen oder deiner Therapeutin bzw. deinem Therapeuten zu schicken. Es entsteht auf deinem Gerät – nichts wird hochgeladen.", "exp.period": "Zeitraum", "exp.days": "{n} Tage", "exp.notes": "Persönliche Notizen einschließen", "exp.btn": "PDF erstellen", "exp.busy": "PDF wird erstellt …", "exp.done": "PDF gespeichert", "exp.shared": "PDF bereit zum Teilen", "exp.declined": "Nicht gespeichert", "exp.fail": "Das PDF konnte nicht erstellt werden. Bitte prüfe deine Internetverbindung und versuche es erneut.", "exp.private": "Diese Datei enthält sensible Gesundheitsdaten. Teile sie nur mit Menschen, denen du vertraust.", "exp.examples": "Beispieleinträge sind nicht enthalten.", "exp.hist": "Export für die Therapie (PDF)", "pdf.title": "Tagebuch-Zusammenfassung für die Therapie", "pdf.period": "Zeitraum: {a} – {b}", "pdf.created": "Erstellt am {d}", "pdf.overview": "Überblick", "pdf.mealdays": "Tage mit 3+ Mahlzeiten: {n} von {d}", "pdf.meals": "Eingetragene Mahlzeiten und Snacks: {n}", "pdf.urges": "Notierte Drang-Momente: {n} · vorbeigezogene Wellen: {p}", "pdf.acute": "{name}: {n}× genutzt · {p}× abgeebbt · Drang im Schnitt {a} -> {b}", "pdf.logs": "Schnell-Logs: {n} · Erbrechen notiert: {k}", "pdf.anx": "Ø Angst mit Drang: {a} · ohne Drang: {b}", "pdf.triggers": "Häufige Auslöser", "pdf.feelings": "Häufige Gefühle", "pdf.helped": "Was geholfen hat", "pdf.times": "Schnell-Log nach Tageszeit", "pdf.days": "Tag für Tag", "pdf.none": "Keine Einträge", "pdf.empty": "Keine Einträge in diesem Zeitraum.", "pdf.note": "Notiz", "pdf.footer": "{app} · kein medizinisches Dokument", "pdf.page": "Seite {p} von {n}", "pdf.after": "danach", "pdf.need": "Bedürfnis", "pdf.action": "In der Zwischenzeit", "pdf.trigger": "Auslöser", "plan.free.f2": "Einfacher PDF-Export für die Therapie"});
+Object.assign(T.sv,{"exp.title": "Export för terapin", "exp.text": "Skapa en PDF av dina anteckningar att ta med till terapin eller skicka till din terapeut. Den skapas på din enhet – inget laddas upp.", "exp.period": "Period", "exp.days": "{n} dagar", "exp.notes": "Ta med personliga anteckningar", "exp.btn": "Skapa PDF", "exp.busy": "PDF skapas …", "exp.done": "PDF sparad", "exp.shared": "PDF redo att dela", "exp.declined": "Inte sparad", "exp.fail": "PDF:en kunde inte skapas. Kontrollera internetanslutningen och försök igen.", "exp.private": "Filen innehåller känsliga hälsouppgifter. Dela den bara med personer du litar på.", "exp.examples": "Exempelanteckningar ingår inte.", "exp.hist": "Export för terapin (PDF)", "pdf.title": "Dagbokssammanfattning för terapin", "pdf.period": "Period: {a} – {b}", "pdf.created": "Skapad {d}", "pdf.overview": "Översikt", "pdf.mealdays": "Dagar med 3+ måltider: {n} av {d}", "pdf.meals": "Loggade måltider och mellanmål: {n}", "pdf.urges": "Noterade sug: {n} · vågor som passerade: {p}", "pdf.acute": "{name}: använt {n}× · ebbade ut {p}× · sug i snitt {a} -> {b}", "pdf.logs": "Snabbloggar: {n} · kräkning noterad: {k}", "pdf.anx": "Snitt ångest med sug: {a} · utan sug: {b}", "pdf.triggers": "Vanliga utlösare", "pdf.feelings": "Vanliga känslor", "pdf.helped": "Det här hjälpte", "pdf.times": "Snabblogg efter tid på dygnet", "pdf.days": "Dag för dag", "pdf.none": "Inga anteckningar", "pdf.empty": "Inga anteckningar under perioden.", "pdf.note": "Anteckning", "pdf.footer": "{app} · inget medicinskt dokument", "pdf.page": "Sida {p} av {n}", "pdf.after": "efteråt", "pdf.need": "Behov", "pdf.action": "Under tiden", "pdf.trigger": "Utlösare", "plan.free.f2": "Enkel PDF-export för terapin"});
+Object.assign(T.es,{"exp.title": "Exportar para la terapia", "exp.text": "Crea un PDF de tus registros para llevarlo a terapia o enviarlo a tu terapeuta. Se crea en tu dispositivo: no se sube nada.", "exp.period": "Periodo", "exp.days": "{n} días", "exp.notes": "Incluir notas personales", "exp.btn": "Crear PDF", "exp.busy": "Creando PDF …", "exp.done": "PDF guardado", "exp.shared": "PDF listo para compartir", "exp.declined": "No guardado", "exp.fail": "No se pudo crear el PDF. Comprueba tu conexión a internet e inténtalo de nuevo.", "exp.private": "Este archivo contiene datos de salud sensibles. Compártelo solo con personas de confianza.", "exp.examples": "Los registros de ejemplo no se incluyen.", "exp.hist": "Exportar para la terapia (PDF)", "pdf.title": "Resumen del diario para la terapia", "pdf.period": "Periodo: {a} – {b}", "pdf.created": "Creado el {d}", "pdf.overview": "Resumen", "pdf.mealdays": "Días con 3+ comidas: {n} de {d}", "pdf.meals": "Comidas y tentempiés registrados: {n}", "pdf.urges": "Impulsos anotados: {n} · olas que pasaron: {p}", "pdf.acute": "{name}: usado {n}× · bajó {p}× · impulso de media {a} -> {b}", "pdf.logs": "Registros rápidos: {n} · vómito anotado: {k}", "pdf.anx": "Ansiedad media con impulso: {a} · sin impulso: {b}", "pdf.triggers": "Desencadenantes frecuentes", "pdf.feelings": "Emociones frecuentes", "pdf.helped": "Lo que ayudó", "pdf.times": "Registro rápido por momento del día", "pdf.days": "Día a día", "pdf.none": "Sin registros", "pdf.empty": "No hay registros en este periodo.", "pdf.note": "Nota", "pdf.footer": "{app} · no es un documento médico", "pdf.page": "Página {p} de {n}", "pdf.after": "después", "pdf.need": "Necesidad", "pdf.action": "Mientras tanto", "pdf.trigger": "Desencadenante", "plan.free.f2": "Exportación sencilla en PDF para la terapia"});
+Object.assign(T.fr,{"exp.title": "Export pour la thérapie", "exp.text": "Crée un PDF de tes saisies à apporter en thérapie ou à envoyer à ton ou ta thérapeute. Il est créé sur ton appareil – rien n’est envoyé en ligne.", "exp.period": "Période", "exp.days": "{n} jours", "exp.notes": "Inclure les notes personnelles", "exp.btn": "Créer le PDF", "exp.busy": "Création du PDF …", "exp.done": "PDF enregistré", "exp.shared": "PDF prêt à partager", "exp.declined": "Non enregistré", "exp.fail": "Le PDF n’a pas pu être créé. Vérifie ta connexion internet et réessaie.", "exp.private": "Ce fichier contient des données de santé sensibles. Ne le partage qu’avec des personnes de confiance.", "exp.examples": "Les exemples ne sont pas inclus.", "exp.hist": "Export pour la thérapie (PDF)", "pdf.title": "Résumé du journal pour la thérapie", "pdf.period": "Période : {a} – {b}", "pdf.created": "Créé le {d}", "pdf.overview": "Vue d’ensemble", "pdf.mealdays": "Jours avec 3+ repas : {n} sur {d}", "pdf.meals": "Repas et collations notés : {n}", "pdf.urges": "Envies notées : {n} · vagues passées : {p}", "pdf.acute": "{name} : utilisé {n}× · retombée {p}× · envie en moyenne {a} -> {b}", "pdf.logs": "Saisies rapides : {n} · vomissement noté : {k}", "pdf.anx": "Anxiété moyenne avec envie : {a} · sans envie : {b}", "pdf.triggers": "Déclencheurs fréquents", "pdf.feelings": "Émotions fréquentes", "pdf.helped": "Ce qui a aidé", "pdf.times": "Saisie rapide selon le moment", "pdf.days": "Jour par jour", "pdf.none": "Aucune saisie", "pdf.empty": "Aucune saisie sur cette période.", "pdf.note": "Note", "pdf.footer": "{app} · pas un document médical", "pdf.page": "Page {p} sur {n}", "pdf.after": "après", "pdf.need": "Besoin", "pdf.action": "En attendant", "pdf.trigger": "Déclencheur", "plan.free.f2": "Export PDF simple pour la thérapie"});
 /* Länder: Notruf + Beratungstelefone (recherchiert 25.10.2026) */
 const COUNTRIES={
   DE:{emergency:'112',lines:[
@@ -742,11 +830,11 @@ const COUNTRIES={
     {name:'3114 – Prévention du suicide',num:'3114',kind:'crisis',h24:true,cost:'free'}]},
   OTHER:{emergency:'112',note:'lines.other',find:true,lines:[]}
 };
-Object.assign(T.en,{"w.label": "Test version", "w.title": "Welcome to Lichtung", "w.intro": "A diary that supports you day to day with bulimia. Thanks for trying it out.", "w.1t": "This is a test version", "w.1": "Things may still change. Your feedback helps a lot – you’ll find it under the gear icon.", "w.2t": "Your data stays with you", "w.2": "Everything is saved only in this browser on your device. Nobody else sees your entries.", "w.3t": "Not a replacement for therapy", "w.3": "The app is meant to support you and make patterns visible, not to treat.", "w.4t": "Help in hard moments", "w.4": "The red SOS button at the top right connects you to emergency services or your contact person. Please choose your country in the settings.", "w.ex": "A few example entries are included to start with. You can remove them in the settings.", "w.go": "Let’s go", "fb.title": "Feedback on the test version", "fb.text": "Thanks for testing! Write down briefly what you notice. “Send via WhatsApp” opens WhatsApp with your text – choose the contact there.", "fb.rate": "Overall impression", "fb.lo": "not helpful at all", "fb.hi": "very helpful", "fb.good": "What do you like?", "fb.bad": "What was unclear or bothered you?", "fb.miss": "What’s missing for you?", "fb.wa": "Send via WhatsApp", "fb.copy": "Copy text", "fb.private": "Your diary entries are not sent – only this feedback text.", "fb.msg": "Feedback Lichtung (test version v6 · Test 5)", "fb.m.rate": "Overall impression", "fb.m.good": "I like", "fb.m.bad": "Unclear/bothered me", "fb.m.miss": "Missing for me", "ver": "Lichtung test version · v6 · Test 5"});
-Object.assign(T.de,{"w.label": "Testversion", "w.title": "Willkommen bei Lichtung", "w.intro": "Ein Tagebuch, das dich bei Bulimie im Alltag begleitet. Schön, dass du es ausprobierst.", "w.1t": "Das ist eine Testversion", "w.1": "Manches kann sich noch ändern. Dein Feedback hilft sehr – du findest es unter dem Zahnrad.", "w.2t": "Deine Daten bleiben bei dir", "w.2": "Alles wird nur in diesem Browser auf deinem Gerät gespeichert. Niemand sonst sieht deine Einträge.", "w.3t": "Kein Ersatz für Therapie", "w.3": "Die App soll unterstützen und Muster sichtbar machen, nicht behandeln.", "w.4t": "Hilfe in schweren Momenten", "w.4": "Der rote SOS-Knopf oben rechts verbindet dich mit dem Notruf oder deiner Kontaktperson. Wähle bitte in den Einstellungen dein Land.", "w.ex": "Zum Start sind ein paar Beispieleinträge drin. Du kannst sie in den Einstellungen entfernen.", "w.go": "Los geht’s", "fb.title": "Feedback zur Testversion", "fb.text": "Danke fürs Testen! Schreib kurz auf, was dir auffällt. Mit „Per WhatsApp senden“ öffnet sich WhatsApp mit deinem Text, dort wählst du den Kontakt aus.", "fb.rate": "Gesamteindruck", "fb.lo": "gar nicht hilfreich", "fb.hi": "sehr hilfreich", "fb.good": "Was gefällt dir?", "fb.bad": "Was war unklar oder hat gestört?", "fb.miss": "Was fehlt dir?", "fb.wa": "Per WhatsApp senden", "fb.copy": "Text kopieren", "fb.private": "Deine Tagebucheinträge werden dabei nicht mitgeschickt, nur dieser Feedback-Text.", "fb.msg": "Feedback Lichtung (Testversion v6 · Test 5)", "fb.m.rate": "Gesamteindruck", "fb.m.good": "Gefällt mir", "fb.m.bad": "Unklar/gestört", "fb.m.miss": "Fehlt mir", "ver": "Lichtung Testversion · v6 · Test 5"});
-Object.assign(T.sv,{"w.label": "Testversion", "w.title": "Välkommen till Lichtung", "w.intro": "En dagbok som stöttar dig i vardagen vid bulimi. Tack för att du testar den.", "w.1t": "Det här är en testversion", "w.1": "Saker kan fortfarande ändras. Din feedback hjälper mycket – du hittar den under kugghjulet.", "w.2t": "Dina data stannar hos dig", "w.2": "Allt sparas bara i den här webbläsaren på din enhet. Ingen annan ser dina anteckningar.", "w.3t": "Ersätter inte terapi", "w.3": "Appen ska stötta och göra mönster synliga, inte behandla.", "w.4t": "Hjälp i svåra stunder", "w.4": "Den röda SOS-knappen uppe till höger kopplar dig till larmnumret eller din kontaktperson. Välj ditt land i inställningarna.", "w.ex": "Några exempelanteckningar finns med från början. Du kan ta bort dem i inställningarna.", "w.go": "Nu kör vi", "fb.title": "Feedback om testversionen", "fb.text": "Tack för att du testar! Skriv kort vad du lägger märke till. ”Skicka via WhatsApp” öppnar WhatsApp med din text – välj kontakten där.", "fb.rate": "Helhetsintryck", "fb.lo": "inte alls till hjälp", "fb.hi": "till stor hjälp", "fb.good": "Vad gillar du?", "fb.bad": "Vad var oklart eller störde dig?", "fb.miss": "Vad saknar du?", "fb.wa": "Skicka via WhatsApp", "fb.copy": "Kopiera text", "fb.private": "Dina dagboksanteckningar skickas inte med, bara den här feedbacktexten.", "fb.msg": "Feedback Lichtung (testversion v6 · Test 5)", "fb.m.rate": "Helhetsintryck", "fb.m.good": "Jag gillar", "fb.m.bad": "Oklart/störande", "fb.m.miss": "Jag saknar", "ver": "Lichtung testversion · v6 · Test 5"});
-Object.assign(T.es,{"w.label": "Versión de prueba", "w.title": "Te damos la bienvenida a Lichtung", "w.intro": "Un diario que te acompaña en el día a día con la bulimia. Gracias por probarlo.", "w.1t": "Es una versión de prueba", "w.1": "Algunas cosas aún pueden cambiar. Tu opinión ayuda mucho: la encontrarás en el icono del engranaje.", "w.2t": "Tus datos se quedan contigo", "w.2": "Todo se guarda solo en este navegador de tu dispositivo. Nadie más ve tus registros.", "w.3t": "No sustituye la terapia", "w.3": "La app quiere acompañarte y hacer visibles los patrones, no tratar.", "w.4t": "Ayuda en momentos difíciles", "w.4": "El botón rojo SOS arriba a la derecha te conecta con emergencias o con tu persona de contacto. Elige tu país en los ajustes.", "w.ex": "Al principio hay algunos registros de ejemplo. Puedes quitarlos en los ajustes.", "w.go": "Empezar", "fb.title": "Opinión sobre la versión de prueba", "fb.text": "¡Gracias por probarla! Escribe brevemente lo que notes. «Enviar por WhatsApp» abre WhatsApp con tu texto: elige allí el contacto.", "fb.rate": "Impresión general", "fb.lo": "nada útil", "fb.hi": "muy útil", "fb.good": "¿Qué te gusta?", "fb.bad": "¿Qué no quedó claro o te molestó?", "fb.miss": "¿Qué echas en falta?", "fb.wa": "Enviar por WhatsApp", "fb.copy": "Copiar texto", "fb.private": "Tus registros del diario no se envían, solo este texto de opinión.", "fb.msg": "Opinión Lichtung (versión de prueba v6 · Test 5)", "fb.m.rate": "Impresión general", "fb.m.good": "Me gusta", "fb.m.bad": "Poco claro/molesto", "fb.m.miss": "Echo en falta", "ver": "Lichtung versión de prueba · v6 · Test 5"});
-Object.assign(T.fr,{"w.label": "Version test", "w.title": "Bienvenue dans Lichtung", "w.intro": "Un journal qui t’accompagne au quotidien face à la boulimie. Merci de l’essayer.", "w.1t": "C’est une version test", "w.1": "Certaines choses peuvent encore changer. Ton avis aide beaucoup – tu le trouveras sous l’icône d’engrenage.", "w.2t": "Tes données restent chez toi", "w.2": "Tout est enregistré uniquement dans ce navigateur, sur ton appareil. Personne d’autre ne voit tes saisies.", "w.3t": "Ne remplace pas une thérapie", "w.3": "L’app sert à te soutenir et à rendre les tendances visibles, pas à soigner.", "w.4t": "De l’aide dans les moments difficiles", "w.4": "Le bouton rouge SOS en haut à droite te met en relation avec les urgences ou ta personne de contact. Choisis ton pays dans les réglages.", "w.ex": "Quelques exemples sont inclus pour commencer. Tu peux les supprimer dans les réglages.", "w.go": "C’est parti", "fb.title": "Avis sur la version test", "fb.text": "Merci de tester ! Note brièvement ce que tu remarques. « Envoyer via WhatsApp » ouvre WhatsApp avec ton texte – choisis le contact là-bas.", "fb.rate": "Impression générale", "fb.lo": "pas du tout utile", "fb.hi": "très utile", "fb.good": "Qu’est-ce qui te plaît ?", "fb.bad": "Qu’est-ce qui était flou ou t’a gêné·e ?", "fb.miss": "Qu’est-ce qui te manque ?", "fb.wa": "Envoyer via WhatsApp", "fb.copy": "Copier le texte", "fb.private": "Tes saisies du journal ne sont pas envoyées, seulement ce texte d’avis.", "fb.msg": "Avis Lichtung (version test v6 · Test 5)", "fb.m.rate": "Impression générale", "fb.m.good": "J’aime", "fb.m.bad": "Flou/gênant", "fb.m.miss": "Il me manque", "ver": "Lichtung version test · v6 · Test 5"});
+Object.assign(T.en,{"w.label": "Test version", "w.title": "Welcome to {app}", "w.intro": "A diary that supports you day to day with bulimia. Thanks for trying it out.", "w.1t": "This is a test version", "w.1": "Things may still change. Your feedback helps a lot – you’ll find it under the gear icon.", "w.2t": "Your data stays with you", "w.2": "Everything is saved only in this browser on your device. Nobody else sees your entries.", "w.3t": "Not a replacement for therapy", "w.3": "The app is meant to support you and make patterns visible, not to treat.", "w.4t": "Help in hard moments", "w.4": "The red SOS button at the top right connects you to emergency services or your contact person. Please choose your country in the settings.", "w.ex": "A few example entries are included to start with. You can remove them in the settings.", "w.go": "Let’s go", "fb.title": "Feedback on the test version", "fb.text": "Thanks for testing! Write down briefly what you notice. “Send via WhatsApp” opens WhatsApp with your text – choose the contact there.", "fb.rate": "Overall impression", "fb.lo": "not helpful at all", "fb.hi": "very helpful", "fb.good": "What do you like?", "fb.bad": "What was unclear or bothered you?", "fb.miss": "What’s missing for you?", "fb.wa": "Send via WhatsApp", "fb.copy": "Copy text", "fb.private": "Your diary entries are not sent – only this feedback text.", "fb.msg": "Feedback {app} (test version v13 · Test 12)", "fb.m.rate": "Overall impression", "fb.m.good": "I like", "fb.m.bad": "Unclear/bothered me", "fb.m.miss": "Missing for me", "ver": "{app} test version · v13 · Test 12"});
+Object.assign(T.de,{"w.label": "Testversion", "w.title": "Willkommen bei {app}", "w.intro": "Ein Tagebuch, das dich bei Bulimie im Alltag begleitet. Schön, dass du es ausprobierst.", "w.1t": "Das ist eine Testversion", "w.1": "Manches kann sich noch ändern. Dein Feedback hilft sehr – du findest es unter dem Zahnrad.", "w.2t": "Deine Daten bleiben bei dir", "w.2": "Alles wird nur in diesem Browser auf deinem Gerät gespeichert. Niemand sonst sieht deine Einträge.", "w.3t": "Kein Ersatz für Therapie", "w.3": "Die App soll unterstützen und Muster sichtbar machen, nicht behandeln.", "w.4t": "Hilfe in schweren Momenten", "w.4": "Der rote SOS-Knopf oben rechts verbindet dich mit dem Notruf oder deiner Kontaktperson. Wähle bitte in den Einstellungen dein Land.", "w.ex": "Zum Start sind ein paar Beispieleinträge drin. Du kannst sie in den Einstellungen entfernen.", "w.go": "Los geht’s", "fb.title": "Feedback zur Testversion", "fb.text": "Danke fürs Testen! Schreib kurz auf, was dir auffällt. Mit „Per WhatsApp senden“ öffnet sich WhatsApp mit deinem Text, dort wählst du den Kontakt aus.", "fb.rate": "Gesamteindruck", "fb.lo": "gar nicht hilfreich", "fb.hi": "sehr hilfreich", "fb.good": "Was gefällt dir?", "fb.bad": "Was war unklar oder hat gestört?", "fb.miss": "Was fehlt dir?", "fb.wa": "Per WhatsApp senden", "fb.copy": "Text kopieren", "fb.private": "Deine Tagebucheinträge werden dabei nicht mitgeschickt, nur dieser Feedback-Text.", "fb.msg": "Feedback {app} (Testversion v13 · Test 12)", "fb.m.rate": "Gesamteindruck", "fb.m.good": "Gefällt mir", "fb.m.bad": "Unklar/gestört", "fb.m.miss": "Fehlt mir", "ver": "{app} Testversion · v13 · Test 12"});
+Object.assign(T.sv,{"w.label": "Testversion", "w.title": "Välkommen till {app}", "w.intro": "En dagbok som stöttar dig i vardagen vid bulimi. Tack för att du testar den.", "w.1t": "Det här är en testversion", "w.1": "Saker kan fortfarande ändras. Din feedback hjälper mycket – du hittar den under kugghjulet.", "w.2t": "Dina data stannar hos dig", "w.2": "Allt sparas bara i den här webbläsaren på din enhet. Ingen annan ser dina anteckningar.", "w.3t": "Ersätter inte terapi", "w.3": "Appen ska stötta och göra mönster synliga, inte behandla.", "w.4t": "Hjälp i svåra stunder", "w.4": "Den röda SOS-knappen uppe till höger kopplar dig till larmnumret eller din kontaktperson. Välj ditt land i inställningarna.", "w.ex": "Några exempelanteckningar finns med från början. Du kan ta bort dem i inställningarna.", "w.go": "Nu kör vi", "fb.title": "Feedback om testversionen", "fb.text": "Tack för att du testar! Skriv kort vad du lägger märke till. ”Skicka via WhatsApp” öppnar WhatsApp med din text – välj kontakten där.", "fb.rate": "Helhetsintryck", "fb.lo": "inte alls till hjälp", "fb.hi": "till stor hjälp", "fb.good": "Vad gillar du?", "fb.bad": "Vad var oklart eller störde dig?", "fb.miss": "Vad saknar du?", "fb.wa": "Skicka via WhatsApp", "fb.copy": "Kopiera text", "fb.private": "Dina dagboksanteckningar skickas inte med, bara den här feedbacktexten.", "fb.msg": "Feedback {app} (testversion v13 · Test 12)", "fb.m.rate": "Helhetsintryck", "fb.m.good": "Jag gillar", "fb.m.bad": "Oklart/störande", "fb.m.miss": "Jag saknar", "ver": "{app} testversion · v13 · Test 12"});
+Object.assign(T.es,{"w.label": "Versión de prueba", "w.title": "Te damos la bienvenida a {app}", "w.intro": "Un diario que te acompaña en el día a día con la bulimia. Gracias por probarlo.", "w.1t": "Es una versión de prueba", "w.1": "Algunas cosas aún pueden cambiar. Tu opinión ayuda mucho: la encontrarás en el icono del engranaje.", "w.2t": "Tus datos se quedan contigo", "w.2": "Todo se guarda solo en este navegador de tu dispositivo. Nadie más ve tus registros.", "w.3t": "No sustituye la terapia", "w.3": "La app quiere acompañarte y hacer visibles los patrones, no tratar.", "w.4t": "Ayuda en momentos difíciles", "w.4": "El botón rojo SOS arriba a la derecha te conecta con emergencias o con tu persona de contacto. Elige tu país en los ajustes.", "w.ex": "Al principio hay algunos registros de ejemplo. Puedes quitarlos en los ajustes.", "w.go": "Empezar", "fb.title": "Opinión sobre la versión de prueba", "fb.text": "¡Gracias por probarla! Escribe brevemente lo que notes. «Enviar por WhatsApp» abre WhatsApp con tu texto: elige allí el contacto.", "fb.rate": "Impresión general", "fb.lo": "nada útil", "fb.hi": "muy útil", "fb.good": "¿Qué te gusta?", "fb.bad": "¿Qué no quedó claro o te molestó?", "fb.miss": "¿Qué echas en falta?", "fb.wa": "Enviar por WhatsApp", "fb.copy": "Copiar texto", "fb.private": "Tus registros del diario no se envían, solo este texto de opinión.", "fb.msg": "Opinión {app} (versión de prueba v13 · Test 12)", "fb.m.rate": "Impresión general", "fb.m.good": "Me gusta", "fb.m.bad": "Poco claro/molesto", "fb.m.miss": "Echo en falta", "ver": "{app} versión de prueba · v13 · Test 12"});
+Object.assign(T.fr,{"w.label": "Version test", "w.title": "Bienvenue dans {app}", "w.intro": "Un journal qui t’accompagne au quotidien face à la boulimie. Merci de l’essayer.", "w.1t": "C’est une version test", "w.1": "Certaines choses peuvent encore changer. Ton avis aide beaucoup – tu le trouveras sous l’icône d’engrenage.", "w.2t": "Tes données restent chez toi", "w.2": "Tout est enregistré uniquement dans ce navigateur, sur ton appareil. Personne d’autre ne voit tes saisies.", "w.3t": "Ne remplace pas une thérapie", "w.3": "L’app sert à te soutenir et à rendre les tendances visibles, pas à soigner.", "w.4t": "De l’aide dans les moments difficiles", "w.4": "Le bouton rouge SOS en haut à droite te met en relation avec les urgences ou ta personne de contact. Choisis ton pays dans les réglages.", "w.ex": "Quelques exemples sont inclus pour commencer. Tu peux les supprimer dans les réglages.", "w.go": "C’est parti", "fb.title": "Avis sur la version test", "fb.text": "Merci de tester ! Note brièvement ce que tu remarques. « Envoyer via WhatsApp » ouvre WhatsApp avec ton texte – choisis le contact là-bas.", "fb.rate": "Impression générale", "fb.lo": "pas du tout utile", "fb.hi": "très utile", "fb.good": "Qu’est-ce qui te plaît ?", "fb.bad": "Qu’est-ce qui était flou ou t’a gêné·e ?", "fb.miss": "Qu’est-ce qui te manque ?", "fb.wa": "Envoyer via WhatsApp", "fb.copy": "Copier le texte", "fb.private": "Tes saisies du journal ne sont pas envoyées, seulement ce texte d’avis.", "fb.msg": "Avis {app} (version test v13 · Test 12)", "fb.m.rate": "Impression générale", "fb.m.good": "J’aime", "fb.m.bad": "Flou/gênant", "fb.m.miss": "Il me manque", "ver": "{app} version test · v13 · Test 12"});
 const COUNTRY_ORDER=['DE','UK','SE','ES','FR','OTHER'];
 
 const KEY='lichtung.web.v1';
@@ -757,7 +845,7 @@ const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
 /* ---------- i18n ---------- */
 let lang='en';
 function t(k,vars){let s=T[lang]&&T[lang][k];if(s==null)s=T.en[k];if(s==null)return k;
-  if(vars&&typeof s==='string')s=s.replace(/\{(\w+)\}/g,(m,v)=>vars[v]??'');return s}
+  if(typeof s==='string'){s=s.replace(/\{app\}/g,APP_NAME);if(vars)s=s.replace(/\{(\w+)\}/g,(m,v)=>vars[v]??'')}return s}
 const o=(g,k)=>t(g+'.'+k);
 const txt=v=>typeof v==='string'&&v.startsWith('ex:')?t('ex.'+v.slice(3)):(v||'');
 const loc=()=>LOCALE[lang]||'en-GB';
@@ -777,6 +865,7 @@ function load(){
   if(!state.seeded){state.entries=examples();state.seeded=true;state.seededLog=true}
   else if(!state.seededLog){if(state.entries.some(e=>e.example))state.entries.push(...logExamples());state.seededLog=true}
   if(!state.country)state.country=guessCountry();
+  if(!state.seededAcute){if(state.entries.some(e=>e.example))state.entries.push(...acuteExamples());state.seededAcute=true}
   if(!state.checkins)state.checkins={on:true,slots:[{id:'midday',time:'13:00',on:true},{id:'afternoon',time:'17:00',on:true},{id:'evening',time:'22:00',on:true}],dismissed:{}};
   if(!T[state.lang])state.lang='en';
   lang=state.lang;save();
@@ -873,6 +962,8 @@ function entryCard(e){
     if(e.hunger!=null)tags.push(t('tag.hunger',{n:e.hunger}));if(e.full!=null)tags.push(t('tag.full',{n:e.full}));(e.fAfter||[]).forEach(f=>tags.push(o('feel',f)))}
   else if(e.type==='urge'){k=t('card.urge')+' · '+(e.kinds||[]).map(x=>o('urge',x)).join(', ');body=esc(t('outcome.'+(e.outcome||'passed')));
     tags.push(t('tag.strength',{n:e.intensity}));(e.triggers||[]).forEach(x=>tags.push(o('trig',x)))}
+  else if(e.type==='acute'){k=t('card.acute');const v=x=>x==null?'–':x;body=esc(t('ac.entry',{a:v(e.urgeBefore),b:v(e.urgeAfter),o:t('ac.o.'+(e.outcome||'none'))}));
+    (e.feelings||[]).forEach(f=>tags.push(o('feel',f)))}
   else if(e.type==='log'){k=t('card.log');const yn=v=>v===true?t('yes'):v===false?t('no'):'–';
     body=esc(t('log.summary',{p:yn(e.purged),u:yn(e.urge)+(e.urge?' ('+e.urgeLevel+')':''),a:yn(e.anxiety)+(e.anxiety?' ('+e.anxLevel+')':'')}));
     (e.feelings||[]).forEach(f=>tags.push(o('feel',f)))}
@@ -892,6 +983,8 @@ function renderToday(){
     ${!storageOk?`<div class="banner"><span>${esc(t('storage.warn'))}</span></div>`:''}
     ${checkinCard()}
     <button class="logbtn" id="quickLog"><span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="txt"><b>${esc(t('quicklog'))}</b><span>${esc(t('quicklog.sub'))}</span></span><span aria-hidden="true" class="chev">›</span></button>
+    ${acuteResumeCard()}
+    ${acuteCardHTML()}
     <div class="quick">
       <button class="qbtn q-meal" data-new="meal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="7"/><path d="M12 6V3M8 13a4 4 0 0 1 4-4"/></svg><div><b>${esc(t('tile.meal'))}</b><br><span>${esc(t('tile.meal.sub'))}</span></div></button>
       <button class="qbtn q-urge" data-new="urge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 15c3 0 3-4 6-4s3 6 6 6 3-8 6-8"/></svg><div><b>${esc(t('tile.urge'))}</b><br><span>${esc(t('tile.urge.sub'))}</span></div></button>
@@ -905,9 +998,10 @@ function renderToday(){
     <section class="timeline">${list.length?list.map(entryCard).join(''):`<div class="empty">${esc(t('empty'))}<br><span class="small">${esc(t('empty.sub'))}</span></div>`}</section>`:''}
   </div>`;
   app.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>openSheet({type:b.dataset.new}));
-  app.querySelectorAll('.entry').forEach(b=>b.onclick=()=>openSheet(state.entries.find(e=>e.id===b.dataset.id)));
+  app.querySelectorAll('.entry').forEach(b=>b.onclick=()=>{const en=state.entries.find(e=>e.id===b.dataset.id);if(en&&en.type==='acute')openAcuteDetail(en);else openSheet(en)});
   $('#sosBtn').onclick=openSos;
   $('#quickLog').onclick=()=>openSheet({type:'log'});
+  bindAcuteCards();
   const cl=$('#ciLog');if(cl)cl.onclick=()=>openSheet({type:'log'});
   const cz=$('#ciLater');if(cz)cz.onclick=()=>{const d=dueSlot();if(d){state.checkins.dismissed={[todayKey()+':'+d.id]:true,...pruneDismissed()};save()}render()};
   $('#toggleOv').onclick=()=>{showOverview=!showOverview;if(!showOverview)viewDay=Date.now();render()};
@@ -928,6 +1022,379 @@ function checkinCard(){const d=dueSlot();if(!d)return '';
     <div class="btnrow"><button class="btn" id="ciLog">${esc(t('ci.log'))}</button><button class="btn ghost" id="ciLater">${esc(t('ci.later'))}</button></div></section>`}
 let lastDue=null;
 setInterval(()=>{const d=dueSlot(),k=d?d.id:null;if(k!==lastDue){lastDue=k;if(tab==='heute'&&sheet.hidden&&modal.hidden)render()}},30000);
+
+/* ---------- Drang akut (v8) ---------- */
+const acuteEl=$('#acute');
+const AC_FEEL=['stressed','lonely','empty','bored','sad','angry','exhausted','overwhelmed'];
+const AC_NEEDS=['hunger','lonely','exhausted','stress','bored'];
+const NEED_FROM_FEEL={lonely:'lonely',exhausted:'exhausted',stressed:'stress',overwhelmed:'stress',bored:'bored',empty:'bored'};
+const AC_ACTS=['room','walk','shower','call','music','drink','write','hands'];
+const AF=['relieved','calmer','neutral','full','shame','anxious','compensate'];
+const AT=['buildup','lastdrop','hungry','unknown'];
+const AC_MAIN=['breathe','name','need','time','check'];
+const AC_STALE=6*3600e3;
+let acTick=null,acPhaseT=null;
+const ICON_WAVE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 15c3 0 3-4 6-4s3 6 6 6 3-8 6-8"/></svg>';
+
+function acuteExamples(){
+  const d=(off,h,m)=>{const x=new Date();x.setDate(x.getDate()-off);x.setHours(h,m,0,0);return x.getTime()};
+  const A=(off,h,m,dur,o)=>Object.assign({id:uid(),example:true,type:'acute',ts:d(off,h,m),end:d(off,h,m)+dur*60000,ext:0,extMin:0,feelAfter:[],trig:null,trigText:'',builtUp:'',note:''},o);
+  return [A(1,20,30,16,{urgeBefore:7,anxBefore:6,feelings:['lonely','bored'],need:'lonely',action:'call',timerMin:10,urgeAfter:3,anxAfter:3,outcome:'passed'}),
+    A(3,21,5,12,{urgeBefore:8,anxBefore:7,feelings:['exhausted','stressed'],need:'exhausted',action:'shower',timerMin:5,urgeAfter:6,anxAfter:5,outcome:'ate',feelAfter:['relieved'],trig:'buildup'}),
+    A(5,18,40,20,{urgeBefore:6,anxBefore:5,feelings:['stressed','overwhelmed'],need:'stress',action:'walk',timerMin:15,urgeAfter:2,anxAfter:2,outcome:'passed'})];
+}
+function acuteFinalizeStale(){const r=state.acuteRun;if(r&&Date.now()-r.start>AC_STALE){acuteStore(r,true);state.acuteRun=null;save()}}
+function acuteStore(r,aborted){
+  const e={id:r.id,type:'acute',ts:r.start,end:Date.now(),urgeBefore:r.urgeBefore,anxBefore:r.anxBefore,feelings:r.feelings||[],need:r.need,lastAte:r.lastAte,action:r.action,
+    timerMin:r.timerMin,ext:r.ext||0,extMin:r.extMin||0,urgeAfter:r.urgeAfter,anxAfter:r.anxAfter,outcome:aborted?null:(r.outcome||null),feelAfter:r.feelAfter||[],trig:r.trig,trigText:r.trigText||'',builtUp:r.builtUp||'',note:''};
+  if(!aborted||r.urgeBefore!=null||r.step!=='breathe')state.entries.push(e);
+  const rec=state.acuteRecent||{needs:[],acts:[]};
+  if(r.need)rec.needs=[r.need,...rec.needs.filter(x=>x!==r.need)].slice(0,5);
+  if(r.action)rec.acts=[r.action,...rec.acts.filter(x=>x!==r.action)].slice(0,8);
+  state.acuteRecent=rec;
+}
+function acuteCardHTML(){
+  return `<button class="acutebtn" id="acuteBtn"><span class="ring">${ICON_WAVE}</span><span class="txt"><b>${esc(t('ac.title'))}</b><span>${esc(t('ac.sub'))}</span></span><span aria-hidden="true" class="chev">›</span></button>`}
+function acuteResumeCard(){const r=state.acuteRun;if(!r)return '';
+  return `<section class="checkin acute-resume"><div class="label">${esc(t('ac.title'))} · ${esc(fmtTime(r.start))}</div><h2>${esc(t('ac.resume.title'))}</h2><p class="small">${esc(t('ac.resume.text'))}</p>
+    <div class="btnrow"><button class="btn" id="acResume">${esc(t('ac.resume.go'))}</button><button class="btn ghost" id="acDiscard">${esc(t('ac.resume.end'))}</button></div></section>`}
+function bindAcuteCards(){
+  const b=$('#acuteBtn');if(b)b.onclick=()=>openAcute();
+  const r=$('#acResume');if(r)r.onclick=()=>openAcute();
+  const x=$('#acDiscard');if(x)x.onclick=()=>{acuteStore(state.acuteRun,true);state.acuteRun=null;save();render()};
+}
+function openAcute(opts){
+  acuteFinalizeStale();
+  if(!state.acuteRun){state.acuteRun={id:uid(),start:Date.now(),step:'breathe',hist:[],urgeBefore:opts&&opts.urge!=null?opts.urge:null,anxBefore:null,feelings:[],need:null,lastAte:null,action:null,
+    timerMin:null,timerEnd:null,ext:0,extMin:0,urgeAfter:null,anxAfter:null,outcome:null,feelAfter:[],trig:null,trigText:'',builtUp:'',breathStart:null,secondEnd:null};save()}
+  stopBreath();acuteEl.hidden=false;document.body.style.overflow='hidden';renderAcute();
+  if(location.hash==='#drang'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+}
+function closeAcute(){clearInterval(acTick);clearTimeout(acPhaseT);acuteEl.hidden=true;acuteEl.innerHTML='';document.body.style.overflow='';render()}
+function acGo(step){const r=state.acuteRun;r.hist=(r.hist||[]).concat(r.step);r.step=step;save();renderAcute();acuteEl.scrollTop=0}
+function acBack(){const r=state.acuteRun;if(!r.hist||!r.hist.length)return;r.step=r.hist.pop();save();renderAcute();acuteEl.scrollTop=0}
+function acFinish(){const r=state.acuteRun;acuteStore(r,false);state.acuteRun=null;save();closeAcute();toast(t('saved'))}
+const mmss=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+function acChips(group,keys,sel,labelFn,multi){sel=sel||[];return `<div class="chips" data-acg="${group}" data-multi="${multi?1:0}">${keys.map(k=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${multi?sel.includes(k):sel===k}">${esc(labelFn(k))}</button>`).join('')}</div>`}
+function contactBlock(){
+  const num=(state.contactNumber||'').trim(),name=(state.contactName||'').trim()||t('sos.defaultName');const msg=t('ac.lonely.msg');
+  if(!num)return `<p class="small muted" style="margin:0">${esc(t('ac.lonely.none'))}</p>`;
+  const digits=num.replace(/[^\d+]/g,'');const intl=digits.startsWith('+')?digits.slice(1):digits.startsWith('00')?digits.slice(2):'';
+  const wa='https://wa.me/'+(intl?intl:'')+'?text='+encodeURIComponent(msg);
+  return `<p class="small muted" style="margin:0">${esc(t('ac.lonely.text'))}</p><div class="ac-msg">„${esc(msg)}“</div>
+   <div class="btnrow"><a class="btn" href="sms:${esc(digits)}&body=${encodeURIComponent(msg)}">${esc(t('ac.lonely.sms'))}</a><a class="btn wa2" href="${esc(wa)}" target="_blank" rel="noopener">${esc(t('ac.lonely.wa'))}</a><button type="button" class="btn ghost" data-copy="${esc(msg)}">${esc(t('copy'))}</button></div>
+   <p class="small muted" style="margin:0">${esc(name)} · ${esc(num)}</p>`}
+function needDetail(k){const r=state.acuteRun;
+  if(k==='hunger'){const a=r.lastAte;return `<p style="margin:0"><b>${esc(t('ac.hunger.q'))}</b></p>${acChips('lastAte',['lt2','2to4','gt4'],a,x=>t('ac.hunger.'+x),false)}
+     ${a==='gt4'?`<p class="ac-tip">${esc(t('ac.hunger.tip'))}</p>`:a==='2to4'?`<p class="ac-tip">${esc(t('ac.hunger.tip2'))}</p>`:a==='lt2'?`<p class="small muted" style="margin:0">${esc(t('ac.hunger.ok'))}</p>`:''}`}
+  if(k==='lonely')return contactBlock();
+  if(k==='exhausted')return `<p class="ac-tip">${esc(t('ac.rest.text'))}</p>`;
+  if(k==='stress')return `<p class="ac-tip">${esc(t('ac.stress.text'))}</p>`;
+  if(k==='bored'){const ideas=t('ideas');const i0=(r.ideaIdx||0);const pick=[0,1,2].map(i=>ideas[(i0+i)%ideas.length]);
+    return `${state.plan&&state.plan.trim()?`<div class="ac-plan"><span class="label">${esc(t('ac.bored.plan'))}</span><p style="margin:4px 0 0;white-space:pre-wrap">${esc(state.plan.trim())}</p></div>`:`<p class="small muted" style="margin:0">${esc(t('ac.bored.noplan'))}</p>`}
+     <span class="label">${esc(t('ac.bored.ideas'))}</span><ul class="ac-ideas">${pick.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><button type="button" class="btn ghost" id="acMoreIdeas">${esc(t('idea.next'))}</button>`}
+  return ''}
+function orderedNeeds(){const r=state.acuteRun;const rec=(state.acuteRecent&&state.acuteRecent.needs)||[];
+  const fromFeel=[...new Set((r.feelings||[]).map(f=>NEED_FROM_FEEL[f]).filter(Boolean))];
+  const score=k=>(fromFeel.includes(k)?0:10)+(rec.includes(k)?rec.indexOf(k):6)+(k==='hunger'&&!fromFeel.length?-1:0);
+  return AC_NEEDS.slice().sort((a,b)=>score(a)-score(b))}
+function timerHTML(endKey){const r=state.acuteRun,end=r[endKey];
+  if(!end)return `<span class="label">${esc(t('ac.time.pick'))}</span><div class="timepick">${[5,10,15].map(n=>`<button type="button" data-tmin="${n}" data-tkey="${endKey}">${esc(t('ac.time.min',{n}))}</button>`).join('')}</div>`;
+  const left=end-Date.now();
+  return `<div class="ac-timer" id="acTimer" data-end="${end}">${mmss(left)}</div>${left<=0?`<p class="ac-tip" style="text-align:center">${esc(t('ac.time.done'))}</p><button type="button" class="btn ghost" id="acPlus5" data-tkey="${endKey}">${esc(t('ac.time.plus5'))}</button>`:''}`}
+function breathCircle(){return `<div class="breath" style="padding-top:4px"><div class="circle" id="acCircle"><span id="acCue">${esc(t('cue.in'))}</span></div></div>`}
+function startAcPhase(){let inhale=true;const ph=()=>{const c=$('#acCircle');if(!c)return;c.style.transitionDuration=(inhale?4:6)+'s';c.className='circle '+(inhale?'in':'out');$('#acCue').textContent=t(inhale?'cue.in':'cue.out');acPhaseT=setTimeout(ph,inhale?4000:6000);inhale=!inhale};ph()}
+function renderAcute(){
+  clearInterval(acTick);clearTimeout(acPhaseT);
+  const r=state.acuteRun;if(!r)return closeAcute();
+  const mi=AC_MAIN.indexOf(r.step);let body='',nav='';
+  const navStd=(nextLabel,skip)=>`<div class="ac-nav">${r.hist&&r.hist.length?`<button class="btn ghost" id="acBack">${esc(t('ac.back'))}</button>`:''}${skip?`<button class="btn ghost" id="acSkip">${esc(t('ac.skip'))}</button>`:''}${nextLabel?`<button class="btn" id="acNext">${esc(nextLabel)}</button>`:''}</div>`;
+  if(r.step==='breathe'){if(!r.breathStart){r.breathStart=Date.now();save()}
+    body=`<h2>${esc(t('ac.breathe.title'))}</h2><p class="muted" style="margin:0">${esc(t('ac.breathe.text'))}</p>${breathCircle()}<div class="ac-timer small-t" id="acTimer" data-end="${r.breathStart+60000}">${mmss(r.breathStart+60000-Date.now())}</div>`;
+    nav=navStd(t('ac.next'),true)}
+  else if(r.step==='name'){
+    body=`<h2>${esc(t('ac.name.title'))}</h2>${scale('acU',t('ac.urge'),r.urgeBefore,t('int.lo'),t('int.hi'))}${scale('acA',t('ac.anx'),r.anxBefore,t('anx.lo'),t('anx.hi'))}
+      <div class="field"><span class="label">${esc(t('ac.feel'))}</span>${acChips('feelings',AC_FEEL,r.feelings,k=>o('feel',k),true)}</div><p class="ac-quote">${esc(t('ac.name.quote'))}</p>`;
+    nav=navStd(t('ac.next'),true)}
+  else if(r.step==='need'){
+    body=`<h2>${esc(t('ac.need.title'))}</h2><p class="muted" style="margin:0">${esc(t('ac.need.text'))}</p><div class="ac-needs">${orderedNeeds().map(k=>`<button type="button" class="bigbtn" data-need="${k}" aria-pressed="${r.need===k}">${esc(t('need.'+k))}</button>${r.need===k?`<div class="need-detail">${needDetail(k)}</div>`:''}`).join('')}</div>`;
+    nav=navStd(t('ac.next'),true)}
+  else if(r.step==='time'){
+    body=`<h2>${esc(t('ac.time.title'))}</h2><p class="ac-tip">${esc(t('ac.time.text'))}</p>${timerHTML('timerEnd')}
+      <div class="field"><span class="label">${esc(t('ac.time.action'))}</span>${acChips('action',AC_ACTS,r.action,k=>t('act.'+k),false)}</div>`;
+    nav=navStd(t('ac.next'),true)}
+  else if(r.step==='check'){
+    body=`<h2>${esc(t('ac.check.title'))}</h2>${scale('acU2',t('ac.urge'),r.urgeAfter??r.urgeBefore,t('int.lo'),t('int.hi'))}${scale('acA2',t('ac.anx'),r.anxAfter??r.anxBefore,t('anx.lo'),t('anx.hi'))}
+      <div class="ac-out"><button type="button" class="bigbtn out-ok" data-out="passed">${esc(t('ac.out.passed'))}</button><button type="button" class="bigbtn" data-out="strong">${esc(t('ac.out.strong'))}</button><button type="button" class="bigbtn" data-out="ate">${esc(t('ac.out.ate'))}</button></div>`;
+    nav=navStd('',false)}
+  else if(r.step==='passed'){
+    body=`<div class="ac-center">${ICON_WAVE.replace('<svg','<svg class="ac-bigicon"')}<h2>${esc(t('ac.passed.title'))}</h2><p class="muted">${esc(t('ac.passed.text'))}</p></div>`;
+    nav=navStd(t('ac.finish'),false)}
+  else if(r.step==='strong'){
+    body=`<h2>${esc(t('ac.strong.title'))}</h2><p class="muted" style="margin:0">${esc(t('ac.strong.text'))}</p>
+      <div class="ac-out"><button type="button" class="bigbtn" data-more="5">${esc(t('ac.strong.more',{n:5}))}</button><button type="button" class="bigbtn" data-more="10">${esc(t('ac.strong.more',{n:10}))}</button></div>
+      <div class="need-detail"><b>${esc(t('ac.strong.contact'))}</b>${contactBlock()}</div>
+      <button type="button" class="sosbtn ac-sos" id="acSos">${ICON.phone}SOS</button>
+      <button type="button" class="bigbtn out-ok" data-out="passed">${esc(t('ac.strong.eased'))}</button>`;
+    nav=navStd(t('ac.finish'),false)}
+  else if(r.step==='ate'){
+    body=`<h2>${esc(t('ac.ate.title'))}</h2><p class="muted" style="margin:0">${esc(t('ac.ate.text'))}</p>${acChips('feelAfter',AF,r.feelAfter,k=>t('af.'+k),true)}
+      <div class="field"><span class="label">${esc(t('ac.trig.title'))}</span>${acChips('trig',AT,r.trig,k=>t('at.'+k),false)}
+      ${r.trig==='lastdrop'?`<label class="label" for="acTrigText">${esc(t('ac.trig.what'))}</label><input type="text" id="acTrigText" value="${esc(r.trigText)}" placeholder="${esc(t('ac.optional'))}">`:''}</div>`;
+    nav=navStd(t('ac.next'),false)}
+  else if(r.step==='reply'){const fa=r.feelAfter||[];const parts=[];
+    if(fa.includes('relieved'))parts.push(`<p class="ac-tip">${esc(t('ac.r.relieved'))}</p><textarea id="acBuilt" placeholder="${esc(t('ac.optional'))}">${esc(r.builtUp)}</textarea>`);
+    if(fa.includes('full'))parts.push(`<p class="ac-tip">${esc(t('ac.r.full'))}</p>`);
+    if(fa.includes('shame'))parts.push(`<div class="compassion"><span class="label">${esc(t('ac.r.shame'))}</span><p>${esc(t('ac.r.shame1'))}</p><p>${esc(t('ac.r.shame2'))}</p><p>${esc(t('ac.r.shame3'))}</p></div>`);
+    if(r.trig==='lastdrop')parts.push(`<p class="ac-tip">${esc(t('ac.r.lastdrop'))}</p>${fa.includes('relieved')?'':`<label class="label" for="acBuilt">${esc(t('ac.r.builtup'))}</label><textarea id="acBuilt" placeholder="${esc(t('ac.optional'))}">${esc(r.builtUp)}</textarea>`}`);
+    if(fa.includes('compensate'))parts.unshift(`<div class="need-detail"><p style="margin:0" class="ac-tip">${esc(t('ac.r.compensate'))}</p><button type="button" class="btn" id="acSecond">${esc(t('ac.r.second'))}</button></div>`);
+    if(!parts.length)parts.push(`<p class="ac-tip">${esc(t('ac.r.default'))}</p>`);
+    body=`<h2>${esc(t('ac.reply.title'))}</h2>${parts.join('')}`;nav=navStd(t('ac.finish'),false)}
+  else if(r.step==='second'){
+    body=`<h2>${esc(t('ac.second.title'))}</h2><p class="ac-quote">${esc(t('ac.r.compensate'))}</p>${breathCircle()}${timerHTML('secondEnd')}
+      <div class="need-detail"><b>${esc(t('ac.strong.contact'))}</b>${contactBlock()}</div>
+      <button type="button" class="sosbtn ac-sos" id="acSos">${ICON.phone}SOS</button><p class="ac-tip">${esc(t('ac.second.meal'))}</p>`;
+    nav=navStd(t('ac.finish'),false)}
+  acuteEl.innerHTML=`<div class="ac-in" role="dialog" aria-modal="true" aria-label="${esc(t('ac.title'))}">
+    <div class="ac-top"><span class="label">${mi>=0?esc(t('ac.step',{n:mi+1})):esc(t('ac.title'))}</span><button class="linkbtn" id="acEnd">${esc(t('ac.end'))}</button></div>
+    <div class="ac-dots">${AC_MAIN.map((_,i)=>`<i class="${(mi<0||i<=mi)?'on':''}"></i>`).join('')}</div>
+    <div class="ac-body">${body}</div>${nav}</div>`;
+  /* Bindings */
+  $('#acEnd').onclick=()=>closeAcute();
+  const bk=$('#acBack');if(bk)bk.onclick=acBack;
+  const nextOf={breathe:'name',name:'need',need:'time',time:'check',ate:'reply'};
+  const sk=$('#acSkip');if(sk)sk.onclick=()=>acGo(nextOf[r.step]);
+  const nx=$('#acNext');if(nx)nx.onclick=()=>{if(['passed','strong','reply','second'].includes(r.step))acFinish();else acGo(nextOf[r.step])};
+  acuteEl.querySelectorAll('input[type=range]').forEach(rg=>{const f={acU:'urgeBefore',acA:'anxBefore',acU2:'urgeAfter',acA2:'anxAfter'}[rg.id];
+    if(f&&r[f]==null){r[f]=+rg.value;save()}
+    rg.oninput=()=>{$('#'+rg.id+'o').textContent=rg.value;r[f]=+rg.value;save()}});
+  acuteEl.querySelectorAll('[data-acg]').forEach(g=>{const key=g.dataset.acg,multi=g.dataset.multi==='1';
+    g.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+      if(multi){const on=c.getAttribute('aria-pressed')!=='true';c.setAttribute('aria-pressed',on);r[key]=[...g.querySelectorAll('.chip[aria-pressed="true"]')].map(x=>x.dataset.k);save()}
+      else{const on=c.getAttribute('aria-pressed')!=='true';r[key]=on?c.dataset.k:null;save();
+        if(key==='lastAte'||key==='trig'){renderAcute()}else{g.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c&&on))}}})});
+  acuteEl.querySelectorAll('[data-need]').forEach(b=>b.onclick=()=>{r.need=r.need===b.dataset.need?null:b.dataset.need;save();renderAcute()});
+  const mi2=$('#acMoreIdeas');if(mi2)mi2.onclick=()=>{r.ideaIdx=(r.ideaIdx||0)+3;save();renderAcute()};
+  acuteEl.querySelectorAll('[data-tmin]').forEach(b=>b.onclick=()=>{const n=+b.dataset.tmin;r[b.dataset.tkey]=Date.now()+n*60000;if(b.dataset.tkey==='timerEnd'&&r.timerMin==null)r.timerMin=n;save();renderAcute()});
+  const p5=$('#acPlus5');if(p5)p5.onclick=()=>{const k=p5.dataset.tkey;r[k]=Math.max(Date.now(),r[k]||0)+5*60000;if(k==='timerEnd'){r.ext=(r.ext||0)+1;r.extMin=(r.extMin||0)+5}save();renderAcute()};
+  acuteEl.querySelectorAll('[data-out]').forEach(b=>b.onclick=()=>{r.outcome=b.dataset.out;save();acGo(b.dataset.out)});
+  acuteEl.querySelectorAll('[data-more]').forEach(b=>b.onclick=()=>{const n=+b.dataset.more;r.timerEnd=Date.now()+n*60000;r.ext=(r.ext||0)+1;r.extMin=(r.extMin||0)+n;save();acGo('time')});
+  const so=$('#acSos');if(so)so.onclick=openSos;
+  const sec=$('#acSecond');if(sec)sec.onclick=()=>acGo('second');
+  const tt=$('#acTrigText');if(tt)tt.oninput=e=>{r.trigText=e.target.value;save()};
+  const bu=$('#acBuilt');if(bu)bu.oninput=e=>{r.builtUp=e.target.value;save()};
+  acuteEl.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copyText(b.dataset.copy));
+  if($('#acCircle'))startAcPhase();
+  const tm=$('#acTimer');
+  if(tm){const end=+tm.dataset.end;let wasDone=end<=Date.now();
+    acTick=setInterval(()=>{const el=$('#acTimer');if(!el)return clearInterval(acTick);const left=end-Date.now();el.textContent=mmss(left);
+      if(left<=0&&!wasDone){wasDone=true;if(r.step!=='breathe')renderAcute()}},500)}
+}
+function offerAcute(level){
+  showModal(`<div class="dialog-head"><h2 id="mO">${esc(t('ac.offer.title'))}</h2><button class="iconbtn" id="mClose" aria-label="${esc(t('close'))}">${ICON.x}</button></div>
+    <p class="muted" style="margin:0">${esc(t('ac.offer.text'))}</p>
+    <button class="acutebtn" id="offerYes"><span class="ring">${ICON_WAVE}</span><span class="txt"><b>${esc(t('ac.offer.yes'))}</b><span>${esc(t('ac.title'))}</span></span></button>
+    <button class="btn ghost" id="offerNo">${esc(t('ac.offer.no'))}</button>`,'mO');
+  $('#offerYes').onclick=()=>{closeModal();openAcute({urge:level})};
+  $('#offerNo').onclick=closeModal;
+}
+function openAcuteDetail(e){
+  const v=x=>x==null?'–':x;const parts=[];
+  parts.push(`<p style="margin:0"><b>${esc(t('ac.urge'))}</b> ${v(e.urgeBefore)} → ${v(e.urgeAfter)} · <b>${esc(t('ac.anx'))}</b> ${v(e.anxBefore)} → ${v(e.anxAfter)}</p>`);
+  if(e.feelings&&e.feelings.length)parts.push(`<div class="tags">${e.feelings.map(f=>`<span class="tag">${esc(o('feel',f))}</span>`).join('')}</div>`);
+  if(e.need)parts.push(`<p class="small" style="margin:0"><b>${esc(t('ac.detail.need'))}:</b> ${esc(t('need.'+e.need))}</p>`);
+  if(e.action)parts.push(`<p class="small" style="margin:0"><b>${esc(t('ac.detail.action'))}:</b> ${esc(t('act.'+e.action))}</p>`);
+  if(e.timerMin)parts.push(`<p class="small" style="margin:0"><b>${esc(t('ac.detail.timer'))}:</b> ${e.timerMin}${e.extMin?' + '+e.extMin:''} min</p>`);
+  if(e.feelAfter&&e.feelAfter.length)parts.push(`<p class="small" style="margin:0"><b>${esc(t('ac.detail.after'))}:</b> ${e.feelAfter.map(f=>esc(t('af.'+f))).join(', ')}</p>`);
+  if(e.trig)parts.push(`<p class="small" style="margin:0">${esc(t('at.'+e.trig))}${e.trigText?': '+esc(e.trigText):''}</p>`);
+  if(e.builtUp)parts.push(`<p class="small muted" style="margin:0">${esc(e.builtUp)}</p>`);
+  showModal(`<div class="dialog-head"><h2 id="mD">${esc(t('card.acute'))} · ${esc(fmtTime(e.ts))}</h2><button class="iconbtn" id="mClose" aria-label="${esc(t('close'))}">${ICON.x}</button></div>
+    <p class="label" style="margin:0">${esc(t('ac.o.'+(e.outcome||'none')))}</p>${parts.join('')}
+    <div class="btnrow"><button class="btn ghost" id="adDel" style="color:var(--sos)">${esc(t('entry.del'))}</button></div>
+    <div id="adDelC" class="banner" hidden><span>${esc(t('entry.del.q'))}</span><span class="btnrow"><button class="btn danger" id="adDelY">${esc(t('del'))}</button><button class="btn ghost" id="adDelN">${esc(t('cancel'))}</button></span></div>`,'mD');
+  $('#adDel').onclick=()=>$('#adDelC').hidden=false;$('#adDelN').onclick=()=>$('#adDelC').hidden=true;
+  $('#adDelY').onclick=()=>{state.entries=state.entries.filter(x=>x.id!==e.id);save();closeModal();render();toast(t('entry.deleted'))};
+}
+function acuteHistory(recent){
+  const L=recent.filter(e=>e.type==='acute');
+  if(!L.length)return `<section class="panel"><h3>${esc(t('card.acute'))}</h3><p class="small muted" style="margin:6px 0 0">${esc(t('ac.hist.empty'))}</p></section>`;
+  const passed=L.filter(e=>e.outcome==='passed').length;
+  const both=L.filter(e=>e.urgeBefore!=null&&e.urgeAfter!=null);
+  const avg=a=>(a.reduce((s,x)=>s+x,0)/a.length).toLocaleString(loc(),{maximumFractionDigits:1});
+  const cnt=arr=>{const m={};arr.forEach(x=>m[x]=(m[x]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,4)};
+  const fe=cnt(L.flatMap(e=>e.feelings||[])),tr=cnt(L.map(e=>e.trig).filter(Boolean));
+  return `<section class="panel acute-hist"><h3>${esc(t('card.acute'))}</h3>
+    <p class="ac-sum">${esc(t('ac.hist.summary',{n:L.length,p:passed}))}</p>
+    ${both.length?`<p class="small muted" style="margin:2px 0 0">${esc(t('ac.hist.avg',{a:avg(both.map(e=>e.urgeBefore)),b:avg(both.map(e=>e.urgeAfter))}))}</p>`:''}
+    ${fe.length?`<p class="label" style="margin:12px 0 4px">${esc(t('ac.hist.feel'))}</p><div class="tags">${fe.map(([k,n])=>`<span class="tag">${esc(o('feel',k))} ×${n}</span>`).join('')}</div>`:''}
+    ${tr.length?`<p class="label" style="margin:12px 0 4px">${esc(t('ac.hist.trig'))}</p><div class="tags">${tr.map(([k,n])=>`<span class="tag">${esc(t('at.'+k))} ×${n}</span>`).join('')}</div>`:''}
+    <p class="note" style="margin:10px 0 0">${esc(t('ac.hist.note'))}</p></section>`;
+}
+window.addEventListener('hashchange',()=>{if(location.hash==='#drang')openAcute()});
+
+/* ---------- {app} unterstützen (Testversion, keine echte Zahlung) ---------- */
+const TIP_AMOUNTS={EUR:[2,5,10],GBP:[2,4,8],SEK:[25,50,100]};
+function tipCurrency(){return state.country==='UK'?'GBP':state.country==='SE'?'SEK':'EUR'}
+function fmtMoney(v,cur){try{return new Intl.NumberFormat(loc(),{style:'currency',currency:cur,maximumFractionDigits:0}).format(v)}catch(e){return v+' '+cur}}
+function supportSection(){const cur=tipCurrency(),am=TIP_AMOUNTS[cur];const done=state.supported;
+  return `<section class="panel field" id="supPanel">
+    <h3>${esc(t('sup.title'))}</h3>
+    <p class="small muted" style="margin:0">${esc(t('sup.text'))}</p>
+    <div class="tipgrid">${['small','medium','large'].map((k,i)=>`<button type="button" data-tip="${k}" data-amt="${am[i]}"><b>${esc(fmtMoney(am[i],cur))}</b><span>${esc(t('sup.'+k))}</span></button>`).join('')}</div>
+    <div id="tipThanks" class="tipthanks" ${done?'':'hidden'}><b>${esc(t('sup.thanks'))}</b><span class="small muted">${esc(t('sup.thanks.test'))}</span></div>
+    <p class="note" style="margin:0">${esc(t('sup.test'))}</p>
+  </section>
+  <section class="panel field" id="plansPanel">
+    <h3>${esc(t('plans.title'))}</h3>
+    <p class="small muted" style="margin:0">${esc(t('plans.text'))}</p>
+    <div class="plans">
+      <div class="plan cur"><div class="plan-head"><b>${esc(t('plan.free'))}</b><span class="soon2">${esc(t('plans.current'))}</span></div><span class="small muted">${esc(t('plan.free.price'))}</span><ul><li>${esc(t('plan.free.f1'))}</li><li>${esc(t('plan.free.f2'))}</li></ul></div>
+      <div class="plan"><div class="plan-head"><b>${esc(t('plan.ther'))}</b><span class="soon2">${esc(t('plans.soon'))}</span></div><span class="small muted">${esc(t('plan.ther.price'))} · ${esc(t('plan.ther.who'))}</span><ul>${[1,2,3].map(i=>`<li>${esc(t('plan.ther.f'+i))}</li>`).join('')}</ul></div>
+    </div>
+  </section>`}
+function bindSupport(){sheet.querySelectorAll('[data-tip]').forEach(b=>b.onclick=()=>{
+  state.supported={at:Date.now(),size:b.dataset.tip,amount:+b.dataset.amt,currency:tipCurrency(),test:true};save();
+  const th=$('#tipThanks');if(th){th.hidden=false;th.scrollIntoView({block:'nearest',behavior:'smooth'})}toast(t('sup.thanks.test'))})}
+
+/* ---------- Export für die Therapie (PDF, v13) ---------- */
+const JSPDF_URL='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+let jspdfP=null;
+function loadJsPDF(){
+  if(window.jspdf&&window.jspdf.jsPDF)return Promise.resolve(window.jspdf);
+  if(!jspdfP)jspdfP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src=JSPDF_URL;sc.async=true;
+    sc.onload=()=>window.jspdf&&window.jspdf.jsPDF?res(window.jspdf):rej(new Error('jspdf missing'));
+    sc.onerror=()=>{jspdfP=null;sc.remove();rej(new Error('jspdf load failed'))};document.head.appendChild(sc)});
+  return jspdfP;
+}
+/* Standard-PDF-Schrift kennt nur westeuropäische Zeichen → wenige Sonderzeichen ersetzen */
+const pdfSafe=s=>String(s??'').replace(/→/g,'->').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/×/g,'x').replace(/[   ]/g,' ')
+  .replace(/[^\x09\x0A\x0D\x20-\x7E -ÿ–—‘’‚“”„•…€]/g,'');
+function expEntries(days){const now=new Date();now.setHours(0,0,0,0);const from=new Date(now);from.setDate(from.getDate()-(days-1));
+  const list=state.entries.filter(e=>!e.example&&e.ts>=from.getTime()).sort((a,b)=>a.ts-b.ts);return {from:from.getTime(),to:Date.now(),list}}
+function entryLine(e,notes){const v=x=>x==null?'–':x;let main='',sub=[];
+  if(e.type==='meal'){main=o('slot',e.slot)+(txt(e.what)?' – '+txt(e.what):'');
+    if(e.hunger!=null)sub.push(t('tag.hunger',{n:e.hunger}));if(e.full!=null)sub.push(t('tag.full',{n:e.full}));
+    if((e.fBefore||[]).length)sub.push(t('f.fBefore')+': '+e.fBefore.map(f=>o('feel',f)).join(', '));
+    if((e.fAfter||[]).length)sub.push(t('f.fAfter')+': '+e.fAfter.map(f=>o('feel',f)).join(', '));
+    if(txt(e.where))sub.push(t('f.where').replace(/[?¿]/g,'')+': '+txt(e.where))}
+  else if(e.type==='urge'){main=t('card.urge')+' – '+(e.kinds||[]).map(x=>o('urge',x)).join(', ')+' · '+t('tag.strength',{n:e.intensity})+' · '+t('outcome.'+(e.outcome||'passed'));
+    if((e.triggers||[]).length)sub.push(t('pdf.trigger')+': '+e.triggers.map(x=>o('trig',x)).join(', '));
+    if((e.helped||[]).length)sub.push(t('f.helped').replace(/[?¿]/g,'')+': '+e.helped.map(x=>o('help',x)).join(', '))}
+  else if(e.type==='mood'){main=t('card.mood')+' – '+(e.feelings||[]).map(f=>o('feel',f)).join(', ')+' · '+t('tag.intensity',{n:e.intensity})}
+  else if(e.type==='log'){const yn=x=>x===true?t('yes'):x===false?t('no'):'–';
+    main=t('card.log')+' – '+t('log.summary',{p:yn(e.purged),u:yn(e.urge)+(e.urge?' ('+e.urgeLevel+')':''),a:yn(e.anxiety)+(e.anxiety?' ('+e.anxLevel+')':'')});
+    if((e.feelings||[]).length)sub.push(e.feelings.map(f=>o('feel',f)).join(', '))}
+  else if(e.type==='acute'){main=t('card.acute')+' – '+t('ac.entry',{a:v(e.urgeBefore),b:v(e.urgeAfter),o:t('ac.o.'+(e.outcome||'none'))});
+    if((e.feelings||[]).length)sub.push(e.feelings.map(f=>o('feel',f)).join(', '));
+    if(e.need)sub.push(t('pdf.need')+': '+t('need.'+e.need));if(e.action)sub.push(t('pdf.action')+': '+t('act.'+e.action));
+    if((e.feelAfter||[]).length)sub.push(t('pdf.after')+': '+e.feelAfter.map(f=>t('af.'+f)).join(', '));
+    if(e.trig)sub.push(t('pdf.trigger')+': '+t('at.'+e.trig)+(e.trigText&&notes?' ('+e.trigText+')':''));
+    if(notes&&e.builtUp)sub.push(e.builtUp)}
+  const note=notes&&txt(e.note)?txt(e.note):'';
+  return {time:fmtTime(e.ts),main,sub:sub.join(' · '),note};
+}
+function buildPdf(jspdf,days,notes){
+  const {jsPDF}=jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,H=297,M=18,CW=W-2*M;let y=M;
+  const C={ink:[29,43,41],muted:[90,107,103],accent:[47,117,104],urge:[110,95,168],line:[207,218,214]};
+  const col=c=>doc.setTextColor(c[0],c[1],c[2]);
+  const ensure=h=>{if(y+h>H-M-8){doc.addPage();y=M}};
+  const text=(s,size,style,color,indent)=>{indent=indent||0;doc.setFont('helvetica',style||'normal');doc.setFontSize(size);col(color||C.ink);
+    const lines=doc.splitTextToSize(pdfSafe(s),CW-indent);const lh=size*0.42;
+    lines.forEach(l=>{ensure(lh);doc.text(l,M+indent,y+lh*0.8);y+=lh});};
+  const gap=h=>{y+=h};
+  const rule=()=>{ensure(3);doc.setDrawColor(...C.line);doc.setLineWidth(0.3);doc.line(M,y,W-M,y);y+=3};
+  const {from,to,list}=expEntries(days);
+  const dFmt=ts=>new Date(ts).toLocaleDateString(loc(),{day:'numeric',month:'long',year:'numeric'});
+  /* Kopf */
+  text(APP_NAME,10,'bold',C.accent);gap(1);
+  text(t('pdf.title'),18,'bold',C.ink);gap(1);
+  text(t('pdf.period',{a:dFmt(from),b:dFmt(to)})+' · '+t('pdf.created',{d:dFmt(Date.now())}),9.5,'normal',C.muted);gap(3);rule();
+  if(!list.length){text(t('pdf.empty'),11,'normal',C.ink)}
+  else{
+    /* Überblick */
+    text(t('pdf.overview'),13,'bold',C.ink);gap(1.5);
+    const dayKeys=[];for(let i=0;i<days;i++){const d=new Date(from);d.setDate(d.getDate()+i);dayKeys.push(dayKey(d.getTime()))}
+    const meals=list.filter(e=>e.type==='meal');const mealDays=dayKeys.filter(k=>meals.filter(m=>dayKey(m.ts)===k).length>=3).length;
+    const urges=list.filter(e=>e.type==='urge'),logs=list.filter(e=>e.type==='log'),ac=list.filter(e=>e.type==='acute');
+    const fmt1=a=>a.length?(a.reduce((s,x)=>s+x,0)/a.length).toLocaleString(loc(),{maximumFractionDigits:1}):'–';
+    const lines=[t('pdf.mealdays',{n:mealDays,d:days}),t('pdf.meals',{n:meals.length}),t('pdf.urges',{n:urges.length,p:urges.filter(u=>u.outcome==='passed').length})];
+    if(ac.length){const both=ac.filter(e=>e.urgeBefore!=null&&e.urgeAfter!=null);lines.push(t('pdf.acute',{name:t('card.acute'),n:ac.length,p:ac.filter(e=>e.outcome==='passed').length,a:fmt1(both.map(e=>e.urgeBefore)),b:fmt1(both.map(e=>e.urgeAfter))}))}
+    if(logs.length){lines.push(t('pdf.logs',{n:logs.length,k:logs.filter(l=>l.purged===true).length}));
+      lines.push(t('pdf.anx',{a:fmt1(logs.filter(l=>l.urge===true).map(l=>l.anxLevel||0)),b:fmt1(logs.filter(l=>l.urge===false).map(l=>l.anxLevel||0))}))}
+    lines.forEach(l=>text('•  '+l,10.5,'normal',C.ink,0));gap(2);
+    const cnt=arr=>{const m={};arr.forEach(x=>m[x]=(m[x]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6)};
+    const block=(title,rows)=>{if(!rows.length)return;ensure(12);text(title,10.5,'bold',C.ink);text(rows.map(([k,n])=>k+' ('+n+')').join(', '),10,'normal',C.muted);gap(2)};
+    block(t('pdf.triggers'),cnt([...urges.flatMap(u=>u.triggers||[]).map(k=>o('trig',k)),...ac.map(e=>e.trig).filter(Boolean).map(k=>t('at.'+k))]));
+    block(t('pdf.feelings'),cnt(list.flatMap(e=>(e.type==='mood'||e.type==='log'||e.type==='acute')?(e.feelings||[]):e.type==='meal'?(e.fBefore||[]):[]).map(k=>o('feel',k))));
+    block(t('pdf.helped'),cnt([...urges.filter(u=>u.outcome!=='happened').flatMap(u=>u.helped||[]).map(k=>o('help',k)),...ac.filter(e=>e.outcome==='passed'&&e.action).map(e=>t('act.'+e.action))]));
+    if(logs.length){ensure(30);text(t('pdf.times'),10.5,'bold',C.ink);gap(1);
+      const bucket=ts=>{const h=new Date(ts).getHours();return h>=5&&h<11?0:h>=11&&h<14?1:h>=14&&h<18?2:h>=18&&h<22?3:4};
+      const rows=[['row.urge',l=>l.urge===true],['row.purged',l=>l.purged===true],['row.anx',l=>l.anxLevel>=5]];
+      const c0=36,cw=(CW-c0)/5;doc.setFontSize(8.5);doc.setFont('helvetica','bold');col(C.muted);
+      [0,1,2,3,4].forEach(i=>doc.text(pdfSafe(t('bs.'+i)),M+c0+cw*i+cw/2,y+3,{align:'center'}));y+=5;
+      rows.forEach(([lab,fn])=>{const c=[0,0,0,0,0];logs.filter(fn).forEach(l=>c[bucket(l.ts)]++);doc.setFont('helvetica','normal');doc.setFontSize(9.5);col(C.ink);
+        doc.text(pdfSafe(t(lab)),M,y+3.5);c.forEach((n,i)=>{doc.text(n?String(n):'·',M+c0+cw*i+cw/2,y+3.5,{align:'center'})});y+=5.5});
+      text(t('lp.ranges'),8,'normal',C.muted);gap(2)}
+    rule();
+    /* Tag für Tag */
+    text(t('pdf.days'),13,'bold',C.ink);gap(1.5);
+    const dayDate=i=>{const d=new Date(from);d.setDate(d.getDate()+i);return d};
+    let emptyRun=[];
+    const flushEmpty=()=>{if(!emptyRun.length)return;ensure(8);
+      const a=dayDate(emptyRun[0]),z=dayDate(emptyRun[emptyRun.length-1]);
+      const label=emptyRun.length===1?a.toLocaleDateString(loc(),{weekday:'long',day:'numeric',month:'long'}):a.toLocaleDateString(loc(),{day:'numeric',month:'long'})+' – '+z.toLocaleDateString(loc(),{day:'numeric',month:'long'});
+      text(label+(lang==='fr'?' : ':': ')+t('pdf.none'),9.5,'normal',C.muted);gap(1.5);emptyRun=[]};
+    dayKeys.forEach((k,idx)=>{const es=list.filter(e=>dayKey(e.ts)===k);
+      if(!es.length){emptyRun.push(idx);return}
+      flushEmpty();const d=dayDate(idx);
+      ensure(14);text(d.toLocaleDateString(loc(),{weekday:'long',day:'numeric',month:'long'}),10.5,'bold',C.accent);
+      es.forEach(e=>{const L=entryLine(e,notes);ensure(10);
+        doc.setFont('helvetica','normal');doc.setFontSize(9.5);col(C.muted);doc.text(pdfSafe(L.time),M,y+3.4);
+        const save=y;text(L.main,9.5,'bold',e.type==='urge'||e.type==='acute'?C.urge:C.ink,14);if(y<save+4)y=save+4;
+        if(L.sub)text(L.sub,9,'normal',C.muted,14);
+        if(L.note)text(t('pdf.note')+(lang==='fr'?' : ':': ')+L.note,9,'italic',C.ink,14);gap(1.2)});
+      gap(1.5)});
+    flushEmpty();
+  }
+  /* Fußzeile auf allen Seiten */
+  const n=doc.getNumberOfPages();
+  for(let i=1;i<=n;i++){doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(8);col(C.muted);
+    doc.setDrawColor(...C.line);doc.line(M,H-12,W-M,H-12);
+    doc.text(pdfSafe(t('pdf.footer')),M,H-8);doc.text(pdfSafe(t('pdf.page',{p:i,n})),W-M,H-8,{align:'right'})}
+  return doc;
+}
+async function savePdfBlob(blob,filename){
+  const api=window.claude&&typeof window.claude.use==='function'?await window.claude.use('downloads').catch(()=>null):null;
+  if(api){try{await api.save({filename,data:blob});return 'saved'}catch(e){if(e&&e.code==='declined')return 'declined';if(e&&e.code==='rate_limited')return 'declined';}}
+  try{const file=new File([blob],filename,{type:'application/pdf'});
+    if(!api&&navigator.canShare&&navigator.canShare({files:[file]})&&/iPhone|iPad|iPod/.test(navigator.userAgent)){await navigator.share({files:[file],title:filename});return 'shared'}}
+  catch(e){if(e&&e.name==='AbortError')return 'declined'}
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);return 'saved';
+}
+function exportSection(){const ex=state.exportPrefs||{days:14,notes:true};
+  return `<section class="panel field" id="expPanel">
+    <h3>${esc(t('exp.title'))}</h3>
+    <p class="small muted" style="margin:0">${esc(t('exp.text'))}</p>
+    <span class="label">${esc(t('exp.period'))}</span>
+    <div class="seg" role="group" aria-label="${esc(t('exp.period'))}">${[7,14,30].map(d=>`<button type="button" data-expdays="${d}" aria-pressed="${ex.days===d}">${esc(t('exp.days',{n:d}))}</button>`).join('')}</div>
+    <label class="switchrow" for="expNotes"><span>${esc(t('exp.notes'))}</span><input type="checkbox" id="expNotes" role="switch" ${ex.notes?'checked':''}></label>
+    <p class="note" style="margin:0">${esc(t('exp.private'))}${state.entries.some(e=>e.example)?' '+esc(t('exp.examples')):''}</p>
+    <button type="button" class="btn" id="expBtn">${esc(t('exp.btn'))}</button>
+  </section>`}
+function bindExport(){
+  loadJsPDF().catch(()=>{});
+  const ex=state.exportPrefs||(state.exportPrefs={days:14,notes:true});
+  sheet.querySelectorAll('[data-expdays]').forEach(b=>b.onclick=()=>{ex.days=+b.dataset.expdays;save();sheet.querySelectorAll('[data-expdays]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  const nt=$('#expNotes');if(nt)nt.onchange=()=>{ex.notes=nt.checked;save()};
+  const btn=$('#expBtn');if(!btn)return;
+  btn.onclick=async()=>{if(btn.disabled)return;btn.disabled=true;const label=btn.textContent;btn.textContent=t('exp.busy');
+    try{const jp=await loadJsPDF();const doc=buildPdf(jp,ex.days,ex.notes);const blob=doc.output('blob');
+      const d=new Date();const fn=`${APP_NAME}-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.pdf`;
+      const r=await savePdfBlob(blob,fn);toast(t(r==='saved'?'exp.done':r==='shared'?'exp.shared':'exp.declined'))}
+    catch(e){console.error(e);toast(t('exp.fail'))}
+    finally{btn.disabled=false;btn.textContent=label}};
+}
 
 /* ---------- Verlauf ---------- */
 function renderHistory(){
@@ -959,12 +1426,15 @@ function renderHistory(){
       <div class="legend"><span><i style="background:var(--accent)"></i>${esc(t('legend.meal'))}</span><span><i style="background:var(--urge);border-radius:50%"></i>${esc(t('legend.urge'))}</span></div>
       <p class="note" style="margin:10px 0 0">${esc(t('strip.note'))}</p>
     </section>
+    ${acuteHistory(recent)}
     ${logPatterns(recent,days)}
     <section class="panel"><h3>${esc(t('rank.triggers'))}</h3>${rank(trig,'var(--urge)')}</section>
     <section class="panel"><h3>${esc(t('rank.helped'))}</h3>${rank(help,'var(--accent)')}</section>
     <section class="panel"><h3>${esc(t('rank.feelings'))}</h3>${rank(feel,'var(--mood)')}</section>
     <p class="note">${esc(t('hist.foot'))}</p>
+    <button type="button" class="btn ghost" id="histExport" style="align-self:flex-start">${esc(t('exp.hist'))}</button>
   </div>`;
+  const hx=$('#histExport');if(hx)hx.onclick=()=>{openSettings();setTimeout(()=>{const e=$('#expPanel');if(e)e.scrollIntoView({block:'start',behavior:'smooth'})},60)};
   app.querySelectorAll('.col').forEach(b=>b.onclick=()=>{viewDay=+b.dataset.day;tab='heute';showOverview=true;render();scrollTo(0,0)});
 }
 function logPatterns(recent,days){
@@ -1001,6 +1471,7 @@ function renderExercises(){
   app.innerHTML=`
   <header class="top"><div class="title"><div class="label">${esc(t('ex.label'))}</div><h1>${esc(t('ex.title'))}</h1></div>${headTools(false)}</header>
   <div class="view">
+    ${acuteCardHTML()}
     <section class="panel">
       <h3>${esc(t('wave.title'))}</h3>
       <p class="small muted" style="margin:4px 0 12px">${esc(t('wave.text'))}</p>
@@ -1027,6 +1498,7 @@ function renderExercises(){
     <p class="note">${esc(t('ex.foot'))}</p>
   </div>`;
   renderGround();
+  bindAcuteCards();
   app.querySelectorAll('[data-mode]').forEach(x=>x.onclick=()=>{const was=running;stopBreath();breathMode=x.dataset.mode;
     app.querySelectorAll('[data-mode]').forEach(y=>y.setAttribute('aria-pressed',y===x));$('#bhint').textContent=t('mode.'+breathMode+'.hint');
     if(was)toggleBreath();else $('#cue').textContent=t('cue.ready')});
@@ -1122,6 +1594,7 @@ function openSettings(){
     ${state.entries.some(e=>e.example)?`<section class="panel field">
       <h3>${esc(t('ex.title2'))}</h3><p class="small muted" style="margin:0">${esc(t('ex.text'))}</p>
       <div class="btnrow"><button class="btn ghost" id="clearEx">${esc(t('ex.remove'))}</button></div></section>`:''}
+    ${exportSection()}
     <section class="panel field">
       <h3>${esc(t('data.title'))}</h3>
       <p class="small muted" style="margin:0">${esc(t('data.text'))}</p>
@@ -1130,6 +1603,7 @@ function openSettings(){
       <div class="btnrow"><button class="btn ghost" id="wipe" style="color:var(--sos)">${esc(t('data.wipe'))}</button></div>
       <div id="wipeConfirm" class="banner" hidden><span>${esc(t('data.wipe.q'))}</span><span class="btnrow"><button class="btn danger" id="wipeYes">${esc(t('del'))}</button><button class="btn ghost" id="wipeNo">${esc(t('cancel'))}</button></span></div>
     </section>
+    ${supportSection()}
     <section class="panel field" id="fbPanel">
       <h3>${esc(t('fb.title'))}</h3>
       <p class="small muted" style="margin:0">${esc(t('fb.text'))}</p>
@@ -1144,6 +1618,7 @@ function openSettings(){
     </section>
     <p class="note">${esc(t('ver'))}</p>
     <p class="note">${esc(t('disclaimer'))}</p>
+    <p class="copyright">${esc(t('copyright'))}</p>
   </div>`;
   sheet.hidden=false;document.body.style.overflow='hidden';
   $('#closeSet').onclick=()=>closeSheet(true);
@@ -1161,6 +1636,8 @@ function openSettings(){
     state=Object.assign({entries:[],plan:'',contactName:'',contactNumber:'',seeded:true,seededLog:true},d);if(!state.schema||state.schema<2)migrate();
     if(!state.checkins)state.checkins={on:true,slots:[{id:'midday',time:'13:00',on:true},{id:'afternoon',time:'17:00',on:true},{id:'evening',time:'22:00',on:true}],dismissed:{}};lang=T[state.lang]?state.lang:'en';save();toast(t('data.restored'));closeSheet(true)}catch(e){toast(t('data.invalid'))}};
   const ce=$('#clearEx');if(ce)ce.onclick=()=>{state.entries=state.entries.filter(e=>!e.example);save();toast(t('ex.removed'));closeSheet(true)};
+  bindSupport();
+  bindExport();
   const fbText=()=>{const f=state.fb;return `${t('fb.msg')}\n\n${t('fb.m.rate')}: ${f.rate?f.rate+'/5':'–'}\n\n${t('fb.m.good')}:\n${f.good||'–'}\n\n${t('fb.m.bad')}:\n${f.bad||'–'}\n\n${t('fb.m.miss')}:\n${f.miss||'–'}`};
   const fbSync=()=>{$('#fbWa').href='https://wa.me/?text='+encodeURIComponent(fbText())};fbSync();
   [['fbGood','good'],['fbBad','bad'],['fbMiss','miss']].forEach(([id,k])=>$('#'+id).oninput=e=>{state.fb[k]=e.target.value;save();fbSync()});
@@ -1253,12 +1730,15 @@ function openSheet(e){
     const i=state.entries.findIndex(x=>x.id===rec.id);if(i>=0)state.entries[i]=rec;else state.entries.push(rec);
     save();viewDay=rec.ts;closeSheet();
     toast(ty==='urge'&&rec.outcome==='passed'?t('saved.wave'):t('saved'));
+    const lvl=ty==='urge'?rec.intensity:(ty==='log'&&rec.urge)?rec.urgeLevel:0;
+    if(isNew&&lvl>=5&&!(ty==='urge'&&rec.outcome==='passed'))setTimeout(()=>offerAcute(lvl),350);
   };
 }
 function closeSheet(keepTab){sheet.hidden=true;sheet.innerHTML='';sheet.dataset.kind='';document.body.style.overflow='';if(!keepTab)tab='heute';render()}
 
 load();
 const h0=(location.hash||'').slice(1);if(['heute','verlauf','uebungen'].includes(h0))tab=h0;
+acuteFinalizeStale();
 render();
 function showWelcome(){let w=document.querySelector('.welcome');if(!w){w=document.createElement('div');w.className='welcome';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');document.body.appendChild(w)}
   w.innerHTML=`<div class="in"><div class="langs" role="group" aria-label="${esc(t('lang.title'))}">${LANGS.map(([k,n])=>`<button data-wl="${k}" aria-pressed="${k===lang}" lang="${k}">${esc(n)}</button>`).join('')}</div>
@@ -1276,6 +1756,7 @@ function showWelcome(){let w=document.querySelector('.welcome');if(!w){w=documen
   w.querySelectorAll('[data-wl]').forEach(b=>b.onclick=()=>{setLang(b.dataset.wl);showWelcome()});
   w.querySelector('#welcomeGo').onclick=()=>{state.welcomed=true;save();w.remove();document.body.style.overflow=''};}
 if(!state.welcomed)showWelcome();
+if(h0==='drang')openAcute();
 
 })();
 </script>
